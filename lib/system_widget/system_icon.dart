@@ -19,4 +19,39 @@ class iconController {
   static const IconData inhouse = Icons.block;
   static const IconData dirty = Icons.dry_cleaning;
   static const IconData clean = Icons.cleaning_services_outlined;
+  static const IconData heatIcon = Icons.heat_pump;
+ static const IconData fanIcon = Icons.wind_power;
+ 
+  static airMethod(String? airMethod) {
+    switch (airMethod?.toLowerCase()) {
+      case "conditioner":
+        return heatIcon;
+      case "fan":
+        return fanIcon;
+      default:
+        return fanIcon; // Default color if the state is not recognized
+    }
+}
+ static const IconData CancelIcon = Icons.do_not_disturb_on; // Block icon
+  static const IconData noshowIcon = Icons.usb_rounded; // Block icon
+  static bookingStatus(String? bookingStatus) {
+    switch (bookingStatus?.toLowerCase()) {
+      case "in-house":
+        return inHouseIcon;
+      case "cancel":
+        return CancelIcon;
+      case "void":
+        return fanIcon;
+      case "no-show":
+        return fanIcon;     
+      case "block":
+        return blockIcon;
+      case "booking":
+        return fanIcon;       
+      default:
+        return Icons.check; // Default color if the state is not recognized
+    }
+}
+
+
 }

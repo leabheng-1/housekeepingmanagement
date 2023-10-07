@@ -21,7 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   late List<Widget> list = [
     Dashboard(),
-    FrontDesk(),
+    bookingLayout(),
     Housekeeping(),
     GuestInHouse(),
     Report()

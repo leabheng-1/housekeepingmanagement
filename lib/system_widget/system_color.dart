@@ -44,4 +44,23 @@ class ColorController {
         return Colors.black;
     }
   }
+ static bookingStatus(String? bookingStatus) {
+    switch (bookingStatus?.toLowerCase()) {
+      case "in-house":
+        return checkInColor;
+      case "cancel":
+        return checkOutColor;
+      case "void":
+        return blockColor;
+      case "no-show":
+        return allRoomsColor;     
+      case "block":
+        return blockColor;
+      case "booking":
+        return allRoomsColor;       
+      default:
+        return allRoomsColor; // Default color if the state is not recognized
+    }
+}
+
 }
