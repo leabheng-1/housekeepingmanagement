@@ -25,7 +25,7 @@ class _GuestsState extends State<Guests> {
   String? selectedGender;
   DateTime? selectedDate; // For birthdate
 
-  final List<String> genderOptions = ['Male', 'Female', 'Other'];
+  final List<String> genderOptions = ['Male', 'Female', 'Others'];
 
   @override
   void initState() {
