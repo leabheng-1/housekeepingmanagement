@@ -10,7 +10,7 @@ class Report extends StatelessWidget {
       color: Colors.green,
       child: const Center(
         child: Text(
-          'Notification Page lsdkjflksdjflkdsjlkjflsk',
+          'Notification Page sdfsd',
           style: TextStyle(
               color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20.0),
         ),
