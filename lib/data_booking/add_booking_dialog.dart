@@ -1,117 +1,80 @@
 import 'package:flutter/material.dart';
-import 'package:housekeepingmanagement/data_booking/add_booking_sub_botton.dart';
-import 'package:housekeepingmanagement/data_booking/gender_botton.dart';
+import 'package:housekeepingmanagement/system_widget/system_color.dart';
 
-class AddBookingDialog extends StatefulWidget {
-  const AddBookingDialog({Key? key}) : super(key: key);
+class IconButtonWithLabel extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final Color iconColor; // Add a parameter for the icon color
+  final Color labelColor; // Add a parameter for the label text color
+  final Color buttonBackgroundColor; // Add a parameter for the button background color
+  final VoidCallback action;
 
-  @override
-  State<AddBookingDialog> createState() => _AddBookingDialogState();
-}
-
-class _AddBookingDialogState extends State<AddBookingDialog> {
-  String selectedItem = 'Not Set';
-  List<String> items = ['Female', 'Male', 'Not Set'];
-  String hintTitle = 'Select an item';
+  IconButtonWithLabel({
+    required this.icon,
+    required this.label,
+    required this.iconColor, // Include the icon color parameter
+    required this.labelColor, // Include the label text color parameter
+    required this.buttonBackgroundColor, // Include the button background color parameter
+    required this.action,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          Container(
-            height: 40,
-            width: 150,
-            decoration: BoxDecoration(
-              color: const Color.fromARGB(255, 94, 156, 206),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(
-                  Icons.add_circle,
-                  color: Colors.white,
-                ),
-                TextButton(
-                  onPressed: () {
-                    _showInsertDataDialog(context);
-                  },
-                  child: const Text(
-                    "Add Booking",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ],
-            ),
+    return Container(
+      
+      child: ElevatedButton(
+        onPressed: action,
+        style: ElevatedButton.styleFrom(
+          padding: EdgeInsets.only(left:10,right:50,top:20,bottom:20), // Adjust padding as needed
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0), // Set border radius to 10
           ),
-        ],
+          backgroundColor: buttonBackgroundColor, // Set the background color of the button
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+             
+              icon,
+              color: iconColor, // Set the color of the icon 
+              size: 30,
+            ),
+            SizedBox(width: 15), // Add spacing between icon and label
+            Text(
+              label,
+              style: TextStyle(
+                color: labelColor, // Set the color of the label text
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
+}
 
-  Future<void> _showInsertDataDialog(BuildContext context) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Add Booking'),
-          content: SingleChildScrollView(
-            child: SizedBox(
-              height: 1000,
-              width: 1000,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        AddBookingSubBotton(
-                          hintTitle: 'Guest Name',
-                          controller: TextEditingController(),
-                          title: 'Guest Name',
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        const GenderBotton(),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    child: Column(
-                      children: [
-                        Expanded(
-                          child: Container(
-                            color: Colors.green,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: const Text('Insert'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
+class AddBookingDialog extends StatelessWidget {
+  final VoidCallback action;
+  final Key? key; // Add a named 'key' parameter
+
+  AddBookingDialog({
+    required this.action,
+    this.key, // Include the 'key' parameter in the constructor
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButtonWithLabel(
+      icon: Icons.add_circle,
+      label: 'Add Booking',
+      iconColor: Colors.white,
+      labelColor: Colors.white,
+      buttonBackgroundColor: ColorController.btnBookingColor,
+      action: () {
+        action();
       },
     );
   }
 }
+
