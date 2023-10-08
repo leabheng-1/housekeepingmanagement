@@ -201,7 +201,7 @@ class _GuestsState extends State<Guests> {
             TextButton(
               onPressed: () {
                 // Validate and submit the form
-                if (Form.of(context)!.validate()) {
+                if (Form.of(context).validate()) {
                   final guestData = {
                     'name': _nameController.text,
                     'gender': selectedGender,
