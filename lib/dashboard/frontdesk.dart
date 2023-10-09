@@ -298,7 +298,7 @@ class _bookingLayoutState extends State<bookingLayout> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   CustomDropdownFilter(
-                                    parameter: 'YourParameter 1',
+                                    parameter: 'YourParameter',
                                     onChange: (roomStatus, housekeepingStatus,
                                         guestsname) {
                                       roomStatusfilter = roomStatus;
