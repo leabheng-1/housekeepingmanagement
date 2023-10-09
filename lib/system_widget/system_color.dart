@@ -32,7 +32,16 @@ class ColorController {
   static const Color bottonbackcolor = Color(0xFFFFFFFF);
   static const Color iconbackgroundcolor = Color(0xFFE0E4FF);
 
-  static Color getHKColor(String hkState) {
+ static const Color btnBookingColor = Color(0xFF8585FF);
+  static const Color barColor = Color(0xFFA5C2D5);
+  static const Color boxBooingColor = Color(0xFFE7E8FF);
+  static const Color activeColor = Color(0xFF5AAAFF);
+
+  
+  
+
+
+   static Color getHKColor(String hkState) {
     switch (hkState.toLowerCase()) {
       case "cleaning":
         return cleaningColor;

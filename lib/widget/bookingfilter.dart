@@ -26,7 +26,7 @@ class _CustomDropdownFilterState extends State<CustomDropdownFilter> {
       children: [
         CustomDropdownButton(
              bg:Color.fromRGBO(255, 255, 255, 1),
-            width: 250,
+            width: 200,
             items: ['All','Clean', 'Cleaning', 'Dirty'],
             selectedValue:  'Clean',
             hintText: 'Housekeeping Status',
@@ -40,7 +40,7 @@ class _CustomDropdownFilterState extends State<CustomDropdownFilter> {
           SizedBox(width:20,),
           CustomDropdownButton(
              bg:Color.fromRGBO(255, 255, 255, 1),
-            width: 250,
+            width: 200,
             items: ['All','Clean', 'Cleaning', 'Dirty'],
             selectedValue:  'Clean',
             hintText: 'Housekeeping Status',
@@ -54,7 +54,7 @@ class _CustomDropdownFilterState extends State<CustomDropdownFilter> {
           SizedBox(width:20,),
         Container(
   height: 40,
-  width: MediaQuery.of(context).size.width * 0.2,
+  width: 200,
   decoration: BoxDecoration(
     color: Colors.white, // Replace with your desired background color
     borderRadius: BorderRadius.circular(10),

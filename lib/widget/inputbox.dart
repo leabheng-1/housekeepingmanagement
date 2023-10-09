@@ -2,6 +2,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/material.dart';
+import 'package:housekeepingmanagement/system_widget/system_color.dart';
 
 class CustomTextField extends StatelessWidget {
   final TextEditingController? controller;
@@ -363,12 +364,12 @@ class _IconBoxState extends State<IconBox> {
         child: Container(
           padding: EdgeInsets.all(5.0),
           decoration: BoxDecoration(
-            color: isActive ? Colors.red : Colors.white,
+            color: isActive ? ColorController.activeColor.withOpacity(0.2) : Colors.white,
             borderRadius: BorderRadius.circular(5.0),
           ),
           child: Icon(
             icon,
-            color: isActive ? Color.fromARGB(255, 124, 124, 124) : Colors.black,
+            color: isActive ? ColorController.activeColor : Colors.black,
             size: 24.0,
           ),
         ),
