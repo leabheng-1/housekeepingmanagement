@@ -20,7 +20,7 @@ class _HousekeepingButtonState extends State<HousekeepingButton> {
     return Row(
       children: [
         Expanded(
-  flex: 2,
+  flex: 3,
   child: Container(
     height: 50,
     decoration: BoxDecoration(
@@ -36,6 +36,7 @@ class _HousekeepingButtonState extends State<HousekeepingButton> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           HouseKeepingStatus(
+            
             title: 'Dirty',
             icon: Icons.cleaning_services_rounded,
             backgroundColor: _selectedIndex == 0
@@ -65,12 +66,13 @@ class _HousekeepingButtonState extends State<HousekeepingButton> {
         Padding(
           padding: const EdgeInsets.only(left: 10, right: 10),
           child: Expanded(
+            flex: 4,
             child: Container(
               height: 50,
               width: 600,
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(20),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -103,6 +105,7 @@ class _HousekeepingButtonState extends State<HousekeepingButton> {
           ),
         ),
         Expanded(
+          flex: 3,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Container(
@@ -110,7 +113,7 @@ class _HousekeepingButtonState extends State<HousekeepingButton> {
               width: 250,
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(20),
               ),
               child: Padding(
                 padding: const EdgeInsets.only(left: 10, right: 20),

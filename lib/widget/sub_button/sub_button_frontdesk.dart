@@ -14,6 +14,7 @@ class SubButtonFrontdesk extends StatefulWidget {
 
 class _SubButtonFrontdeskState extends State<SubButtonFrontdesk> {
   Map<String, dynamic>? apiResponse;
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -22,11 +23,16 @@ class _SubButtonFrontdeskState extends State<SubButtonFrontdesk> {
   }
 
   Future<void> fetchData() async {
+    setState(() {
+      isLoading = true; // Set isLoading to true before making the request.
+    });
+
     final response = await http
         .get(Uri.parse('http://localhost:8000/api/dashboard/todayStatus'));
 
     if (response.statusCode == 200) {
       setState(() {
+        isLoading = false; // Set isLoading to false when the data is loaded.
         apiResponse = json.decode(response.body);
       });
     } else {
@@ -36,10 +42,16 @@ class _SubButtonFrontdeskState extends State<SubButtonFrontdesk> {
 
   @override
   Widget build(BuildContext context) {
-    final data = apiResponse!['data'];
+    final data = apiResponse != null ? apiResponse!['data'] : null;
     return Column(
       children: [
-        Row(
+        isLoading
+            ? Center(
+                child: CircularProgressIndicator(), // Show a loading indicator.
+              )
+            : Column(
+                children: [
+                Row(
           children: [
             SubButtonFrontdeskWidget(
               icon: const Icon(
@@ -47,7 +59,7 @@ class _SubButtonFrontdeskState extends State<SubButtonFrontdesk> {
                 color: Colors.white,
               ),
               title: "Check-In",
-              value: data['checkin_count'],
+              value: data?['checkin_count'],
               backgroundColor: ColorController.checkInColor,
               iconbackground: Colors.blue.shade800,
             ),
@@ -60,7 +72,7 @@ class _SubButtonFrontdeskState extends State<SubButtonFrontdesk> {
                 color: Colors.white,
               ),
               title: "Arrival",
-              value: data['count_arrival'],
+              value: data?['count_arrival'] ?? '',
               backgroundColor: ColorController.arrivalsColor,
               iconbackground: Colors.purple.shade900,
             ),
@@ -77,7 +89,7 @@ class _SubButtonFrontdeskState extends State<SubButtonFrontdesk> {
                 color: Colors.white,
               ),
               title: "Check-Out",
-              value: data['checkout_count'],
+              value: data?['checkout_count'] ?? '',
               backgroundColor: ColorController.checkOutColor,
               iconbackground: Colors.orange.shade900,
             ),
@@ -90,7 +102,7 @@ class _SubButtonFrontdeskState extends State<SubButtonFrontdesk> {
                 color: Colors.white,
               ),
               title: "Departure",
-              value: data['count_departure'],
+              value: data?['count_departure'] ?? '',
               backgroundColor: ColorController.departuresColor,
               iconbackground: Colors.grey.shade700,
             ),
@@ -107,7 +119,7 @@ class _SubButtonFrontdeskState extends State<SubButtonFrontdesk> {
                 color: Colors.white,
               ),
               title: "Available",
-              value: data['available_rooms'],
+              value: data?['available_rooms'] ?? '',
               backgroundColor: ColorController.availableColor,
               iconbackground: Colors.blue.shade800,
             ),
@@ -120,13 +132,20 @@ class _SubButtonFrontdeskState extends State<SubButtonFrontdesk> {
                 color: Colors.white,
               ),
               title: "Inhouse",
-              value: data['inHouse'],
+              value: data?['inHouse'] ?? '',
               backgroundColor: ColorController.inhouse,
               iconbackground: Colors.blue.shade800,
             ),
           ],
         ),
+                
+        SizedBox(
+          height: 10,
+        ),
+        // Other rows and widgets...
       ],
+            )
+      ]
     );
   }
 }

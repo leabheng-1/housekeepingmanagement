@@ -8,6 +8,7 @@ import 'package:housekeepingmanagement/system_widget/system_color.dart';
 import 'package:housekeepingmanagement/system_widget/system_icon.dart';
 import 'package:housekeepingmanagement/widget/bookingfilter.dart';
 import 'package:housekeepingmanagement/widget/inputbox.dart';
+import 'package:housekeepingmanagement/widget/sub_button/sub_button_frontdesk.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
@@ -143,7 +144,7 @@ class _bookingLayoutState extends State<bookingLayout> {
     return SingleChildScrollView(
       child: Container(
         padding: EdgeInsets.all(10),
-        height: 850,
+        height: 880,
         child: Column(
           children: [
             // First row taking up 20% of vertical space
@@ -182,7 +183,7 @@ class _bookingLayoutState extends State<bookingLayout> {
                           child: Column(
                             children: [
                               Expanded(
-                                flex: 5,
+                                flex: 7,
                                 // 20% of available space in the column
                                 child: Container(
                                   child: Center(
@@ -214,10 +215,8 @@ class _bookingLayoutState extends State<bookingLayout> {
                                             ),
                                           ),
                                           Container(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 0,
-                                                horizontal:
-                                                    5.0), // Set the padding as needed
+                                            width: 400,
+                                            padding: const EdgeInsets.only(left:20,top:0,bottom:10,right:20), // Set the padding as needed
                                             child: TableCalendar<Event>(
                                               firstDay: kFirstDay,
                                               lastDay: kLastDay,
@@ -251,8 +250,7 @@ class _bookingLayoutState extends State<bookingLayout> {
                                                 _focusedDay = focusedDay;
                                               },
                                             ),
-                                          ),
-                                          const SizedBox(height: 8.0),
+                                          ),const SizedBox(height: 8.0),
                                         ],
                                       ),
                                     ),
@@ -260,10 +258,11 @@ class _bookingLayoutState extends State<bookingLayout> {
                                 ),
                               ),
                               Expanded(
+                                flex: 3,
                                 child: Container(
-                                  margin: EdgeInsets.all(8.0),
+                                  padding:EdgeInsets.all(10),
                                   child: Center(
-                                    child: Text('Col 2'),
+                                    child: SubButtonFrontdesk(),
                                   ),
                                 ),
                               )

@@ -17,53 +17,60 @@ class SubButtonFrontdeskWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
+    return Expanded(
+      flex: 6,
+      child: 
         Container(
           height: 50,
-          width: 185,
           decoration: BoxDecoration(
             color: backgroundColor,
             borderRadius: BorderRadius.circular(10),
           ),
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.only(left:5,top:5,bottom:5,right: 15 ),
             child: Row(
-              children: [
-                Container(
-                    height: 40,
-                    width: 40,
-                    decoration: BoxDecoration(
-                      color: iconbackground,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: icon),
-                const SizedBox(
-                  width: 10,
-                ),
-                SizedBox(
-                  width: 80,
-                  child: Text(
-                    title,
-                    style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white),
-                  ),
-                ),
-                Text(
-                  value.toString(),
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                ),
-              ],
-            ),
+  children: [
+    Container(
+      height: 40,
+      width: 40,
+      decoration: BoxDecoration(
+        color: Colors.black.withOpacity(0.4),
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: icon,
+    ),
+    const SizedBox(
+      width: 10,
+    ),
+    SizedBox(
+      width: 80,
+      child: Text(
+        title,
+        style: const TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+        ),
+      ),
+    ),
+    Expanded(
+      child: Align(
+        alignment: Alignment.centerRight,
+        child: Text(
+          value.toString(),
+          style: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
           ),
         ),
-      ],
+      ),
+    ),
+  ],
+)
+
+          ),
+        ),
     );
   }
 }
