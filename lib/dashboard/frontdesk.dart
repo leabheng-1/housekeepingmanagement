@@ -1,4 +1,3 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:housekeepingmanagement/data_booking/add_booking_dialog.dart';
 import 'package:housekeepingmanagement/dialog/bookingdialog.dart';
@@ -19,12 +18,12 @@ String roomStatusfilter = 'All';
 String housekeepingStatusfilter = 'All';
 String guestStatusfilter = 'All';
 
-class bookingLayout extends StatefulWidget {
+class FrontDesk extends StatefulWidget {
   @override
-  _bookingLayoutState createState() => _bookingLayoutState();
+  _FrontDeskState createState() => _FrontDeskState();
 }
 
-class _bookingLayoutState extends State<bookingLayout> {
+class _FrontDeskState extends State<FrontDesk> {
   List<dynamic> bookings = [];
 
   bool isLoading = true;
@@ -41,7 +40,7 @@ class _bookingLayoutState extends State<bookingLayout> {
     super.initState();
     _selectedDay = _focusedDay;
     _selectedEvents =
-        ValueNotifier(_getEventsForDay(_selectedDay!).cast<bookingLayout>());
+        ValueNotifier(_getEventsForDay(_selectedDay!).cast<FrontDesk>());
     fetchBookingData();
   }
 
@@ -68,7 +67,7 @@ class _bookingLayoutState extends State<bookingLayout> {
     }
   }
 
-  late final ValueNotifier<List<bookingLayout>> _selectedEvents;
+  late final ValueNotifier<List<FrontDesk>> _selectedEvents;
   CalendarFormat _calendarFormat = CalendarFormat.month;
   RangeSelectionMode _rangeSelectionMode = RangeSelectionMode
       .toggledOff; // Can be toggled on/off by longpressing a date
@@ -112,8 +111,7 @@ class _bookingLayoutState extends State<bookingLayout> {
         print(dateurl);
       });
 
-      _selectedEvents.value =
-          _getEventsForDay(selectedDay).cast<bookingLayout>();
+      _selectedEvents.value = _getEventsForDay(selectedDay).cast<FrontDesk>();
     }
   }
 
@@ -128,12 +126,11 @@ class _bookingLayoutState extends State<bookingLayout> {
 
     // `start` or `end` could be null
     if (start != null && end != null) {
-      _selectedEvents.value =
-          _getEventsForRange(start, end).cast<bookingLayout>();
+      _selectedEvents.value = _getEventsForRange(start, end).cast<FrontDesk>();
     } else if (start != null) {
-      _selectedEvents.value = _getEventsForDay(start).cast<bookingLayout>();
+      _selectedEvents.value = _getEventsForDay(start).cast<FrontDesk>();
     } else if (end != null) {
-      _selectedEvents.value = _getEventsForDay(end).cast<bookingLayout>();
+      _selectedEvents.value = _getEventsForDay(end).cast<FrontDesk>();
     }
   }
 
@@ -148,23 +145,26 @@ class _bookingLayoutState extends State<bookingLayout> {
         child: Column(
           children: [
             // First row taking up 20% of vertical space
-           
-              Container(
-                height: 70,
-                margin: EdgeInsets.only(bottom:10),
-                child: Row(
-                  mainAxisAlignment:
-                      MainAxisAlignment.end, // Align the button to the right
-                  children: [AddBookingDialog(
-  action: () {
-    // Add your button action here
-    BookingDialog(context,reloadData).showCreateBookingDialog(newbooking);
-  },
-  key: UniqueKey(), // Provide a key if necessary
-                  )],
-                ),
+
+            Container(
+              height: 70,
+              margin: EdgeInsets.only(bottom: 10),
+              child: Row(
+                mainAxisAlignment:
+                    MainAxisAlignment.end, // Align the button to the right
+                children: [
+                  AddBookingDialog(
+                    action: () {
+                      // Add your button action here
+                      BookingDialog(context, reloadData)
+                          .showCreateBookingDialog(newbooking);
+                    },
+                    key: UniqueKey(), // Provide a key if necessary
+                  )
+                ],
               ),
-            
+            ),
+
             // Second row taking up 80% of vertical space
             Expanded(
               flex: 9, // 80% of available space
@@ -196,7 +196,8 @@ class _bookingLayoutState extends State<bookingLayout> {
                                           Container(
                                             height: 80, // Set margin for Col 1
                                             decoration: const BoxDecoration(
-                                              color: ColorController.barColor, // Set background color for Col 1
+                                              color: ColorController
+                                                  .barColor, // Set background color for Col 1
                                               borderRadius: BorderRadius.only(
                                                 topLeft: Radius.circular(
                                                     20.0), // Set the top-left corner radius
@@ -231,7 +232,8 @@ class _bookingLayoutState extends State<bookingLayout> {
                                               eventLoader: _getEventsForDay,
                                               startingDayOfWeek:
                                                   StartingDayOfWeek.monday,
-                                              calendarStyle: const CalendarStyle(
+                                              calendarStyle:
+                                                  const CalendarStyle(
                                                 outsideDaysVisible: false,
                                                 weekendTextStyle: TextStyle(
                                                   color: Colors.red,
@@ -297,7 +299,7 @@ class _bookingLayoutState extends State<bookingLayout> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   CustomDropdownFilter(
-                                    parameter: 'YourParameter',
+                                    parameter: 'YourParameter12',
                                     onChange: (roomStatus, housekeepingStatus,
                                         guestsname) {
                                       roomStatusfilter = roomStatus;
@@ -350,30 +352,25 @@ class _bookingLayoutState extends State<bookingLayout> {
                                                   i++) {
                                                 final booking = bookings[i];
 
-                                                Color statusColor;
                                                 Icon statusIcon;
                                                 switch (booking[
                                                     'housekeeping_status']) {
                                                   case 'clean':
-                                                    statusColor = Colors.green;
                                                     statusIcon = Icon(
                                                         Icons.check,
                                                         color: Colors.white);
                                                     break;
                                                   case 'cleaning':
-                                                    statusColor = Colors.yellow;
                                                     statusIcon = Icon(
                                                         Icons.cleaning_services,
                                                         color: Colors.black);
                                                     break;
                                                   case 'dirty':
-                                                    statusColor = Colors.brown;
                                                     statusIcon = Icon(
                                                         Icons.error,
                                                         color: Colors.white);
                                                     break;
                                                   default:
-                                                    statusColor = Colors.grey;
                                                     statusIcon = Icon(
                                                         Icons.help,
                                                         color: Colors.white);
@@ -406,7 +403,8 @@ class _bookingLayoutState extends State<bookingLayout> {
                                                       padding: EdgeInsets.all(
                                                           16.0), // Add padding
                                                       decoration: BoxDecoration(
-                                                        color: ColorController.boxBooingColor, // Set the background color
+                                                        color: ColorController
+                                                            .boxBooingColor, // Set the background color
                                                         borderRadius:
                                                             BorderRadius.circular(
                                                                 20.0), // Add rounded corners
@@ -432,7 +430,10 @@ class _bookingLayoutState extends State<bookingLayout> {
                                                                         BoxDecoration(
                                                                       shape: BoxShape
                                                                           .circle,
-                                                                      color:Colors.black.withOpacity(0.1),
+                                                                      color: Colors
+                                                                          .black
+                                                                          .withOpacity(
+                                                                              0.1),
                                                                     ),
                                                                     child: Icon(
                                                                         iconController.airMethod(booking[
