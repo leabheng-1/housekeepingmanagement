@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:housekeepingmanagement/system_widget/system_color.dart';
 import 'package:housekeepingmanagement/system_widget/system_icon.dart';
 import 'package:housekeepingmanagement/controller/main_controller.dart';
 import 'package:housekeepingmanagement/dashboard/dashboard.dart';
@@ -21,16 +22,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
   late List<Widget> list = [
     Dashboard(),
-    bookingLayout(),
+    FrontDesk(),
     Housekeeping(),
     GuestInHouse(),
     Report()
   ];
   final List<String> _destinations = [
-    'DashBoard',
-    'Front Desk',
+    'Dashboard',
+    'Frontdesk',
     'Housekeeping',
-    'Guest In House',
+    'Guest In-House',
     'Report'
   ];
 
@@ -89,100 +90,48 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final MainController controller = Get.put(MainController());
-    return Obx(
-      () => Scaffold(
-        backgroundColor: Colors.grey[300],
-        body: Row(
-          children: [
-            Row(
-              children: [
-                _buildNavigationRail(),
-              ],
-            ),
-            Expanded(
-              child: Column(
-                children: <Widget>[
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(top: 10, left: 30, right: 10),
-                    child: Container(
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        borderRadius: BorderRadius.circular(10),
+    return Scaffold(
+      backgroundColor: const Color(0xFFEEF1F6),
+      body: Column(
+        children: [
+          Row(
+            children: [
+              Column(
+                children: [
+                  Row(
+                    children: [
+                      const SizedBox(width: 10),
+                      IconButton(
+                        icon: const Icon(Icons.menu),
+                        onPressed: () {
+                          // Handle menu button press
+                        },
                       ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment
-                            .spaceBetween, // Aligns children to the start and end of the row
-                        children: [
-                          Row(
-                            children: [
-                              const SizedBox(width: 10),
-                              IconButton(
-                                icon: const Icon(Icons.menu),
-                                onPressed: () {
-                                  controller
-                                      .isExpanded(!controller.isExpanded.value);
-                                },
-                              ),
-                              Text(
-                                _destinations[_selectedIndex],
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 20),
-                            child: Row(
-                              children: [
-                                Icon(
-                                  Icons.account_circle_outlined,
-                                  size: 40,
-                                  color: Colors.grey[600],
-                                ),
-                                IconButton(
-                                  onPressed: () {},
-                                  icon: Icon(
-                                    Icons.keyboard_arrow_down,
-                                    color: Colors.grey[500],
-                                  ),
-                                ),
-                                const Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "Admin",
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Text(
-                                      "Receptionist",
-                                      style: TextStyle(
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
-                          ),
-                        ],
+                      Text(
+                        _destinations[_selectedIndex],
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                  Expanded(
-                    child: list[_selectedIndex],
-                  ),
+                  // Display the Dashboard widget directly
+                  Dashboard(),
                 ],
               ),
-            ),
-          ],
-        ),
+            ],
+          ),
+          Row(
+            children: [
+              Container(
+                height: 30,
+                width: MediaQuery.of(context).size.width,
+                color: Colors.red,
+              )
+            ],
+          )
+        ],
       ),
     );
   }

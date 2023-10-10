@@ -20,7 +20,7 @@ class _SearchState extends State<Search> {
 
   late List<Widget> list = [
     Dashboard(),
-    bookingLayout(),
+    FrontDesk(),
     Housekeeping(),
     GuestInHouse(),
     Report()
