@@ -93,9 +93,7 @@ class _DashboardState extends State<Dashboard> {
                   child: Text(
                     "CHECK-IN",
                     style: TextStyle(
-                      color: listviewClicked
-                          ? const Color(0xFF94BEE0)
-                          : Colors.black,
+                      color: listviewClicked ? Colors.blue : Colors.black,
                     ),
                   ),
                 ),
@@ -125,9 +123,7 @@ class _DashboardState extends State<Dashboard> {
                   child: Text(
                     "CHECK-OUT",
                     style: TextStyle(
-                      color: gridviewClicked
-                          ? const Color(0xFFDBEDF8)
-                          : Colors.black,
+                      color: gridviewClicked ? Colors.blue : Colors.black,
                     ),
                   ),
                 ),
