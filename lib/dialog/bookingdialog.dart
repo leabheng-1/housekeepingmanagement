@@ -576,7 +576,7 @@ Row(
         Row(
         children: [           
 Boxdetail(
-  title: "Guest ID",
+  title: "Guest I",
   value: booking['guest_id'].toString(),
 ),      
 SizedBox(width: 20),
