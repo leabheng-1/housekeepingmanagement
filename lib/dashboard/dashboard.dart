@@ -40,7 +40,7 @@ class _DashboardState extends State<Dashboard> {
             padding: const EdgeInsets.only(top: 20),
             child: Row(
               children: <Widget>[
-                DashboardToday(),
+                const DashboardToday(),
                 const SizedBox(
                   width: 40,
                 ),
@@ -85,7 +85,7 @@ class _DashboardState extends State<Dashboard> {
                     backgroundColor: MaterialStateProperty.resolveWith<Color>(
                       (Set<MaterialState> states) {
                         return listviewClicked
-                            ? Colors.blue.shade200
+                            ? const Color(0xFFDBEDF8)
                             : Colors.grey.shade400;
                       },
                     ),
@@ -93,7 +93,9 @@ class _DashboardState extends State<Dashboard> {
                   child: Text(
                     "CHECK-IN",
                     style: TextStyle(
-                      color: listviewClicked ? Colors.blue : Colors.black,
+                      color: listviewClicked
+                          ? const Color(0xFF94BEE0)
+                          : Colors.black,
                     ),
                   ),
                 ),
@@ -115,7 +117,7 @@ class _DashboardState extends State<Dashboard> {
                     backgroundColor: MaterialStateProperty.resolveWith<Color>(
                       (Set<MaterialState> states) {
                         return gridviewClicked
-                            ? Colors.blue.shade200
+                            ? const Color(0xFFDBEDF8)
                             : Colors.grey.shade400;
                       },
                     ),
@@ -123,7 +125,9 @@ class _DashboardState extends State<Dashboard> {
                   child: Text(
                     "CHECK-OUT",
                     style: TextStyle(
-                      color: gridviewClicked ? Colors.blue : Colors.black,
+                      color: gridviewClicked
+                          ? const Color(0xFFDBEDF8)
+                          : Colors.black,
                     ),
                   ),
                 ),

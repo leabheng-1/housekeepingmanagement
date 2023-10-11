@@ -18,21 +18,22 @@ class IconWithLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(          child: Row(
+    return Container(
+      child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: backgroundColor,
-      ),
-      padding: EdgeInsets.all(10.0), // Adjust padding as needed
-  
-          child: Icon(
-            iconData,
-            color: iconColor,
-            size: iconSize,
-          ),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: backgroundColor,
+            ),
+            padding: EdgeInsets.all(10.0), // Adjust padding as needed
+
+            child: Icon(
+              iconData,
+              color: iconColor,
+              size: iconSize,
+            ),
           ),
           if (label != null) // Display label only if it's not null
             SizedBox(width: 10.0), // Space between icon and label
@@ -50,51 +51,50 @@ class IconWithLabel extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class HouseKeepingStatus extends StatelessWidget {
   final String title;
   final IconData icon;
   Color backgroundColor;
-final Color iconColor;
+  final Color iconColor;
   final double iconSize;
   HouseKeepingStatus({
     Key? key,
     required this.title,
     required this.icon,
     required this.backgroundColor,
-     this.iconColor = Colors.white, // Default icon color
+    this.iconColor = Colors.white, // Default icon color
     this.iconSize = 16.0, // Default icon size
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(          child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: backgroundColor,
-      ),
-      padding: EdgeInsets.all(10.0), // Adjust padding as needed
-  
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: backgroundColor,
+          ),
+          padding: EdgeInsets.all(10.0), // Adjust padding as needed
+
           child: Icon(
             icon,
             color: iconColor,
             size: iconSize,
           ),
+        ),
+        // Display label only if it's not null
+        const SizedBox(width: 10.0), // Space between icon and label
+        Text(
+          title,
+          style: const TextStyle(
+            color: Colors.black, // Text color
+            fontSize: 16.0, // Text size
           ),
-          if (title != null) // Display label only if it's not null
-            SizedBox(width: 10.0), // Space between icon and label
-          if (title != null)
-            Text(
-              title!,
-              style: TextStyle(
-                color: Colors.black, // Text color
-                fontSize: 16.0, // Text size
-              ),
-            ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
