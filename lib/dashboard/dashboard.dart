@@ -40,7 +40,7 @@ class _DashboardState extends State<Dashboard> {
             padding: const EdgeInsets.only(top: 20),
             child: Row(
               children: <Widget>[
-                DashboardToday(),
+                const DashboardToday(),
                 const SizedBox(
                   width: 40,
                 ),
@@ -85,7 +85,7 @@ class _DashboardState extends State<Dashboard> {
                     backgroundColor: MaterialStateProperty.resolveWith<Color>(
                       (Set<MaterialState> states) {
                         return listviewClicked
-                            ? Colors.blue.shade200
+                            ? const Color(0xFFDBEDF8)
                             : Colors.grey.shade400;
                       },
                     ),
@@ -115,7 +115,7 @@ class _DashboardState extends State<Dashboard> {
                     backgroundColor: MaterialStateProperty.resolveWith<Color>(
                       (Set<MaterialState> states) {
                         return gridviewClicked
-                            ? Colors.blue.shade200
+                            ? const Color(0xFFDBEDF8)
                             : Colors.grey.shade400;
                       },
                     ),

@@ -92,180 +92,175 @@ class _DataCheckInListState extends State<DataCheckInList> {
           Row(
             children: [
               Expanded(
-                child: Row(
-                  children: [
-                    DataTable(
-                      columnSpacing: 16.0,
-                      headingRowHeight: 48.0,
-                      columns: const [
-                        DataColumn(
-                          label: SizedBox(
-                              width: 50,
-                              child: Text('No',
-                                  style:
-                                      TextStyle(fontWeight: FontWeight.bold))),
-                          numeric: true,
-                        ),
-                        DataColumn(
-                          label: SizedBox(
-                            width: 100,
-                            child: Text('Guest Name',
-                                style: TextStyle(fontWeight: FontWeight.bold)),
+                child: DataTable(
+                  columnSpacing: 16.0,
+                  headingRowHeight: 48.0,
+                  columns: const [
+                    DataColumn(
+                      label: SizedBox(
+                          width: 50,
+                          child: Text('No',
+                              style: TextStyle(fontWeight: FontWeight.bold))),
+                      numeric: true,
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        width: 100,
+                        child: Text('Guest Name',
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                      ),
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        width: 100,
+                        child: Text('Phone Number',
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                      ),
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        width: 100,
+                        child: Text('Room #',
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                      ),
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        width: 120,
+                        child: Text('Stay Date',
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                      ),
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        width: 100,
+                        child: Text('Pax A/C',
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                      ),
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        width: 100,
+                        child: Text('Night',
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                      ),
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        width: 250,
+                        child: Center(
+                          child: Text(
+                            'Action',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
-                        DataColumn(
-                          label: SizedBox(
-                            width: 100,
-                            child: Text('Phone Number',
-                                style: TextStyle(fontWeight: FontWeight.bold)),
+                      ),
+                    )
+                  ],
+                  rows: bookingsData.asMap().entries.map<DataRow>((entry) {
+                    int index = entry.key;
+                    Map<String, dynamic> booking = entry.value;
+                    bool isSelected = selectedRows.contains(index);
+
+                    return DataRow(
+                      selected: isSelected,
+                      onSelectChanged: (isSelected) {
+                        setState(() {
+                          if (isSelected != null && isSelected) {
+                            selectedRows.add(index);
+                          } else {
+                            selectedRows.remove(index);
+                          }
+                        });
+                      },
+                      cells: [
+                        DataCell(
+                          SizedBox(
+                            width: 50,
+                            child: Text(
+                              (index + 1).toString(),
+                            ),
                           ),
                         ),
-                        DataColumn(
-                          label: SizedBox(
-                            width: 100,
-                            child: Text('Room #',
-                                style: TextStyle(fontWeight: FontWeight.bold)),
+                        DataCell(
+                          SizedBox(
+                            width: 180,
+                            child: Text(
+                              booking['name'] ?? 'N/A',
+                            ),
                           ),
                         ),
-                        DataColumn(
-                          label: SizedBox(
-                            width: 120,
-                            child: Text('Stay Date',
-                                style: TextStyle(fontWeight: FontWeight.bold)),
+                        DataCell(
+                          Text(
+                            booking['phone_number'] ?? 'N/A',
                           ),
                         ),
-                        DataColumn(
-                          label: SizedBox(
-                            width: 100,
-                            child: Text('Pax A/C',
-                                style: TextStyle(fontWeight: FontWeight.bold)),
-                          ),
-                        ),
-                        DataColumn(
-                          label: SizedBox(
-                            width: 100,
-                            child: Text('Night',
-                                style: TextStyle(fontWeight: FontWeight.bold)),
-                          ),
-                        ),
-                        DataColumn(
-                          label: SizedBox(
-                            width: 250,
+                        DataCell(
+                          SizedBox(
+                            width: 50,
                             child: Center(
                               child: Text(
-                                'Action',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
+                                booking['room_id']?.toString() ?? 'N/A',
                               ),
                             ),
                           ),
-                        )
+                        ),
+                        DataCell(
+                          Text(
+                            '${formatDate(booking['checkin_date'])} - ${formatDate(booking['checkout_date'])}',
+                          ),
+                        ),
+                        DataCell(
+                          SizedBox(
+                            width: 50,
+                            child: Center(
+                              child: Text(
+                                '${booking['adults'] ?? 0} / ${booking['child'] ?? 0}',
+                              ),
+                            ),
+                          ),
+                        ),
+                        DataCell(
+                          Text(
+                            calculateDateDifference(booking['checkin_date'],
+                                booking['checkout_date']),
+                          ),
+                        ),
+                        DataCell(
+                          Row(
+                            children: [
+                              TextButttonList(
+                                title: 'View',
+                                height: 0.1,
+                                width: 0.05,
+                                backgroundColor: Colors.green,
+                              ),
+                              TextButttonList(
+                                title: 'Edit',
+                                height: 0.1,
+                                width: 0.06,
+                                backgroundColor: Colors.blue.shade600,
+                              ),
+                              TextButttonList(
+                                title: 'Check-In',
+                                height: 0.1,
+                                width: 0.06,
+                                backgroundColor: Colors.purple.shade800,
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
-                      rows: bookingsData.asMap().entries.map<DataRow>((entry) {
-                        int index = entry.key;
-                        Map<String, dynamic> booking = entry.value;
-                        bool isSelected = selectedRows.contains(index);
-
-                        return DataRow(
-                          selected: isSelected,
-                          onSelectChanged: (isSelected) {
-                            setState(() {
-                              if (isSelected != null && isSelected) {
-                                selectedRows.add(index);
-                              } else {
-                                selectedRows.remove(index);
-                              }
-                            });
-                          },
-                          cells: [
-                            DataCell(
-                              SizedBox(
-                                width: 50,
-                                child: Text(
-                                  (index + 1).toString(),
-                                ),
-                              ),
-                            ),
-                            DataCell(
-                              SizedBox(
-                                width: 180,
-                                child: Text(
-                                  booking['name'] ?? 'N/A',
-                                ),
-                              ),
-                            ),
-                            DataCell(
-                              Text(
-                                booking['phone_number'] ?? 'N/A',
-                              ),
-                            ),
-                            DataCell(
-                              SizedBox(
-                                width: 50,
-                                child: Center(
-                                  child: Text(
-                                    booking['room_id']?.toString() ?? 'N/A',
-                                  ),
-                                ),
-                              ),
-                            ),
-                            DataCell(
-                              Text(
-                                '${formatDate(booking['checkin_date'])} - ${formatDate(booking['checkout_date'])}',
-                              ),
-                            ),
-                            DataCell(
-                              SizedBox(
-                                width: 50,
-                                child: Center(
-                                  child: Text(
-                                    '${booking['adults'] ?? 0} / ${booking['child'] ?? 0}',
-                                  ),
-                                ),
-                              ),
-                            ),
-                            DataCell(
-                              Text(
-                                calculateDateDifference(booking['checkin_date'],
-                                    booking['checkout_date']),
-                              ),
-                            ),
-                            DataCell(
-                              Row(
-                                children: [
-                                  TextButttonList(
-                                    title: 'View',
-                                    height: 0.1,
-                                    width: 0.05,
-                                    backgroundColor: const Color(0xFF419875),
-                                  ),
-                                  TextButttonList(
-                                    title: 'Edit',
-                                    height: 0.1,
-                                    width: 0.06,
-                                    backgroundColor: const Color(0xFF2E92CB),
-                                  ),
-                                  TextButttonList(
-                                    title: 'Check-In',
-                                    height: 0.1,
-                                    width: 0.09,
-                                    backgroundColor: const Color(0xFFE07471),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        );
-                      }).toList(),
-                    ),
-                  ],
+                    );
+                  }).toList(),
                 ),
               ),
-              const SizedBox(
-                height: 170,
-              ),
             ],
+          ),
+          const SizedBox(
+            height: 200,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
