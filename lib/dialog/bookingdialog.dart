@@ -1,6 +1,9 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:housekeepingmanagement/dashboard/frontdesk.dart';
+import 'package:housekeepingmanagement/frontdesk/widget/morebtnaction.dart';
+import 'package:housekeepingmanagement/system_widget/box_detail.dart';
 import 'package:housekeepingmanagement/system_widget/btn.dart';
 import 'package:housekeepingmanagement/widget/Datebooking.dart';
 import 'package:housekeepingmanagement/widget/checkinandcheckout.dart';
@@ -467,28 +470,213 @@ DateTime todaycorrentCheckout = DateTime(today.year, today.month, today.day + 1 
           child: Text('Booking Details', style: TextStyle(fontWeight: FontWeight.bold)),
         ),
         
-        content: Container(
+        content: 
+        Container(
   margin: EdgeInsets.only(top: 20), // Set your desired top margin here
   child: Row(
-    children: [    
-      buildLabelAndContent('Guest Details:', [
-        Text('Name: ${booking['name']}'),
-        Text('Email: ${booking['email']}'),
-        // Add more guest details here
-      ]),
+    children: [   
+      Expanded(
+      flex: 4,
+      child:  
+      
+      buildLabelAndContent('Guest Information', [
+       
+        Row(
+        children: [           
+Boxdetail(
+  title: "Guest ID",
+  value: booking['guest_id'].toString(),
+),      
+SizedBox(width: 20),
+Boxdetail(
+  title: "Guest Name",
+  value:  booking['name'],
+  
+),
+ ]
+        ),
+        Row(
+        children: [           
+Boxdetail(
+  title: "Gender",
+  value: booking['gender'] ?? '',
+),      
+SizedBox(width: 20),
+Boxdetail(
+  title: "Date Of Birth",
+  value:  booking['dob'] ?? '' ,
+),
+ ]
+        ),
+ Row(
+        children: [           
+Boxdetail(
+  title: "Adults",
+  value: booking['adults'].toString() ?? '' ,
+),      
+SizedBox(width: 20),
+Boxdetail(
+  title: "Child",
+  value:  booking['child'].toString() ?? '' ,
+),
+ ]
+        ),
+ Row(
+        children: [           
+Boxdetail(
+  title: "Country",
+  value: booking['country'] ?? '',
+),      
+SizedBox(width: 20),
+Boxdetail(
+  title: "Address",
+  value:  booking['address'] ?? '' ,
+),
+ ]
+        ),
+ Row(
+        children: [           
+Boxdetail(
+  title: "Phone Number",
+  value: booking['phone_number'].toString() ?? '',
+),      
+SizedBox(width: 20),
+Boxdetail(
+  title: "Email",
+  value:  booking['email'] ?? '' ,
+),
+ ]
+        ), 
+  Row(
+        children: [           
+Boxdetail(
+   width:900,
+  title: "passport_number",
+  value: booking['Passport Number'].toString(),
+), 
+
+ ]
+        ),
+Row(
+          children: [
+            Boxdetail(title: "Note", value: booking['note'] , height: 200, width:900)
+          ],
+        )                        
+
+      ],() {
+              // This is the action that will be executed when the button is pressed
+              print('Button Pressed!');
+            }),
+      ),
       SizedBox(width: 20),
-      buildLabelAndContent('Booking Details:', [
-        Text('Room Number: ${booking['checkin_date']}'),
-        Text('Room Status: ${booking['checkout_date']}'),
-        Text('Housekeeping Status: ${booking['housekeeping_status']}'),
-        // Add more booking details here
-      ]),
+      Expanded(
+      flex: 6,
+      child: 
+      buildLabelAndContent('Booking Information ', [
+        Row(
+        children: [           
+Boxdetail(
+  title: "Guest ID",
+  value: booking['guest_id'].toString(),
+),      
+SizedBox(width: 20),
+Boxdetail(
+  title: "Guest Name",
+  value:  booking['name'],
+  
+),
+ ]
+        ),
+        Row(
+        children: [           
+Boxdetail(
+  title: "Gender",
+  value: booking['gender'] ?? '',
+),
+      Boxdetail(
+  title: "Date Of Birth",
+  value:  booking['dob'] ?? '' ,
+),
+ ]
+        ),
+ Row(
+        children: [           
+Boxdetail(
+  title: "Adults",
+  value: booking['adults'].toString() ?? '' ,
+),      
+SizedBox(width: 20),
+Boxdetail(
+  title: "Child",
+  value:  booking['child'].toString() ?? '' ,
+),
+ ]
+        ),
+ Row(
+        children: [           
+Boxdetail(
+  title: "Country",
+  value: booking['country'] ?? '',
+),      
+SizedBox(width: 20),
+Boxdetail(
+  title: "Address",
+  value:  booking['address'] ?? '' ,
+),
+ ]
+        ),
+ Row(
+        children: [           
+Boxdetail(
+  title: "Phone Number",
+  value: booking['phone_number'].toString() ?? '',
+),      
+SizedBox(width: 20),
+Boxdetail(
+  title: "Email",
+  value:  booking['email'] ?? '' ,
+),
+ ]
+        ), 
+  Row(
+        children: [           
+Boxdetail(
+  title: "passport_number",
+  value: booking['Passport Number'].toString(),
+),      
+SizedBox(width: 20),
+
+ ]
+        ),
+     
+Row(
+          children: [
+            Boxdetail(title: "Note", value: booking['note'] , height: 200 , width:900,)
+          ],
+        )
+      ],() {
+              // This is the action that will be executed when the button is pressed
+              print('Button Pressed!');
+            }),
+      )
     ],
+  
   ),
+  
 ),
         actions: [
-       
-    Visibility(
+          Row(
+             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+            Expanded(child:Row(children: [
+              morebtnaction()
+            ],) 
+            ) ,
+            Expanded(
+              child:Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [  
+                 Visibility(
   visible:
    (DateTime.parse(booking['checkin_date']).isBefore(todaycorrent) || DateTime.parse(booking['checkin_date']).isAtSameMomentAs(todaycorrent) ) && booking['booking_status'] != 'In house', // Show "Check In" button if checkInDate is in the future
   child: BtnAction(
@@ -513,6 +701,11 @@ Visibility(
     },
   ),
 )
+],) 
+            )
+            ],
+          )
+         
         ],
       );
     },
