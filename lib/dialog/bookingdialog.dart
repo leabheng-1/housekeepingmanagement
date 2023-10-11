@@ -524,7 +524,7 @@ Boxdetail(
  Row(
         children: [           
 Boxdetail(
-  title: "Country dj ",
+  title: "Country d ",
   value: booking['country'] ?? '',
 ),      
 SizedBox(width: 20),
