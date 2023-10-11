@@ -40,7 +40,7 @@ class _DashboardState extends State<Dashboard> {
             padding: const EdgeInsets.only(top: 20),
             child: Row(
               children: <Widget>[
-                const DashboardToday(),
+                DashboardToday(),
                 const SizedBox(
                   width: 40,
                 ),

@@ -87,261 +87,262 @@ class _DataCheckInListState extends State<DataCheckInList> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 10),
-      child: Expanded(
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                children: [
-                  DataTable(
-                    columnSpacing: 16.0,
-                    headingRowHeight: 48.0,
-                    columns: const [
-                      DataColumn(
-                        label: SizedBox(
-                            width: 50,
-                            child: Text('No',
-                                style: TextStyle(fontWeight: FontWeight.bold))),
-                        numeric: true,
-                      ),
-                      DataColumn(
-                        label: SizedBox(
-                          width: 100,
-                          child: Text('Guest Name',
-                              style: TextStyle(fontWeight: FontWeight.bold)),
-                        ),
-                      ),
-                      DataColumn(
-                        label: SizedBox(
-                          width: 100,
-                          child: Text('Phone Number',
-                              style: TextStyle(fontWeight: FontWeight.bold)),
-                        ),
-                      ),
-                      DataColumn(
-                        label: SizedBox(
-                          width: 100,
-                          child: Text('Room #',
-                              style: TextStyle(fontWeight: FontWeight.bold)),
-                        ),
-                      ),
-                      DataColumn(
-                        label: SizedBox(
-                          width: 120,
-                          child: Text('Stay Date',
-                              style: TextStyle(fontWeight: FontWeight.bold)),
-                        ),
-                      ),
-                      DataColumn(
-                        label: SizedBox(
-                          width: 100,
-                          child: Text('Pax A/C',
-                              style: TextStyle(fontWeight: FontWeight.bold)),
-                        ),
-                      ),
-                      DataColumn(
-                        label: SizedBox(
-                          width: 100,
-                          child: Text('Night',
-                              style: TextStyle(fontWeight: FontWeight.bold)),
-                        ),
-                      ),
-                      DataColumn(
-                        label: SizedBox(
-                          width: 250,
-                          child: Center(
-                            child: Text(
-                              'Action',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                    rows: bookingsData.asMap().entries.map<DataRow>((entry) {
-                      int index = entry.key;
-                      Map<String, dynamic> booking = entry.value;
-                      bool isSelected = selectedRows.contains(index);
-
-                      return DataRow(
-                        selected: isSelected,
-                        onSelectChanged: (isSelected) {
-                          setState(() {
-                            if (isSelected != null && isSelected) {
-                              selectedRows.add(index);
-                            } else {
-                              selectedRows.remove(index);
-                            }
-                          });
-                        },
-                        cells: [
-                          DataCell(
-                            SizedBox(
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: Row(
+                  children: [
+                    DataTable(
+                      columnSpacing: 16.0,
+                      headingRowHeight: 48.0,
+                      columns: const [
+                        DataColumn(
+                          label: SizedBox(
                               width: 50,
+                              child: Text('No',
+                                  style:
+                                      TextStyle(fontWeight: FontWeight.bold))),
+                          numeric: true,
+                        ),
+                        DataColumn(
+                          label: SizedBox(
+                            width: 100,
+                            child: Text('Guest Name',
+                                style: TextStyle(fontWeight: FontWeight.bold)),
+                          ),
+                        ),
+                        DataColumn(
+                          label: SizedBox(
+                            width: 100,
+                            child: Text('Phone Number',
+                                style: TextStyle(fontWeight: FontWeight.bold)),
+                          ),
+                        ),
+                        DataColumn(
+                          label: SizedBox(
+                            width: 100,
+                            child: Text('Room #',
+                                style: TextStyle(fontWeight: FontWeight.bold)),
+                          ),
+                        ),
+                        DataColumn(
+                          label: SizedBox(
+                            width: 120,
+                            child: Text('Stay Date',
+                                style: TextStyle(fontWeight: FontWeight.bold)),
+                          ),
+                        ),
+                        DataColumn(
+                          label: SizedBox(
+                            width: 100,
+                            child: Text('Pax A/C',
+                                style: TextStyle(fontWeight: FontWeight.bold)),
+                          ),
+                        ),
+                        DataColumn(
+                          label: SizedBox(
+                            width: 100,
+                            child: Text('Night',
+                                style: TextStyle(fontWeight: FontWeight.bold)),
+                          ),
+                        ),
+                        DataColumn(
+                          label: SizedBox(
+                            width: 250,
+                            child: Center(
                               child: Text(
-                                (index + 1).toString(),
-                              ),
-                            ),
-                          ),
-                          DataCell(
-                            SizedBox(
-                              width: 180,
-                              child: Text(
-                                booking['name'] ?? 'N/A',
-                              ),
-                            ),
-                          ),
-                          DataCell(
-                            Text(
-                              booking['phone_number'] ?? 'N/A',
-                            ),
-                          ),
-                          DataCell(
-                            SizedBox(
-                              width: 50,
-                              child: Center(
-                                child: Text(
-                                  booking['room_id']?.toString() ?? 'N/A',
-                                ),
-                              ),
-                            ),
-                          ),
-                          DataCell(
-                            Text(
-                              '${formatDate(booking['checkin_date'])} - ${formatDate(booking['checkout_date'])}',
-                            ),
-                          ),
-                          DataCell(
-                            SizedBox(
-                              width: 50,
-                              child: Center(
-                                child: Text(
-                                  '${booking['adults'] ?? 0} / ${booking['child'] ?? 0}',
-                                ),
-                              ),
-                            ),
-                          ),
-                          DataCell(
-                            Text(
-                              calculateDateDifference(booking['checkin_date'],
-                                  booking['checkout_date']),
-                            ),
-                          ),
-                          DataCell(
-                            Row(
-                              children: [
-                                TextButttonList(
-                                  title: 'View',
-                                  height: 0.1,
-                                  width: 0.05,
-                                  backgroundColor: const Color(0xFF419875),
-                                ),
-                                TextButttonList(
-                                  title: 'Edit',
-                                  height: 0.1,
-                                  width: 0.06,
-                                  backgroundColor: const Color(0xFF2E92CB),
-                                ),
-                                TextButttonList(
-                                  title: 'Check-In',
-                                  height: 0.1,
-                                  width: 0.09,
-                                  backgroundColor: const Color(0xFFE07471),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      );
-                    }).toList(),
-                  ),
-                  const SizedBox(
-                    height: 170,
-                  ),
-                  Row(
-                    mainAxisAlignment:
-                        MainAxisAlignment.center, // Center horizontally
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.first_page, size: 20),
-                        onPressed: () {
-                          setState(() {
-                            currentPage = 1;
-                            fetchData();
-                          });
-                        },
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.navigate_before, size: 20),
-                        onPressed: () {
-                          if (currentPage > 1) {
-                            setState(() {
-                              currentPage--;
-                              fetchData();
-                            });
-                          }
-                        },
-                      ),
-                      for (int page = 1; page <= totalPages; page++)
-                        MouseRegion(
-                          onEnter: (event) {},
-                          onExit: (event) {},
-                          child: InkWell(
-                            onTap: () {
-                              setState(() {
-                                currentPage = page;
-                                fetchData();
-                              });
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.all(14),
-                              margin: const EdgeInsets.all(4),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: currentPage == page
-                                    ? ColorController.primaryColor
-                                    : Colors.transparent,
-                              ),
-                              child: Text(
-                                '$page',
+                                'Action',
                                 style: TextStyle(
-                                  color: currentPage == page
-                                      ? Colors.white
-                                      : Colors.black,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                      IconButton(
-                        icon: const Icon(Icons.navigate_next, size: 20),
-                        onPressed: () {
-                          if (currentPage < totalPages) {
+                        )
+                      ],
+                      rows: bookingsData.asMap().entries.map<DataRow>((entry) {
+                        int index = entry.key;
+                        Map<String, dynamic> booking = entry.value;
+                        bool isSelected = selectedRows.contains(index);
+
+                        return DataRow(
+                          selected: isSelected,
+                          onSelectChanged: (isSelected) {
                             setState(() {
-                              currentPage++;
-                              fetchData();
+                              if (isSelected != null && isSelected) {
+                                selectedRows.add(index);
+                              } else {
+                                selectedRows.remove(index);
+                              }
                             });
-                          }
-                        },
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.last_page, size: 20),
-                        onPressed: () {
-                          setState(() {
-                            currentPage = totalPages;
-                            fetchData();
-                          });
-                        },
-                      ),
-                    ],
-                  )
-                ],
+                          },
+                          cells: [
+                            DataCell(
+                              SizedBox(
+                                width: 50,
+                                child: Text(
+                                  (index + 1).toString(),
+                                ),
+                              ),
+                            ),
+                            DataCell(
+                              SizedBox(
+                                width: 180,
+                                child: Text(
+                                  booking['name'] ?? 'N/A',
+                                ),
+                              ),
+                            ),
+                            DataCell(
+                              Text(
+                                booking['phone_number'] ?? 'N/A',
+                              ),
+                            ),
+                            DataCell(
+                              SizedBox(
+                                width: 50,
+                                child: Center(
+                                  child: Text(
+                                    booking['room_id']?.toString() ?? 'N/A',
+                                  ),
+                                ),
+                              ),
+                            ),
+                            DataCell(
+                              Text(
+                                '${formatDate(booking['checkin_date'])} - ${formatDate(booking['checkout_date'])}',
+                              ),
+                            ),
+                            DataCell(
+                              SizedBox(
+                                width: 50,
+                                child: Center(
+                                  child: Text(
+                                    '${booking['adults'] ?? 0} / ${booking['child'] ?? 0}',
+                                  ),
+                                ),
+                              ),
+                            ),
+                            DataCell(
+                              Text(
+                                calculateDateDifference(booking['checkin_date'],
+                                    booking['checkout_date']),
+                              ),
+                            ),
+                            DataCell(
+                              Row(
+                                children: [
+                                  TextButttonList(
+                                    title: 'View',
+                                    height: 0.1,
+                                    width: 0.05,
+                                    backgroundColor: const Color(0xFF419875),
+                                  ),
+                                  TextButttonList(
+                                    title: 'Edit',
+                                    height: 0.1,
+                                    width: 0.06,
+                                    backgroundColor: const Color(0xFF2E92CB),
+                                  ),
+                                  TextButttonList(
+                                    title: 'Check-In',
+                                    height: 0.1,
+                                    width: 0.09,
+                                    backgroundColor: const Color(0xFFE07471),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
-        ),
+              const SizedBox(
+                height: 170,
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.first_page, size: 20),
+                onPressed: () {
+                  setState(() {
+                    currentPage = 1;
+                    fetchData();
+                  });
+                },
+              ),
+              IconButton(
+                icon: const Icon(Icons.navigate_before, size: 20),
+                onPressed: () {
+                  if (currentPage > 1) {
+                    setState(() {
+                      currentPage--;
+                      fetchData();
+                    });
+                  }
+                },
+              ),
+              for (int page = 1; page <= totalPages; page++)
+                MouseRegion(
+                  onEnter: (event) {},
+                  onExit: (event) {},
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        currentPage = page;
+                        fetchData();
+                      });
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(14),
+                      margin: const EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: currentPage == page
+                            ? ColorController.primaryColor
+                            : Colors.transparent,
+                      ),
+                      child: Text(
+                        '$page',
+                        style: TextStyle(
+                          color:
+                              currentPage == page ? Colors.white : Colors.black,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              IconButton(
+                icon: const Icon(Icons.navigate_next, size: 20),
+                onPressed: () {
+                  if (currentPage < totalPages) {
+                    setState(() {
+                      currentPage++;
+                      fetchData();
+                    });
+                  }
+                },
+              ),
+              IconButton(
+                icon: const Icon(Icons.last_page, size: 20),
+                onPressed: () {
+                  setState(() {
+                    currentPage = totalPages;
+                    fetchData();
+                  });
+                },
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
