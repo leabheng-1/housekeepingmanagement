@@ -7,7 +7,13 @@ import 'package:housekeepingmanagement/dashboard/frontdesk.dart';
 import 'package:housekeepingmanagement/dashboard/guest_in_house.dart';
 import 'package:housekeepingmanagement/dashboard/house_keeping.dart';
 import 'package:housekeepingmanagement/dashboard/report.dart';
-
+import 'package:intl/intl.dart';
+String currentDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+DateTime now = DateTime.now();
+int currentHour = now.hour;
+int currentMinute = now.minute;
+int currentSecond = now.second;
+String time = '${currentHour}:${currentMinute}:${currentSecond}';
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -178,12 +184,64 @@ class _HomeScreenState extends State<HomeScreen> {
                   Expanded(
                     child: list[_selectedIndex],
                   ),
+                  Container(
+  margin: EdgeInsets.only(left:5,right:5),
+  alignment: Alignment.bottomCenter,
+  padding:EdgeInsets.all(15),
+  decoration: BoxDecoration(
+    color: Colors.white,
+    borderRadius: BorderRadius.only(
+      topLeft: Radius.circular(30.0),
+      topRight: Radius.circular(30.0),
+    ),
+  ),
+  child:Row(
+    children: [
+      Expanded(child: 
+      Text(
+    "Working Date ${currentDate}",
+
+    style: TextStyle(
+      color: Colors.black,
+    ),
+    
+    textAlign: TextAlign.left,
+  ),
+      ),
+       RealTimeClock(),
+    ],
+  )
+  
+   
+)
+
                 ],
               ),
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class RealTimeClock extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder(
+      stream: Stream.periodic(Duration(seconds: 1), (i) => i),
+      builder: (context, snapshot) {
+        DateTime now = DateTime.now();
+        String formattedTime = "${now.hour}:${now.minute}:${now.second}";
+        return Text(
+          formattedTime,
+          style: TextStyle(
+            color: Colors.black,
+          ),
+           textAlign: TextAlign.left,
+        );
+        
+      },
     );
   }
 }
