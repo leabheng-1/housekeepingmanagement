@@ -20,8 +20,11 @@ class iconController {
   static const IconData dirty = Icons.dry_cleaning;
   static const IconData clean = Icons.cleaning_services_outlined;
   static const IconData heatIcon = Icons.heat_pump;
- static const IconData fanIcon = Icons.wind_power;
- 
+  static const IconData fanIcon = Icons.wind_power;
+  static IconData saveIcon = Icons.edit_calendar_outlined;
+  static IconData closeIcon = Icons.close;
+  static IconData settiongIcon = Icons.settings;
+
   static airMethod(String? airMethod) {
     switch (airMethod?.toLowerCase()) {
       case "conditioner":
@@ -29,11 +32,12 @@ class iconController {
       case "fan":
         return fanIcon;
       default:
-        return fanIcon; // Default color if the state is not recognized
+        return fanIcon;
     }
-}
- static const IconData CancelIcon = Icons.do_not_disturb_on; // Block icon
-  static const IconData noshowIcon = Icons.usb_rounded; // Block icon
+  }
+
+  static const IconData CancelIcon = Icons.do_not_disturb_on;
+  static const IconData noshowIcon = Icons.usb_rounded;
   static bookingStatus(String? bookingStatus) {
     switch (bookingStatus?.toLowerCase()) {
       case "in-house":
@@ -43,15 +47,13 @@ class iconController {
       case "void":
         return fanIcon;
       case "no-show":
-        return fanIcon;     
+        return fanIcon;
       case "block":
         return blockIcon;
       case "booking":
-        return fanIcon;       
+        return fanIcon;
       default:
         return Icons.check; // Default color if the state is not recognized
     }
-}
-
-
+  }
 }
