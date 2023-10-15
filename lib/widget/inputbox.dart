@@ -15,7 +15,8 @@ class CustomTextField extends StatelessWidget {
   final double inputHeight; // Height of the input field
   final bool isNumeric; // Indicates whether the input should be numeric or not
 
-  CustomTextField({
+  const CustomTextField({
+    super.key,
     this.controller,
     required this.labelText,
     this.borderColor = Colors.black, // Border color
@@ -58,7 +59,7 @@ class CustomTextField extends StatelessWidget {
           ),
           child: Center(
             child: TextFormField(
-              keyboardType:TextInputType.number,
+              keyboardType: TextInputType.number,
               controller: controller,
               decoration: InputDecoration(
                 border: InputBorder.none,
@@ -67,21 +68,20 @@ class CustomTextField extends StatelessWidget {
               style: TextStyle(fontSize: 16), // Adjust font size as needed
             ),
           ),
-          alignment: Alignment.center, // Align the contents (Text) to the center
+          alignment:
+              Alignment.center, // Align the contents (Text) to the center
         ),
       ],
     );
   }
 }
 
-
-
 class DatePickerTextField extends StatefulWidget {
   final TextEditingController? controller;
   final String labelText;
-   final String mindate;
+  final String mindate;
   final String enddate;
-  final DateTime checkcurrnetdate;    
+  final DateTime checkcurrnetdate;
   final Color borderColor;
   final double borderRadius;
   final double borderWidth;
@@ -98,11 +98,12 @@ class DatePickerTextField extends StatefulWidget {
     this.borderWidth = 1.0, // Border width
     this.width = 450, // Default margin
     this.height = 40, // Height of the container
-    this.inputHeight = 30,  this.mindate =  '1900-1-1' ,
-    this.enddate = '2500-1-1', 
+    this.inputHeight = 30,
+    this.mindate = '1900-1-1',
+    this.enddate = '2500-1-1',
     required this.checkcurrnetdate,
     required this.onDateSelectedDate,
-     // Height of the input field
+    // Height of the input field
   });
 
   @override
@@ -115,36 +116,39 @@ class _DatePickerTextFieldState extends State<DatePickerTextField> {
   @override
   void initState() {
     super.initState();
-    _selectedDate =  widget.checkcurrnetdate; // Initialize with today's date
+    _selectedDate = widget.checkcurrnetdate; // Initialize with today's date
   }
 
   Future<void> _selectDate(BuildContext context) async {
     String mindate = widget.mindate;
-        String maxdate = widget.enddate;
-List<String> minCom = mindate.split('-');
-List<String> maxCom = maxdate.split('-');
-int yearMin = int.parse(minCom[0]);
-int monthMin = int.parse(minCom[1]);
-int dayMin = int.parse(minCom[2]);
-int yearMax = int.parse(maxCom[0]);
-int monthMax = int.parse(maxCom[1]);
-int dayMax = int.parse(maxCom[2]);
+    String maxdate = widget.enddate;
+    List<String> minCom = mindate.split('-');
+    List<String> maxCom = maxdate.split('-');
+    int yearMin = int.parse(minCom[0]);
+    int monthMin = int.parse(minCom[1]);
+    int dayMin = int.parse(minCom[2]);
+    int yearMax = int.parse(maxCom[0]);
+    int monthMax = int.parse(maxCom[1]);
+    int dayMax = int.parse(maxCom[2]);
     final DateTime currentDate = _selectedDate ?? DateTime.now();
-  final DateTime firstAllowedDate = DateTime(yearMin, monthMin, dayMin); // Set your minimum allowed date
-  final DateTime lastAllowedDate = DateTime(yearMax, monthMax, dayMax); // Set your maximum allowed date
+    final DateTime firstAllowedDate =
+        DateTime(yearMin, monthMin, dayMin); // Set your minimum allowed date
+    final DateTime lastAllowedDate =
+        DateTime(yearMax, monthMax, dayMax); // Set your maximum allowed date
 
-  final DateTime picked = (await showDatePicker(
-    context: context,
-    initialDate: currentDate,
-    firstDate: firstAllowedDate,
-    lastDate: lastAllowedDate,
-  )) ?? currentDate;
+    final DateTime picked = (await showDatePicker(
+          context: context,
+          initialDate: currentDate,
+          firstDate: firstAllowedDate,
+          lastDate: lastAllowedDate,
+        )) ??
+        currentDate;
 
     if (picked != null && picked != _selectedDate) {
-       widget.onDateSelectedDate(picked);
+      widget.onDateSelectedDate(picked);
       setState(() {
         _selectedDate = picked;
-        
+
         if (widget.controller != null) {
           widget.controller!.text = "${picked.toLocal()}".split(' ')[0];
         }
@@ -169,7 +173,7 @@ int dayMax = int.parse(maxCom[2]);
           ),
         ),
         Container(
-          width:widget.width,
+          width: widget.width,
           height: widget.height,
           padding: EdgeInsets.all(6),
           decoration: BoxDecoration(
@@ -209,12 +213,12 @@ class CustomDropdownButton extends StatefulWidget {
   final List<String> items;
   final String? selectedValue;
   final String? labelText;
-  
+
   final ValueChanged<String?>? onChanged;
   final String hintText;
   final double fontSize;
   final Color bg;
-final double marginTop;
+  final double marginTop;
   CustomDropdownButton({
     required this.width,
     this.bg = Colors.white,
@@ -222,7 +226,7 @@ final double marginTop;
     required this.selectedValue,
     required this.onChanged,
     this.labelText = '',
-    this.marginTop=0,
+    this.marginTop = 0,
     required this.hintText, // Change label to hintText
     this.fontSize = 14.0, // Default font size is 14.0
   });
@@ -235,72 +239,73 @@ class _CustomDropdownButtonState extends State<CustomDropdownButton> {
   @override
   Widget build(BuildContext context) {
     return Column(
-  crossAxisAlignment: CrossAxisAlignment.start,
-  children: [
-    Visibility(
-      visible: widget.labelText != null && widget.labelText!.isNotEmpty,
-      child: Padding(
-        padding: EdgeInsets.only(left: 10),
-        child: SizedBox(height: 10),
-      ),
-    ),
-    Visibility(
-      visible: widget.labelText != null && widget.labelText!.isNotEmpty,
-      child: Text(
-        widget.labelText!,
-        style: TextStyle(
-          color: Colors.black,
-          fontWeight: FontWeight.bold,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Visibility(
+          visible: widget.labelText != null && widget.labelText!.isNotEmpty,
+          child: Padding(
+            padding: EdgeInsets.only(left: 10),
+            child: SizedBox(height: 10),
+          ),
         ),
-      ),
-    ),
-    Container(
-      height: 40,
-      width: widget.width,
-      margin: EdgeInsets.only(top: widget.marginTop),
-      decoration: BoxDecoration(
-        color: widget.bg,
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: Colors.black45,
-        ),
-      ),
-      child: DropdownButtonFormField<String>(
-        isExpanded: true,
-        decoration: InputDecoration(
-          hintText: widget.hintText,
-          hintStyle: TextStyle(fontSize: widget.fontSize),
-          contentPadding: EdgeInsets.only(left: 10, top: 0, bottom: 8, right: 0),
-          border: InputBorder.none,
-        ),
-        value: widget.selectedValue,
-        items: widget.items.map((item) {
-          return DropdownMenuItem<String>(
-            value: item,
-            child: Text(
-              item,
-              style: TextStyle(
-                fontSize: widget.fontSize,
-              ),
+        Visibility(
+          visible: widget.labelText != null && widget.labelText!.isNotEmpty,
+          child: Text(
+            widget.labelText!,
+            style: TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
             ),
-          );
-        }).toList(),
-        onChanged: widget.onChanged,
-        selectedItemBuilder: (BuildContext context) {
-          return widget.items.map<Widget>((String item) {
-            return Text(
-              item,
-              style: TextStyle(
-                fontSize: widget.fontSize,
-                fontWeight: FontWeight.bold,
-              ),
-            );
-          }).toList();
-        },
-      ),
-    ),
-  ],
-);
+          ),
+        ),
+        Container(
+          height: 40,
+          width: widget.width,
+          margin: EdgeInsets.only(top: widget.marginTop),
+          decoration: BoxDecoration(
+            color: widget.bg,
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(
+              color: Colors.black45,
+            ),
+          ),
+          child: DropdownButtonFormField<String>(
+            isExpanded: true,
+            decoration: InputDecoration(
+              hintText: widget.hintText,
+              hintStyle: TextStyle(fontSize: widget.fontSize),
+              contentPadding:
+                  EdgeInsets.only(left: 10, top: 0, bottom: 8, right: 0),
+              border: InputBorder.none,
+            ),
+            value: widget.selectedValue,
+            items: widget.items.map((item) {
+              return DropdownMenuItem<String>(
+                value: item,
+                child: Text(
+                  item,
+                  style: TextStyle(
+                    fontSize: widget.fontSize,
+                  ),
+                ),
+              );
+            }).toList(),
+            onChanged: widget.onChanged,
+            selectedItemBuilder: (BuildContext context) {
+              return widget.items.map<Widget>((String item) {
+                return Text(
+                  item,
+                  style: TextStyle(
+                    fontSize: widget.fontSize,
+                    fontWeight: FontWeight.bold,
+                  ),
+                );
+              }).toList();
+            },
+          ),
+        ),
+      ],
+    );
   }
 }
 
@@ -364,7 +369,9 @@ class _IconBoxState extends State<IconBox> {
         child: Container(
           padding: EdgeInsets.all(5.0),
           decoration: BoxDecoration(
-            color: isActive ? ColorController.activeColor.withOpacity(0.2) : Colors.white,
+            color: isActive
+                ? ColorController.activeColor.withOpacity(0.2)
+                : Colors.white,
             borderRadius: BorderRadius.circular(5.0),
           ),
           child: Icon(

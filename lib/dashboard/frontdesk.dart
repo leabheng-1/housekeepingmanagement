@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:housekeepingmanagement/data_booking/add_booking_dialog.dart';
 import 'package:housekeepingmanagement/dialog/bookingdialog.dart';
@@ -19,6 +21,8 @@ String housekeepingStatusfilter = 'All';
 String guestStatusfilter = 'All';
 
 class FrontDesk extends StatefulWidget {
+  const FrontDesk({super.key});
+
   @override
   _FrontDeskState createState() => _FrontDeskState();
 }
@@ -69,8 +73,7 @@ class _FrontDeskState extends State<FrontDesk> {
 
   late final ValueNotifier<List<FrontDesk>> _selectedEvents;
   CalendarFormat _calendarFormat = CalendarFormat.month;
-  RangeSelectionMode _rangeSelectionMode = RangeSelectionMode
-      .toggledOff; // Can be toggled on/off by longpressing a date
+  RangeSelectionMode _rangeSelectionMode = RangeSelectionMode.toggledOff;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
   DateTime? _rangeStart;
@@ -84,12 +87,10 @@ class _FrontDeskState extends State<FrontDesk> {
   }
 
   List<Event> _getEventsForDay(DateTime day) {
-    // Implementation example
     return kEvents[day] ?? [];
   }
 
   List<Event> _getEventsForRange(DateTime start, DateTime end) {
-    // Implementation example
     final days = daysInRange(start, end);
 
     return [
@@ -102,13 +103,11 @@ class _FrontDeskState extends State<FrontDesk> {
       setState(() {
         _selectedDay = selectedDay;
         _focusedDay = focusedDay;
-        _rangeStart = null; // Important to clean those
+        _rangeStart = null;
         _rangeEnd = null;
         _rangeSelectionMode = RangeSelectionMode.toggledOff;
         dateurl = selectedDay;
-        print(_focusedDay);
         fetchBookingData();
-        print(dateurl);
       });
 
       _selectedEvents.value = _getEventsForDay(selectedDay).cast<FrontDesk>();
@@ -124,7 +123,6 @@ class _FrontDeskState extends State<FrontDesk> {
       _rangeSelectionMode = RangeSelectionMode.toggledOn;
     });
 
-    // `start` or `end` could be null
     if (start != null && end != null) {
       _selectedEvents.value = _getEventsForRange(start, end).cast<FrontDesk>();
     } else if (start != null) {
@@ -137,154 +135,146 @@ class _FrontDeskState extends State<FrontDesk> {
   @override
   Widget build(BuildContext context) {
     Map<String, dynamic> newbooking = {};
-    double screenWidth = MediaQuery.of(context).size.width * 0.4;
     return SingleChildScrollView(
       child: Container(
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         height: 880,
         child: Column(
           children: [
-            // First row taking up 20% of vertical space
-
             Container(
               height: 70,
-              margin: EdgeInsets.only(bottom: 10),
+              margin: const EdgeInsets.only(bottom: 10),
               child: Row(
-                mainAxisAlignment:
-                    MainAxisAlignment.end, // Align the button to the right
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   AddBookingDialog(
                     action: () {
-                      // Add your button action here
                       BookingDialog(context, reloadData)
                           .showCreateBookingDialog(newbooking);
                     },
-                    key: UniqueKey(), // Provide a key if necessary
+                    key: UniqueKey(),
                   )
                 ],
               ),
             ),
-
-            // Second row taking up 80% of vertical space
             Expanded(
-              flex: 9, // 80% of available space
+              flex: 9,
               child: Row(
                 children: [
-                  // First column taking up 20% of horizontal space
                   Expanded(
-                      flex: 3,
-                      child: Container(
-                          decoration: BoxDecoration(
-                            color:
-                                Colors.white, // Set the background color to red
-                            borderRadius: BorderRadius.circular(
-                                20.0), // Set the border radius
-                          ),
-                          child: Column(
-                            children: [
-                              Expanded(
-                                flex: 7,
-                                // 20% of available space in the column
-                                child: Container(
-                                  child: Center(
-                                      child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(20.0),
-                                    child: Scaffold(
-                                      backgroundColor: Colors.transparent,
-                                      body: Column(
-                                        children: [
-                                          Container(
-                                            height: 80, // Set margin for Col 1
-                                            decoration: const BoxDecoration(
-                                              color: ColorController
-                                                  .barColor, // Set background color for Col 1
-                                              borderRadius: BorderRadius.only(
-                                                topLeft: Radius.circular(
-                                                    20.0), // Set the top-left corner radius
-                                                topRight: Radius.circular(
-                                                    20.0), // Set the top-right corner radius
-                                              ),
-                                            ),
-                                            child: const Center(
-                                              child: Text(
-                                                'Calendar',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 24,
-                                                ),
-                                              ),
+                    flex: 3,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                      child: Column(
+                        children: [
+                          Expanded(
+                            flex: 7,
+                            child: Center(
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(20.0),
+                                child: Scaffold(
+                                  backgroundColor: Colors.transparent,
+                                  body: Column(
+                                    children: [
+                                      Container(
+                                        height: 80,
+                                        decoration: const BoxDecoration(
+                                          color: ColorController.barColor,
+                                          borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(20.0),
+                                            topRight: Radius.circular(20.0),
+                                          ),
+                                        ),
+                                        child: const Center(
+                                          child: Text(
+                                            'Calendar',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 24,
                                             ),
                                           ),
-                                          Container(
-                                            width: 400,
-                                            padding: const EdgeInsets.only(left:20,top:0,bottom:10,right:20), // Set the padding as needed
-                                            child: TableCalendar<Event>(
-                                              firstDay: kFirstDay,
-                                              lastDay: kLastDay,
-                                              focusedDay: _focusedDay,
-                                              selectedDayPredicate: (day) =>
-                                                  isSameDay(_selectedDay, day),
-                                              rangeStartDay: _rangeStart,
-                                              rangeEndDay: _rangeEnd,
-                                              calendarFormat: _calendarFormat,
-                                              rangeSelectionMode:
-                                                  _rangeSelectionMode,
-                                              eventLoader: _getEventsForDay,
-                                              startingDayOfWeek:
-                                                  StartingDayOfWeek.monday,
-                                              calendarStyle:
-                                                  const CalendarStyle(
-                                                outsideDaysVisible: false,
-                                                weekendTextStyle: TextStyle(
-                                                  color: Colors.red,
-                                                ),
-                                              ),
-                                              onDaySelected: _onDaySelected,
-                                              onRangeSelected: _onRangeSelected,
-                                              onFormatChanged: (format) {
-                                                if (_calendarFormat != format) {
-                                                  setState(() {
-                                                    _calendarFormat = format;
-                                                  });
-                                                }
-                                              },
-                                              onPageChanged: (focusedDay) {
-                                                _focusedDay = focusedDay;
-                                              },
-                                            ),
-                                          ),const SizedBox(height: 8.0),
-                                        ],
+                                        ),
                                       ),
-                                    ),
-                                  )),
-                                ),
-                              ),
-                              Expanded(
-                                flex: 3,
-                                child: Container(
-                                  padding:EdgeInsets.all(10),
-                                  child: Center(
-                                    child: SubButtonFrontdesk(),
+                                      Container(
+                                        width: 400,
+                                        padding: const EdgeInsets.only(
+                                            left: 20,
+                                            top: 0,
+                                            bottom: 10,
+                                            right: 20),
+                                        child: TableCalendar<Event>(
+                                          firstDay: kFirstDay,
+                                          lastDay: kLastDay,
+                                          focusedDay: _focusedDay,
+                                          selectedDayPredicate: (day) =>
+                                              isSameDay(_selectedDay, day),
+                                          rangeStartDay: _rangeStart,
+                                          rangeEndDay: _rangeEnd,
+                                          calendarFormat: _calendarFormat,
+                                          rangeSelectionMode:
+                                              _rangeSelectionMode,
+                                          eventLoader: _getEventsForDay,
+                                          startingDayOfWeek:
+                                              StartingDayOfWeek.monday,
+                                          calendarStyle: const CalendarStyle(
+                                            outsideDaysVisible: false,
+                                            weekendTextStyle: TextStyle(
+                                              color: Colors.red,
+                                            ),
+                                          ),
+                                          onDaySelected: _onDaySelected,
+                                          onRangeSelected: _onRangeSelected,
+                                          onFormatChanged: (format) {
+                                            if (_calendarFormat != format) {
+                                              setState(
+                                                () {
+                                                  _calendarFormat = format;
+                                                },
+                                              );
+                                            }
+                                          },
+                                          onPageChanged: (focusedDay) {
+                                            _focusedDay = focusedDay;
+                                          },
+                                        ),
+                                      ),
+                                      const SizedBox(height: 8.0),
+                                    ],
                                   ),
                                 ),
-                              )
-                            ],
-                          ))),
-                  SizedBox(width: 10.0),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 3,
+                            child: Container(
+                              padding: const EdgeInsets.all(10),
+                              child: const Center(
+                                child: SubButtonFrontdesk(),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10.0),
                   Expanded(
-                      flex: 7, // 80% of available space in the row
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color:
-                              Colors.white, // Set the background color to red
-                          borderRadius: BorderRadius.circular(
-                              20.0), // Set the border radius
-                        ),
-                        child: Column(children: [
+                    flex: 7,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                      child: Column(
+                        children: [
                           Container(
                             height: 80,
-                            padding: EdgeInsets.only(top: 5, left: 35),
-                            decoration: BoxDecoration(
+                            padding: const EdgeInsets.only(top: 5, left: 35),
+                            decoration: const BoxDecoration(
                               color: ColorController.barColor,
                               borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(20.0),
@@ -292,8 +282,7 @@ class _FrontDeskState extends State<FrontDesk> {
                               ),
                             ),
                             child: Padding(
-                              padding: EdgeInsets.all(
-                                  16.0), // Adjust the padding as needed
+                              padding: const EdgeInsets.all(16.0),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -307,8 +296,6 @@ class _FrontDeskState extends State<FrontDesk> {
                                           housekeepingStatus;
                                       guestStatusfilter = guestsname;
                                       reloadData();
-                                      print(
-                                          'Checkin: $roomStatusfilter, Checkout: $housekeepingStatus, Nights: $guestsname');
                                     },
                                     context: context,
                                   ),
@@ -316,98 +303,93 @@ class _FrontDeskState extends State<FrontDesk> {
                                     icon1: Icons.grid_view_rounded,
                                     icon2: Icons.list,
                                     initialActiveIndex: 1,
-                                    onChange: (newActiveIndex) {
-                                      // Do something with the new active index.
-                                      print(
-                                          "Active index changed to $newActiveIndex");
-                                    },
+                                    onChange: (newActiveIndex) {},
                                   )
                                 ],
                               ),
                             ),
                           ),
                           Expanded(
-                            child: Container(
-                                // Margin settings for Col 2
+                            child: Scaffold(
+                              backgroundColor: Colors.transparent,
+                              body: isLoading
+                                  ? const Center(
+                                      child: CircularProgressIndicator(),
+                                    )
+                                  : ListView.builder(
+                                      itemCount: (bookings.length / 4).ceil(),
+                                      itemBuilder:
+                                          (BuildContext context, int rowIndex) {
+                                        int startIndex = rowIndex * 4;
+                                        int endIndex = (rowIndex + 1) * 4;
+                                        if (endIndex > bookings.length) {
+                                          endIndex = bookings.length;
+                                        }
+                                        List<Widget> bookingItems = [];
+                                        for (int i = startIndex;
+                                            i < endIndex;
+                                            i++) {
+                                          final booking = bookings[i];
 
-                                child: Scaffold(
-                                    backgroundColor: Colors.transparent,
-                                    body: isLoading
-                                        ? Center(
-                                            child: CircularProgressIndicator(),
-                                          )
-                                        : ListView.builder(
-                                            itemCount:
-                                                (bookings.length / 4).ceil(),
-                                            itemBuilder: (BuildContext context,
-                                                int rowIndex) {
-                                              int startIndex = rowIndex * 4;
-                                              int endIndex = (rowIndex + 1) * 4;
-                                              if (endIndex > bookings.length) {
-                                                endIndex = bookings.length;
-                                              }
-                                              List<Widget> bookingItems = [];
-                                              for (int i = startIndex;
-                                                  i < endIndex;
-                                                  i++) {
-                                                final booking = bookings[i];
+                                          Icon statusIcon;
+                                          switch (
+                                              booking['housekeeping_status']) {
+                                            case 'clean':
+                                              statusIcon = const Icon(
+                                                  Icons.check,
+                                                  color: Colors.white);
+                                              break;
+                                            case 'cleaning':
+                                              statusIcon = const Icon(
+                                                  Icons.cleaning_services,
+                                                  color: Colors.black);
+                                              break;
+                                            case 'dirty':
+                                              statusIcon = const Icon(
+                                                  Icons.error,
+                                                  color: Colors.white);
+                                              break;
+                                            default:
+                                              statusIcon = const Icon(
+                                                  Icons.help,
+                                                  color: Colors.white);
+                                              break;
+                                          }
 
-                                                Icon statusIcon;
-                                                switch (booking[
-                                                    'housekeeping_status']) {
-                                                  case 'clean':
-                                                    statusIcon = Icon(
-                                                        Icons.check,
-                                                        color: Colors.white);
-                                                    break;
-                                                  case 'cleaning':
-                                                    statusIcon = Icon(
-                                                        Icons.cleaning_services,
-                                                        color: Colors.black);
-                                                    break;
-                                                  case 'dirty':
-                                                    statusIcon = Icon(
-                                                        Icons.error,
-                                                        color: Colors.white);
-                                                    break;
-                                                  default:
-                                                    statusIcon = Icon(
-                                                        Icons.help,
-                                                        color: Colors.white);
-                                                    break;
-                                                }
-
-                                                bookingItems.add(Expanded(
-                                                    child: GestureDetector(
-                                                  onTap: () {
-                                                    if (booking['booking_id'] ==
-                                                        null) {
-                                                      BookingDialog(context,
-                                                              reloadData)
-                                                          .showCreateBookingDialog(
-                                                              booking);
-                                                      ;
-                                                    } else {
-                                                      BookingDialog(context,
-                                                              reloadData)
-                                                          .showBookingDetailsDialog(
-                                                              booking);
-                                                    }
-                                                  },
-                                                  child: Column(children: [
+                                          bookingItems.add(
+                                            Expanded(
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  if (booking['booking_id'] ==
+                                                      null) {
+                                                    BookingDialog(
+                                                            context, reloadData)
+                                                        .showCreateBookingDialog(
+                                                            booking);
+                                                    ;
+                                                  } else {
+                                                    BookingDialog(
+                                                            context, reloadData)
+                                                        .showBookingDetailsDialog(
+                                                            booking);
+                                                  }
+                                                },
+                                                child: Column(
+                                                  children: [
                                                     Container(
-                                                      height:
-                                                          140, // Set the height as desired
-                                                      margin: EdgeInsets.all(
-                                                          8.0), // Add margin
-                                                      padding: EdgeInsets.all(
-                                                          16.0), // Add padding
+                                                      height: 140,
+                                                      margin:
+                                                          const EdgeInsets.all(
+                                                              8.0),
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              16.0),
                                                       decoration: BoxDecoration(
                                                         color: ColorController
-                                                            .boxBooingColor, // Set the background color
+                                                            .boxBooingColor,
                                                         borderRadius:
-                                                            BorderRadius.circular(
-                                                                20.0), // Add rounded corners
+                                                            BorderRadius
+                                                                .circular(20.0),
                                                       ),
                                                       child: Stack(
                                                         children: [
@@ -436,15 +418,17 @@ class _FrontDeskState extends State<FrontDesk> {
                                                                               0.1),
                                                                     ),
                                                                     child: Icon(
-                                                                        iconController.airMethod(booking[
-                                                                            'air_method']),
-                                                                        size:
-                                                                            16,
-                                                                        color: Color.fromARGB(
-                                                                            255,
-                                                                            255,
-                                                                            255,
-                                                                            255)),
+                                                                      iconController
+                                                                          .airMethod(
+                                                                              booking['air_method']),
+                                                                      size: 16,
+                                                                      color: const Color
+                                                                          .fromARGB(
+                                                                          255,
+                                                                          255,
+                                                                          255,
+                                                                          255),
+                                                                    ),
                                                                   ),
                                                                 ),
                                                               ],
@@ -453,46 +437,47 @@ class _FrontDeskState extends State<FrontDesk> {
                                                           Column(
                                                             crossAxisAlignment:
                                                                 CrossAxisAlignment
-                                                                    .start, // Align text to the left
+                                                                    .start,
                                                             children: [
                                                               Text(
                                                                 '${booking['room_number']}',
                                                                 style:
-                                                                    TextStyle(
+                                                                    const TextStyle(
                                                                   fontSize: 24,
                                                                   fontWeight:
                                                                       FontWeight
                                                                           .bold,
-                                                                  height:
-                                                                      1, // Set the line height for Room Number
+                                                                  height: 1,
                                                                 ),
                                                               ),
-                                                              SizedBox(
+                                                              const SizedBox(
                                                                   height: 2),
                                                               Text(
                                                                 '${booking['name']}',
-                                                                style: TextStyle(
-                                                                    height: 1,
-                                                                    fontSize:
-                                                                        16), // Set the line height for other text
+                                                                style:
+                                                                    const TextStyle(
+                                                                        height:
+                                                                            1,
+                                                                        fontSize:
+                                                                            16),
                                                               ),
                                                               Row(children: [
                                                                 Text(
                                                                   '${booking['checkin_date']} - ',
-                                                                  style: TextStyle(
+                                                                  style: const TextStyle(
                                                                       height: 1,
                                                                       fontSize:
-                                                                          12), // Set the line height for other text
+                                                                          12),
                                                                 ),
                                                                 Text(
                                                                   '${booking['checkout_date']}',
-                                                                  style: TextStyle(
+                                                                  style: const TextStyle(
                                                                       height: 1,
                                                                       fontSize:
-                                                                          12), // Set the line height for other text
+                                                                          12),
                                                                 ),
                                                               ]),
-                                                              SizedBox(
+                                                              const SizedBox(
                                                                   height: 19),
                                                               Row(
                                                                 children: [
@@ -511,7 +496,7 @@ class _FrontDeskState extends State<FrontDesk> {
                                                                         color: ColorController.getHKColor(booking['housekeeping_status'] ??
                                                                             ''),
                                                                       ),
-                                                                      child: Icon(
+                                                                      child: const Icon(
                                                                           iconController
                                                                               .khIcon,
                                                                           size:
@@ -520,7 +505,7 @@ class _FrontDeskState extends State<FrontDesk> {
                                                                               Colors.white),
                                                                     ),
                                                                   ),
-                                                                  SizedBox(
+                                                                  const SizedBox(
                                                                       width:
                                                                           10),
                                                                   Tooltip(
@@ -550,7 +535,7 @@ class _FrontDeskState extends State<FrontDesk> {
                                                                               Colors.white),
                                                                     ),
                                                                   ),
-                                                                  SizedBox(
+                                                                  const SizedBox(
                                                                       width:
                                                                           10),
                                                                   if (booking[
@@ -566,7 +551,7 @@ class _FrontDeskState extends State<FrontDesk> {
                                                                         height:
                                                                             35,
                                                                         decoration:
-                                                                            BoxDecoration(
+                                                                            const BoxDecoration(
                                                                           shape:
                                                                               BoxShape.circle,
                                                                           color:
@@ -583,22 +568,31 @@ class _FrontDeskState extends State<FrontDesk> {
                                                         ],
                                                       ),
                                                     ),
-                                                  ]),
-                                                )));
-                                              }
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        }
 
-                                              return Row(
-                                                children: bookingItems,
-                                              );
-                                            },
-                                          ))),
+                                        return Row(
+                                          children: bookingItems,
+                                        );
+                                      },
+                                    ),
+                            ),
                           )
-                        ]),
-                      )),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
-            Expanded(flex: 1, child: HousekeepingButton())
+            const Expanded(
+              flex: 1,
+              child: HousekeepingButton(),
+            ),
           ],
         ),
       ),

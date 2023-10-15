@@ -12,7 +12,6 @@ class HousekeepingButton extends StatefulWidget {
 }
 
 class _HousekeepingButtonState extends State<HousekeepingButton> {
-  // A variable to keep track of the selected index in the navigation rail
   final int _selectedIndex = 0;
 
   @override
@@ -20,49 +19,47 @@ class _HousekeepingButtonState extends State<HousekeepingButton> {
     return Row(
       children: [
         Expanded(
-  flex: 3,
-  child: Container(
-    height: 50,
-    decoration: BoxDecoration(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(20),
-    ),
-    child: Padding(
-      padding: const EdgeInsets.only(
-        right: 10,
-        left: 10,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          HouseKeepingStatus(
-            
-            title: 'Dirty',
-            icon: Icons.cleaning_services_rounded,
-            backgroundColor: _selectedIndex == 0
-                ? Colors.blue.shade800
-                : Colors.grey.shade800,
+          flex: 3,
+          child: Container(
+            height: 50,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.only(
+                right: 10,
+                left: 10,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  HouseKeepingStatus(
+                    title: 'Dirty',
+                    icon: Icons.cleaning_services_rounded,
+                    backgroundColor: _selectedIndex == 0
+                        ? Colors.blue.shade800
+                        : Colors.grey.shade800,
+                  ),
+                  HouseKeepingStatus(
+                    title: 'Cleaning',
+                    icon: Icons.cleaning_services_rounded,
+                    backgroundColor: _selectedIndex == 0
+                        ? Colors.yellow.shade600
+                        : Colors.grey.shade800,
+                  ),
+                  HouseKeepingStatus(
+                    title: 'Clean',
+                    icon: Icons.cleaning_services_rounded,
+                    backgroundColor: _selectedIndex == 0
+                        ? Colors.green
+                        : Colors.grey.shade800,
+                  ),
+                ],
+              ),
+            ),
           ),
-          HouseKeepingStatus(
-            title: 'Cleaning',
-            icon: Icons.cleaning_services_rounded,
-            backgroundColor: _selectedIndex == 0
-                ? Colors.yellow.shade600
-                : Colors.grey.shade800,
-          ),
-          HouseKeepingStatus(
-            title: 'Clean',
-            icon: Icons.cleaning_services_rounded,
-            backgroundColor: _selectedIndex == 0
-                ? Colors.green
-                : Colors.grey.shade800,
-          ),
-        ],
-      ),
-    ),
-  ),
-),
-
+        ),
         Padding(
           padding: const EdgeInsets.only(left: 10, right: 10),
           child: Expanded(

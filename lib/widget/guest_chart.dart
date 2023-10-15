@@ -43,14 +43,13 @@ class GuestChart extends StatefulWidget {
   State<StatefulWidget> createState() => GuestChartState();
 }
 
-// ignore: camel_case_types
 class GuestChartState extends State<GuestChart> {
-  ApiResponse? globalApiResponse; // Store the API response here
+  ApiResponse? globalApiResponse;
 
   @override
   void initState() {
     super.initState();
-    fetchDataAndSetGlobal(); // Fetch API data when the widget is initialized
+    fetchDataAndSetGlobal();
   }
 
   Future<void> fetchDataAndSetGlobal() async {
@@ -76,9 +75,9 @@ class GuestChartState extends State<GuestChart> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 350, // Adjust the width as needed
-      height: 250, // Adjust the height as needed
+    return SizedBox(
+      width: 350,
+      height: 250,
       child: AspectRatio(
         aspectRatio: 1,
         child: Stack(
