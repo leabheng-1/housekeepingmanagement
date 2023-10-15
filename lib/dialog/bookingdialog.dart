@@ -346,7 +346,7 @@ totalChargeController.text = (nights * roomRateCal).toString();
   icon: Icons.star,
   textColor: Colors.white,
   color: Colors.blue,
-  label: "Cancel",
+  label: "Create",
   action: () {
        final guestName = guestNameController.text;
     final gender = genderController.text ;
@@ -426,10 +426,11 @@ Future<void> submitUpdatedData(    String name,
         int room_id,
     ) async {
   final String baseUrl1 = 'http://localhost:8000/api/booking/insert';
-   final url = Uri.parse('$baseUrl1?room_id=$room_id&name=$name&gender=$gender&dob=$dob&country=$country&adult=$adult&child=$child&phone_number=$phone_number&address=$address&cardId=$cardId&email=$email&checkout_date=$checkout_date&room_type=$room_type&roomNumber=$roomNumber&roomRate=$roomRate&extra_charge=$extraCharge&total_payment=$totalPayment&totalCharge=$totalCharge&totalBalance=$totalBalance&checkin_date=$checkin_date&payment_status=leabheng');
+   final url = Uri.parse('$baseUrl1?room_id=$room_id&name=$name&gender=$gender&dob=$dob&country=$country&adult=$adult&child=$child&phone_number=$phone_number&address=$address&cardId=$cardId&email=$email&checkout_date=$checkout_date&room_type=$room_type&roomNumber=$roomNumber&roomRate=$roomRate&extra_charge=$extraCharge&total_payment=$totalPayment&tcharges=$totalCharge&totalBalance=$totalBalance&checkin_date=$checkin_date&payment_status=leabheng');
   
     final response = await http.post(url);
     if (response.statusCode == 200) {
+      print(totalCharge);
       AwesomeDialog(
          width: 500,  
         context: context,

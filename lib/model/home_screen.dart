@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:housekeepingmanagement/model/footer.dart';
 import 'package:housekeepingmanagement/system_widget/system_icon.dart';
 import 'package:housekeepingmanagement/controller/main_controller.dart';
 import 'package:housekeepingmanagement/dashboard/dashboard.dart';
@@ -8,12 +9,7 @@ import 'package:housekeepingmanagement/dashboard/guest_in_house.dart';
 import 'package:housekeepingmanagement/dashboard/house_keeping.dart';
 import 'package:housekeepingmanagement/dashboard/report.dart';
 import 'package:intl/intl.dart';
-String currentDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
-DateTime now = DateTime.now();
-int currentHour = now.hour;
-int currentMinute = now.minute;
-int currentSecond = now.second;
-String time = '${currentHour}:${currentMinute}:${currentSecond}';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -195,22 +191,7 @@ class _HomeScreenState extends State<HomeScreen> {
       topRight: Radius.circular(30.0),
     ),
   ),
-  child:Row(
-    children: [
-      Expanded(child: 
-      Text(
-    "Working Date ${currentDate}",
-
-    style: TextStyle(
-      color: Colors.black,
-    ),
-    
-    textAlign: TextAlign.left,
-  ),
-      ),
-       RealTimeClock(),
-    ],
-  )
+  child:footer()
   
    
 )
@@ -221,27 +202,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-    );
-  }
-}
-
-class RealTimeClock extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: Stream.periodic(Duration(seconds: 1), (i) => i),
-      builder: (context, snapshot) {
-        DateTime now = DateTime.now();
-        String formattedTime = "${now.hour}:${now.minute}:${now.second}";
-        return Text(
-          formattedTime,
-          style: TextStyle(
-            color: Colors.black,
-          ),
-           textAlign: TextAlign.left,
-        );
-        
-      },
     );
   }
 }
