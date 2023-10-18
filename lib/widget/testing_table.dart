@@ -46,7 +46,7 @@ Future<void> _showAlertDialog(BuildContext context) async {
             onPressed: () {
               Navigator.of(context).pop(); // Close the dialog
             },
-            child: const Text('Cancel'),
+            child: const Text('Cancel s'),
           ),
           TextButton(
             onPressed: () async {
