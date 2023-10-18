@@ -1,19 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:housekeepingmanagement/report/widget/PieChartReport.dart';
 import 'package:housekeepingmanagement/report/widget/chart.dart';
+import 'package:housekeepingmanagement/report/widget/table.dart';
 
+
+int currentYear = DateTime.now().year;
 class Report extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: RowLayout(),
-      ),
-    );
-  }
-}
-
-class RowLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return 
@@ -31,22 +23,36 @@ class RowLayout extends StatelessWidget {
             children: <Widget>[
               // First column
               Expanded(
-  flex: 6,
+  flex: 7,
   child: Stack(
     children: <Widget>[
-      Padding(
-  padding: EdgeInsets.all(16.0), // Adjust the padding as needed
-  child: Container(
-    color: Colors.blue,
-    child: Center(
+ Container(
+  margin: EdgeInsets.all(10.0),
+  decoration: BoxDecoration(
+    color: const Color.fromARGB(255, 255, 255, 255),
+    borderRadius: BorderRadius.circular(15.0), // Adjust the border radius as needed
+    boxShadow: [
+      BoxShadow(
+        color: Colors.grey, // The color of the shadow
+        blurRadius: 5.0,    // Adjust the blur radius as needed
+        offset: Offset(0, 2), // Adjust the offset as needed
+      ),
+    ],
+  ),
+  child: Center(
+    child: Padding(
+      padding: EdgeInsets.all(30), // Adjust the padding as needed
       child: chart_bar_report(),
     ),
   ),
 ),
 
+
+
+
       Positioned(
-        top: 10,  // Adjust the top value as needed for padding
-        left: 10, // Adjust the left value as needed for padding
+        top: 30,  // Adjust the top value as needed for padding
+        left: 30, // Adjust the left value as needed for padding
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -55,7 +61,7 @@ class RowLayout extends StatelessWidget {
               style: TextStyle(fontSize: 14),
             ),
             Text(
-              "Big Title",
+              "$currentYear",
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ],
@@ -65,27 +71,36 @@ class RowLayout extends StatelessWidget {
   ),
 ),
 Expanded(
-  flex: 4,
-  child: Stack(
+  flex: 3,
+  child:Stack(
     children: <Widget>[
-      Container( // Adjust the margin as needed
-        decoration: BoxDecoration(
-          color: Colors.blue,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey, // Shadow color
-              offset: Offset(0, 2), // Offset
-              blurRadius: 4, // Blur radius
-            ),
-          ],
-        ),
-        child: Center(
-          child: PieChartreport(),
-        ),
+ Container(
+  margin: EdgeInsets.all(10.0),
+  decoration: BoxDecoration(
+    color: const Color.fromARGB(255, 255, 255, 255),
+    borderRadius: BorderRadius.circular(15.0), // Adjust the border radius as needed
+    boxShadow: [
+      BoxShadow(
+        color: Colors.grey, // The color of the shadow
+        blurRadius: 5.0,    // Adjust the blur radius as needed
+        offset: Offset(0, 2), // Adjust the offset as needed
       ),
+    ],
+  ),
+  child: Center(
+    child: Padding(
+      padding: EdgeInsets.all(30), // Adjust the padding as needed
+      child: PieChartreport(),
+    ),
+  ),
+),
+
+
+
+
       Positioned(
-        top: 10,  // Adjust the top value as needed for padding
-        left: 10, // Adjust the left value as needed for padding
+        top: 30,  // Adjust the top value as needed for padding
+        left: 30, // Adjust the left value as needed for padding
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -101,7 +116,7 @@ Expanded(
         ),
       ),
     ],
-  ),
+  ), 
 )
 
             ],
@@ -112,10 +127,14 @@ Expanded(
         Expanded(
           flex: 6,
           child: Container(
-            color: Colors.orange,
-            child: Center(
-              child: Text('Row 2'),
-            ),
+            margin: EdgeInsets.all(10.0),
+            padding: EdgeInsets.all(10),
+            decoration: BoxDecoration(
+    color: const Color.fromARGB(255, 255, 255, 255),
+    borderRadius: BorderRadius.circular(15.0), // Adjust the border radius as needed
+    
+  ),
+            child: dailyReport()
           ),
         ),
       ],

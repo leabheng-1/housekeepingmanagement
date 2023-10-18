@@ -50,6 +50,14 @@ dependencies:
   bs_flutter_datatable: ^1.2.5
   dropdown_button2: ^2.3.9
   getwidget: ^4.0.0
+  pdf: ^3.10.4
+  printing: ^5.11.0
+  google_fonts: ^6.1.0
+  path_provider: ^2.1.1
+  flutter_downloader: ^1.11.3
+  open_file: ^3.3.2
+  flutter_pdfview: ^1.3.2
+  url_launcher: ^6.1.14
 
 dev_dependencies:
   flutter_test:

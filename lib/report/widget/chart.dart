@@ -111,7 +111,7 @@ Future<void> fetchMonthlyChargeData() async {
         BarChartRodData(
           width: 40,
           borderRadius: BorderRadius.all(Radius.circular(0)),
-            toY: double.parse(_list[i].value!), color: Colors.deepOrange)
+            toY: double.parse(_list[i].value!), color: Color.fromARGB(255, 0, 128, 255))
       ]));
     }
     return list;
@@ -122,42 +122,42 @@ Future<void> fetchMonthlyChargeData() async {
         getTitlesWidget: (value, meta) {
           String text = '';
           switch (value.toInt()) {
-            case 0:
-              text = 'Mon';
-              break;
-            case 1:
-              text = 'Tue';
-              break;
-            case 2:
-              text = 'Wed';
-              break;
-            case 3:
-              text = 'Thu';
-              break;
-            case 4:
-              text = 'Fri';
-              break;
-            case 5:
-              text = 'Sat';
-              break;
-            case 6:
-              text = 'Sun';
-              break;
-            case 7:
-              text = 'Sun';
-              break;
-            case 8:
-              text = 'Sun';
-              break;
-            case 9:
-              text = 'Sun';
-              break;
-            case 10:
-              text = 'Sun';
-              break;
-            case 11:
-              text = 'Sun';
-              break;          
+         case 0:
+    text = 'Jan';
+    break;
+  case 1:
+    text = 'Feb';
+    break;
+  case 2:
+    text = 'Mar';
+    break;
+  case 3:
+    text = 'Apr';
+    break;
+  case 4:
+    text = 'May';
+    break;
+  case 5:
+    text = 'Jun';
+    break;
+  case 6:
+    text = 'Jul';
+    break;
+  case 7:
+    text = 'Aug';
+    break;
+  case 8:
+    text = 'Sep';
+    break;
+  case 9:
+    text = 'Oct';
+    break;
+  case 10:
+    text = 'Nov';
+    break;
+  case 11:
+    text = 'Dec';
+    break;         
           }
 
           return Text(

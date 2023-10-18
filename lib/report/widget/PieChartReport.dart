@@ -2,6 +2,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:housekeepingmanagement/report/widget/indicator.dart';
+import 'package:housekeepingmanagement/system_widget/system_color.dart';
 import 'package:housekeepingmanagement/widget/app_color.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -55,15 +56,15 @@ class PieChart2State extends State{
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
-      aspectRatio: 2,
+      aspectRatio: 1.3,
       child: Column(
         children: <Widget>[
           const SizedBox(
-            height: 18,
+            height: 120,
           ),
           Expanded(
             child: AspectRatio(
-              aspectRatio: 1,
+              aspectRatio: 1.5,
               child: PieChart(
                 PieChartData(
                   pieTouchData: PieTouchData(
@@ -90,47 +91,51 @@ class PieChart2State extends State{
               ),
             ),
           ),
-          const Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              
-              Indicator(
-                color: AppColors.contentColorBlue,
-                text: 'Single Room',
-                isSquare: false,
-                
-                
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Indicator(
-                color: AppColors.contentColorYellow,
-                text: 'Twin Room',
-                 isSquare: false,
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Indicator(
-                color: AppColors.contentColorPurple,
-                text: 'No Show',
-                isSquare: false,
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Indicator(
-                color: AppColors.contentColorGreen,
-                text: 'Cancel',
-                isSquare: false,
-              ),
-              SizedBox(
-                height: 18,
-              ),
-            ],
+                const SizedBox(
+            height: 100,
           ),
+          Expanded(child:
+          const Center(
+          
+  child: Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    crossAxisAlignment: CrossAxisAlignment.center,
+    children: <Widget>[
+      Indicator(
+        color: AppColors.contentColorBlue,
+        text: 'Single Room',
+        isSquare: false,
+      ),
+      SizedBox(
+        width: 10,
+      ),
+      Indicator(
+        color: Colors.yellow,
+        text: 'Twin Room',
+        isSquare: false,
+      ),
+      SizedBox(
+        width: 10,
+      ),
+      Indicator(
+        color: ColorController.noshow,
+        text: 'No Show',
+        isSquare: false,
+      ),
+      
+      SizedBox(
+        width: 10,
+      ),
+      Indicator(
+        color: ColorController.cancel,
+        text: 'Cancel',
+        isSquare: false,
+      ),
+    ],
+  ),
+),
+ ),
+
           const SizedBox(
             width: 28,
           ),
@@ -142,8 +147,8 @@ class PieChart2State extends State{
   List<PieChartSectionData> showingSections() {
     return List.generate(4, (i) {
       final isTouched = i == touchedIndex;
-      final fontSize = isTouched ? 20.0 : 16.0;
-      final radius = isTouched ? 80.0 : 70.0;
+      final fontSize = isTouched ? 16.0 : 12.0;
+      final radius = isTouched ? 95.0 : 90.0;
       const shadows = [Shadow(color: Colors.black, blurRadius: 2)];
       switch (i) {
         case 0:
