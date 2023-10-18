@@ -192,7 +192,7 @@ class CustomDropdownButton extends StatefulWidget {
     required this.onChanged,
     this.marginTop = 0,
     required this.hintText,
-    this.fontSize = 14.0,
+    this.fontSize = 14.0, 
   });
 
   @override

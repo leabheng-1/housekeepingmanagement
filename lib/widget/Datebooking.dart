@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class DateRangePickerWidget extends StatefulWidget {
- final TextEditingController? controller;
+  final TextEditingController? controller;
   final String? labelText;
   final String? mindate;
   final String? enddate;
@@ -10,21 +10,22 @@ class DateRangePickerWidget extends StatefulWidget {
   final double borderRadius;
   final double borderWidth;
   final double width;
-  final double height; // Height of the container
-  final double inputHeight; // Height of the input field
+  final double height;
+  final double inputHeight;
   final void Function(DateTime selectedDate) onDateSelectedDate;
   final TextEditingController? checkin;
   final TextEditingController? checkout;
-  final TextEditingController?  night;
-final void Function(DateTime checkin, DateTime checkout, int nights) onChange;
-  DateRangePickerWidget({
+  final TextEditingController? night;
+  final void Function(DateTime checkin, DateTime checkout, int nights) onChange;
+  const DateRangePickerWidget({
+    super.key,
     this.controller,
     required this.labelText,
-    this.borderColor = Colors.black, // Border color
-    this.borderRadius = 10.0, // Border radius
-    this.borderWidth = 1.0, // Border width
-    this.width = 450, // Default margin
-    this.height = 40, // Height of the container
+    this.borderColor = const Color(0xFFb4b4b4),
+    this.borderRadius = 10.0,
+    this.borderWidth = 1.0,
+    this.width = 450,
+    this.height = 40,
     this.inputHeight = 30,
     this.mindate = '1900-1-1',
     this.enddate = '2500-1-1',
@@ -33,35 +34,35 @@ final void Function(DateTime checkin, DateTime checkout, int nights) onChange;
     this.checkin,
     this.checkout,
     this.night,
-     required this.onChange,
+    required this.onChange,
   });
   @override
+  // ignore: library_private_types_in_public_api
   _DateRangePickerWidgetState createState() => _DateRangePickerWidgetState();
 }
 
 class _DateRangePickerWidgetState extends State<DateRangePickerWidget> {
   DateTime? _checkInDate;
   DateTime? _checkOutDate;
-  
-  int _numberOfNights = 1; // Initialize with 1 night as default
-  
+
+  int _numberOfNights = 1;
 
   @override
- void initState() {
+  void initState() {
     super.initState();
-     if (widget.night!.text.isNotEmpty) {
-  
+    if (widget.night!.text.isNotEmpty) {
       _numberOfNights = int.parse(widget.night!.text);
-     }
+    }
     _checkInDate = widget.checkin!.text.isNotEmpty
         ? DateTime.parse(widget.checkin!.text)
-        : widget.checkcurrentdate; // Use default or provided check-in date
+        : widget.checkcurrentdate;
     _checkOutDate = widget.checkout!.text.isNotEmpty
         ? DateTime.parse(widget.checkout!.text)
-        : _checkInDate!.add(Duration(
-            days:
-                _numberOfNights)); // Use default or calculate check-out date based on check-in date
+        : _checkInDate!.add(
+            Duration(days: _numberOfNights),
+          );
   }
+
   Future<void> _selectDate(BuildContext context, bool isCheckIn) async {
     String? mindate = widget.mindate;
     String? maxdate = widget.enddate;
@@ -89,21 +90,23 @@ class _DateRangePickerWidgetState extends State<DateRangePickerWidget> {
       setState(() {
         if (isCheckIn) {
           _checkInDate = picked;
-          // Ensure that check-out date is not before check-in date
+
           if (_checkOutDate!.isBefore(_checkInDate!)) {
-            _checkOutDate = _checkInDate!.add(Duration(days: _numberOfNights));
-             _updateValues();
+            _checkOutDate = _checkInDate!.add(
+              Duration(days: _numberOfNights),
+            );
+            _updateValues();
           }
         } else {
-          // Ensure that check-out date is not before check-in date
           if (picked!.isBefore(_checkInDate!)) {
-            picked = _checkInDate!.add(Duration(days: _numberOfNights));
-             _updateValues();
+            picked = _checkInDate!.add(
+              Duration(days: _numberOfNights),
+            );
+            _updateValues();
           }
           _checkOutDate = picked;
-
         }
-        // Calculate the number of nights
+
         final duration = _checkOutDate!.difference(_checkInDate!);
         _numberOfNights = duration.inDays;
       });
@@ -116,13 +119,12 @@ class _DateRangePickerWidgetState extends State<DateRangePickerWidget> {
     return Row(
       children: [
         Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Padding(
+          const Padding(
             padding: EdgeInsets.only(left: 10),
             child: SizedBox(height: 10),
-
           ),
-          Text(
-            'Check Out',
+          const Text(
+            'Check-In',
             style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.bold,
@@ -131,152 +133,190 @@ class _DateRangePickerWidgetState extends State<DateRangePickerWidget> {
           Container(
             width: 200,
             height: widget.height,
-            padding: EdgeInsets.all(6),
+            padding: const EdgeInsets.all(6),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: const Color(0xFFF6F6F6),
               borderRadius: BorderRadius.circular(widget.borderRadius),
               border: Border.all(
                 color: widget.borderColor,
                 width: widget.borderWidth,
               ),
             ),
+            alignment: Alignment.center,
             child: InkWell(
               onTap: () {
-                _selectDate(context, true); // Select Check-In date
-                 _updateValues();
+                _selectDate(context, true);
+                _updateValues();
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Text(
-                    _checkInDate != null
-                        ? "${_checkInDate!.toLocal()}".split(' ')[0]
-                        : 'Select Check-In',
-                    style: TextStyle(fontSize: 16),
+                    formatDateToDdMmmYyyy(_checkInDate),
+                    style: const TextStyle(fontSize: 16),
                   ),
-                  Icon(Icons.calendar_today, color: Colors.blue),
+                  const Icon(Icons.calendar_today, color: Colors.blue),
                 ],
               ),
             ),
-            alignment: Alignment.center,
           ),
         ]),
-        SizedBox(width: 15),
-        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Padding(
-            padding: EdgeInsets.only(left: 10),
-            child: SizedBox(height: 10),
-          ),
-          Text(
-            'Check In',
-            style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
+        const SizedBox(width: 15),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(left: 10),
+              child: SizedBox(height: 10),
             ),
-          ),
-          Container(
-            width: 200,
-            height: widget.height,
-            padding: EdgeInsets.all(6),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(widget.borderRadius),
-              border: Border.all(
-                color: widget.borderColor,
-                width: widget.borderWidth,
+            const Text(
+              'Check-Out',
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
               ),
             ),
-            child: InkWell(
-              onTap: () {
-                 _updateValues();
-                _selectDate(context, false); // Select Check-Out date
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Text(
-                    _checkOutDate != null
-                        ? "${_checkOutDate!.toLocal()}".split(' ')[0]
-                        : 'Select Check-Out',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  Icon(Icons.calendar_today, color: Colors.blue),
-                ],
-              ),
-            ),
-            alignment: Alignment.center,
-          ),
-        ]),
-        SizedBox(width: 15),
-        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Padding(
-            padding: EdgeInsets.only(left: 10),
-            child: SizedBox(height: 10),
-          ),
-          Text(
-            'Nights',
-            style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          Container(
-            width: 120,
-            height: widget.height,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(widget.borderRadius),
-              border: Border.all(
-                color: widget.borderColor,
-                width: widget.borderWidth,
-              ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                IconButton(
-                  icon: Icon(Icons.remove),
-                  onPressed: () {
-                    setState(() {
-                      if (_numberOfNights > 1) {
-                        _numberOfNights--;
-                        _checkOutDate =
-                            _checkInDate!.add(Duration(days: _numberOfNights));
-                             _updateValues();
-                      }
-                    });
-                  },
+            Container(
+              width: 200,
+              height: widget.height,
+              padding: const EdgeInsets.all(6),
+              decoration: BoxDecoration(
+                color: const Color(0xFFF6F6F6),
+                borderRadius: BorderRadius.circular(widget.borderRadius),
+                border: Border.all(
+                  color: widget.borderColor,
+                  width: widget.borderWidth,
                 ),
-                Container(
-                  child: Text(
+              ),
+              alignment: Alignment.center,
+              child: InkWell(
+                onTap: () {
+                  _updateValues();
+                  _selectDate(context, false);
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      formatDateToDdMmmYyyy(_checkOutDate),
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                    const Icon(Icons.calendar_today, color: Colors.blue),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(width: 15),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Padding(
+              padding: EdgeInsets.only(left: 10),
+              child: SizedBox(height: 10),
+            ),
+            const Text(
+              'Nights',
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Container(
+              width: 120,
+              height: widget.height,
+              decoration: BoxDecoration(
+                color: const Color(0xFFF6F6F6),
+                borderRadius: BorderRadius.circular(widget.borderRadius),
+                border: Border.all(
+                  color: widget.borderColor,
+                  width: widget.borderWidth,
+                ),
+              ),
+              alignment: Alignment.center,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  IconButton(
+                    icon: const Icon(Icons.remove),
+                    onPressed: () {
+                      setState(
+                        () {
+                          if (_numberOfNights > 1) {
+                            _numberOfNights--;
+                            _checkOutDate = _checkInDate!.add(
+                              Duration(days: _numberOfNights),
+                            );
+                            _updateValues();
+                          }
+                        },
+                      );
+                    },
+                  ),
+                  Text(
                     '$_numberOfNights',
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 16,
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                ),
-                IconButton(
-                  icon: Icon(Icons.add),
-                  onPressed: () {
-                    setState(() {
-                      _numberOfNights++;
-                      _checkOutDate =
-                          _checkInDate!.add(Duration(days: _numberOfNights));
+                  IconButton(
+                    icon: const Icon(Icons.add),
+                    onPressed: () {
+                      setState(
+                        () {
+                          _numberOfNights++;
+                          _checkOutDate = _checkInDate!.add(
+                            Duration(days: _numberOfNights),
+                          );
                           _updateValues();
-                    });
-                  },
-                ),
-              ],
+                        },
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
-            alignment: Alignment.center,
-          ),
-        ])
+          ],
+        )
       ],
     );
   }
+
   void _updateValues() {
-    widget.onChange(_checkInDate!, _checkOutDate!, _numberOfNights);
+    if (_checkInDate != null && _checkOutDate != null) {
+      int numberOfNights = _checkOutDate!.difference(_checkInDate!).inDays;
+
+      widget.onChange(_checkInDate!, _checkOutDate!, numberOfNights);
+    }
+  }
+
+  String formatDateToDdMmmYyyy(DateTime? date) {
+    if (date == null) {
+      return 'Select Check-Out';
+    } else {
+      final List<String> months = [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec'
+      ];
+
+      String day = date.day.toString().padLeft(2, '0');
+      String month = months[date.month - 1];
+      String year = date.year.toString();
+
+      return '$day-$month-$year';
+    }
   }
 }

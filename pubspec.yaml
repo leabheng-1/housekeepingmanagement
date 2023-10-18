@@ -50,6 +50,7 @@ dependencies:
   bs_flutter_datatable: ^1.2.5
   dropdown_button2: ^2.3.9
   getwidget: ^4.0.0
+  dio: ^5.3.3
 
 dev_dependencies:
   flutter_test:

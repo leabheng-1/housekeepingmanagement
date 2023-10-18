@@ -2,7 +2,6 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 
 final List<String> items = [
-  "",
   "Afghanistan",
   "Albania",
   "Algeria",
@@ -203,6 +202,7 @@ final List<String> items = [
 ];
 
 final TextEditingController textEditingController = TextEditingController();
+typedef OnChangedCallback = void Function(String? newValue);
 
 @override
 void dispose() {
@@ -211,10 +211,10 @@ void dispose() {
 
 // ignore: must_be_immutable, camel_case_types
 class selectCountry_dropdown extends StatefulWidget {
+  late final OnChangedCallback onChanged;
   final double width;
   String? selectedValue;
   String? labelText;
-  final ValueChanged<String?>? onChanged;
   final String hintText;
   final double fontSize;
   final Color bg;
@@ -238,24 +238,27 @@ class selectCountry_dropdown extends StatefulWidget {
 
 // ignore: camel_case_types
 class selectCountry_dropdown_layout extends State<selectCountry_dropdown> {
+  String? selectedValue;
   @override
   Widget build(BuildContext context) {
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      const Padding(
-        padding: EdgeInsets.only(left: 10),
-        child: SizedBox(height: 10),
-      ),
-      Text(
-        widget.labelText!,
-        style: const TextStyle(
-          color: Colors.black,
-          fontWeight: FontWeight.bold,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.only(left: 10),
+          child: SizedBox(height: 10),
         ),
-      ),
-      Container(
+        Text(
+          widget.labelText!,
+          style: const TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        Container(
           height: 40,
           width: 250,
-          margin: EdgeInsets.only(top: 0),
+          margin: const EdgeInsets.only(top: 0),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10),
@@ -273,6 +276,7 @@ class selectCountry_dropdown_layout extends State<selectCountry_dropdown> {
                   color: Theme.of(context).hintColor,
                 ),
               ),
+              value: selectedValue, // Added the selected value
               items: items
                   .map((item) => DropdownMenuItem(
                         value: item,
@@ -284,9 +288,12 @@ class selectCountry_dropdown_layout extends State<selectCountry_dropdown> {
                         ),
                       ))
                   .toList(),
-
-              onChanged: widget.onChanged,
-
+              onChanged: (newValue) {
+                setState(() {
+                  selectedValue = newValue;
+                });
+                widget.onChanged(newValue);
+              },
               buttonStyleData: const ButtonStyleData(
                 padding: EdgeInsets.symmetric(horizontal: 16),
                 height: 40,
@@ -331,14 +338,15 @@ class selectCountry_dropdown_layout extends State<selectCountry_dropdown> {
                   return item.value.toString().contains(searchValue);
                 },
               ),
-
               onMenuStateChange: (isOpen) {
                 if (!isOpen) {
                   textEditingController.clear();
                 }
               },
             ),
-          ))
-    ]);
+          ),
+        ),
+      ],
+    );
   }
 }

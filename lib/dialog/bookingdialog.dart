@@ -4,6 +4,7 @@ import 'package:housekeepingmanagement/system_widget/box_detail.dart';
 import 'package:housekeepingmanagement/system_widget/btn.dart';
 import 'package:housekeepingmanagement/widget/Datebooking.dart';
 import 'package:housekeepingmanagement/widget/country.dart';
+import 'package:housekeepingmanagement/widget/input_box_simbol.dart';
 import 'package:housekeepingmanagement/widget/inputbox.dart';
 import 'package:housekeepingmanagement/widget/legend.dart';
 import 'package:http/http.dart' as http;
@@ -12,52 +13,42 @@ import 'package:housekeepingmanagement/system_widget/system_icon.dart';
 class BookingDialog {
   final BuildContext context;
   final VoidCallback reloadDataCallback;
-
   BookingDialog(this.context, this.reloadDataCallback);
+  Future<void> fetchBookingData() async {
+    const url = 'http://127.0.0.1:8000/api/booking/insert';
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+      );
+
+      if (response.statusCode == 200) {
+      } else {
+        throw Exception('Failed to load booking data');
+      }
+    } catch (error) {}
+  }
+
   void showCreateBookingDialog(Map<String, dynamic> booking) {
     int? bookingId = booking['booking_id'] as int?;
-    int? id = booking['id'] as int?;
-    int? guestId = booking['guest_id'] as int?;
     String? roomType = booking['roomtype'] as String?;
-    int? roomId = booking['room_id'] as int?;
-    int? paymentId = booking['payment_id'] as int?;
-    String? bookingStatus = booking['booking_status'] as String?;
-    String? cancelDate = booking['cancel_date'] as String?;
-    String? arrivalDate = booking['arrival_date'] as String?;
-    String? departureDate = booking['departure_date'] as String?;
     String? checkinDate = booking['checkin_date'] as String?;
     String? checkoutDate = booking['checkout_date'] as String?;
     int? adults = booking['adults'] as int?;
     int? child = booking['child'] as int?;
-    String? createdBy = booking['created_by'] as String?;
     String? note = booking['note'] as String?;
-    String? createdAt = booking['created_at'] as String?;
-    String? updatedAt = booking['updated_at'] as String?;
     String? roomNumber = booking['room_number'] as String?;
-    String? roomStatus = booking['room_status'] as String?;
-    String? roomtype = booking['roomtype'] as String?;
-    int? floor = booking['floor'] as int?;
     String? roomRate = booking['room_rate'] as String?;
-    String? housekeeper = booking['housekeeper'] as String?;
-    String? airMethod = booking['air_method'] as String?;
     int? payment = booking['payment'] as int?;
-    String? paymentStatus = booking['payment_status'] as String?;
     String? extraCharge = booking['extra_charge'] as String?;
     int? charges = booking['charges'] as int?;
     String? balance = booking['balance'] as String?;
-    String? itemExtraCharge = booking['item_extra_charge'] as String?;
     String? name = booking['name'] as String?;
     String? gender = booking['gender'] as String?;
     String? phoneNumber = booking['phone_number'] as String?;
     String? email = booking['email'] as String?;
     String? country = booking['country'] as String?;
     String? dob = booking['dob'] as String?;
-    String? passportNumber = booking['passport_number'] as String?;
     String? cardId = booking['card_id'] as String?;
-    String? otherInformation = booking['other_information'] as String?;
-    int? isDelete = booking['is_delete'] as int?;
-    String? housekeepingStatus = booking['housekeeping_status'] as String?;
-    String? date = booking['date'] as String?;
 
     TextEditingController guestNameController = TextEditingController();
     TextEditingController genderController = TextEditingController();
@@ -70,7 +61,6 @@ class BookingDialog {
     TextEditingController cardIdController = TextEditingController();
     TextEditingController emailController = TextEditingController();
     TextEditingController guestNoteController = TextEditingController();
-
     TextEditingController bookingIdController = TextEditingController();
     TextEditingController checkInController = TextEditingController();
     TextEditingController checkOutController = TextEditingController();
@@ -82,18 +72,14 @@ class BookingDialog {
     TextEditingController totalPaymentController = TextEditingController();
     TextEditingController totalChargeController = TextEditingController();
     TextEditingController totalBalanceController = TextEditingController();
-
-// Check if the values are not null before assigning them to the controllers
     bookingIdController.text = bookingId?.toString() ?? '';
     checkInController.text = checkinDate ?? DateTime.now().toString();
-    DateTime tomorrow = DateTime.now().add(Duration(days: 1));
+    DateTime tomorrow = DateTime.now().add(const Duration(days: 1));
     checkOutController.text = checkoutDate ?? tomorrow.toString();
     DateTime checkInDate = DateTime.parse(checkInController.text);
     DateTime checkOutDate = DateTime.parse(checkOutController.text);
-
     int differenceInDays = checkOutDate.difference(checkInDate).inDays;
-    nightController.text = differenceInDays.toString() ?? '1';
-
+    nightController.text = differenceInDays.toString();
     roomTypeController.text = roomType ?? 'No set';
     roomNumberController.text = roomNumber ?? '';
     roomRateController.text = roomRate ?? '10';
@@ -102,10 +88,8 @@ class BookingDialog {
     int nightCal = int.parse(nightController.text);
     double roomRateCal = double.parse(roomRateController.text);
     double result = nightCal * roomRateCal;
-
     totalChargeController.text = charges?.toString() ?? result.toString();
     totalBalanceController.text = balance ?? '';
-
     guestNameController.text = name ?? '';
     genderController.text = gender ?? 'No set';
     dobController.text = dob ?? '';
@@ -117,8 +101,6 @@ class BookingDialog {
     emailController.text = email ?? '';
     guestNoteController.text = note ?? '';
 
-    String? minSelectDate;
-    String? selectCountry;
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -126,8 +108,9 @@ class BookingDialog {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),
-          content: SizedBox(
+          content: Container(
             height: 590,
+            color: const Color(0xffffffff),
             child: Column(
               children: [
                 Row(
@@ -170,109 +153,110 @@ class BookingDialog {
                       child: Column(
                         children: [
                           buildLabelAndContent(
-                              'Guest Detail',
-                              [
-                                Row(
-                                  children: [
-                                    CustomTextField(
-                                      controller: guestNameController,
-                                      labelText: 'Guest Name',
-                                      width: 270,
-                                    ),
-                                    const SizedBox(width: 10),
-                                    CustomDropdownButton(
-                                      width: 270,
-                                      items: const ['No set', 'Male', 'Female'],
-                                      selectedValue: genderController.text,
-                                      hintText: 'Room Status',
-                                      labelText: 'Gender',
-                                      onChanged: (value) {
-                                        genderController.text = value!;
-                                      },
-                                    )
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    DatePickerTextField(
-                                      checkcurrnetdate: DateTime(2000),
-                                      controller: dobController,
-                                      labelText: 'Date Of Birth',
-                                      width: 290,
-                                      onDateSelectedDate: (selectedDate) {},
-                                    ),
-                                    const SizedBox(width: 10),
-                                    selectCountry_dropdown(
-                                      width: 250,
-                                      labelText: 'Country',
-                                      selectedValue: countryController.text,
-                                      hintText: 'Country',
-                                      onChanged: (value) {
-                                        countryController.text = value!;
-                                      },
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    CustomTextField(
-                                      controller: adultController,
-                                      labelText: 'Adult',
-                                      width: 270,
-                                    ),
-                                    const SizedBox(width: 10),
-                                    CustomTextField(
-                                      controller: childController,
-                                      labelText: 'Child',
-                                      width: 270,
-                                    )
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    CustomTextField(
-                                      controller: phoneController,
-                                      labelText: 'Phone Number',
-                                      width: 270,
-                                    ),
-                                    const SizedBox(width: 10),
-                                    CustomTextField(
-                                      controller: addressController,
-                                      labelText: 'Address',
-                                      width: 270,
-                                    )
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    CustomTextField(
-                                      controller: cardIdController,
-                                      labelText: 'Card ID',
-                                      width: 270,
-                                    ),
-                                    const SizedBox(width: 10),
-                                    CustomTextField(
-                                      controller: emailController,
-                                      labelText: 'Email',
-                                      width: 270,
-                                    )
-                                  ],
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(bottom: 15),
-                                  child: Row(
-                                    children: [
-                                      CustomTextField(
-                                        controller: guestNoteController,
-                                        labelText: 'Guest Note',
-                                        width: 550,
-                                        height: 100,
-                                      ),
-                                    ],
+                            'Guest Detail',
+                            [
+                              Row(
+                                children: [
+                                  CustomTextField(
+                                    controller: guestNameController,
+                                    labelText: 'Guest Name',
+                                    width: 270,
                                   ),
+                                  const SizedBox(width: 10),
+                                  CustomDropdownButton(
+                                    width: 270,
+                                    items: const ['No set', 'Male', 'Female'],
+                                    selectedValue: genderController.text,
+                                    hintText: 'Room Status',
+                                    labelText: 'Gender',
+                                    onChanged: (value) {
+                                      genderController.text = value!;
+                                    },
+                                  )
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  DatePickerTextField(
+                                    checkcurrnetdate: DateTime(2000),
+                                    controller: dobController,
+                                    labelText: 'Date Of Birth',
+                                    width: 290,
+                                    onDateSelectedDate: (selectedDate) {},
+                                  ),
+                                  const SizedBox(width: 10),
+                                  selectCountry_dropdown(
+                                    width: 250,
+                                    labelText: 'Country',
+                                    selectedValue: countryController.text,
+                                    hintText: 'Country',
+                                    onChanged: (value) {
+                                      countryController.text = value!;
+                                    },
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  CustomTextField(
+                                    controller: adultController,
+                                    labelText: 'Adult',
+                                    width: 270,
+                                  ),
+                                  const SizedBox(width: 10),
+                                  CustomTextField(
+                                    controller: childController,
+                                    labelText: 'Child',
+                                    width: 270,
+                                  )
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  CustomTextField(
+                                    controller: phoneController,
+                                    labelText: 'Phone Number',
+                                    width: 270,
+                                  ),
+                                  const SizedBox(width: 10),
+                                  CustomTextField(
+                                    controller: addressController,
+                                    labelText: 'Address',
+                                    width: 270,
+                                  )
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  CustomTextField(
+                                    controller: cardIdController,
+                                    labelText: 'Card ID',
+                                    width: 270,
+                                  ),
+                                  const SizedBox(width: 10),
+                                  CustomTextField(
+                                    controller: emailController,
+                                    labelText: 'Email',
+                                    width: 270,
+                                  )
+                                ],
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 15),
+                                child: Row(
+                                  children: [
+                                    CustomTextField(
+                                      controller: guestNoteController,
+                                      labelText: 'Guest Note',
+                                      width: 550,
+                                      height: 100,
+                                    ),
+                                  ],
                                 ),
-                              ],
-                              () {}),
+                              ),
+                            ],
+                            () {},
+                          ),
                         ],
                       ),
                     ),
@@ -288,7 +272,7 @@ class BookingDialog {
                               const SizedBox(width: 10),
                               DateRangePickerWidget(
                                 controller: checkOutController,
-                                labelText: 'Check-Out Date',
+                                labelText: 'Check-Out',
                                 checkin: checkInController,
                                 checkout: checkOutController,
                                 night: nightController,
@@ -330,13 +314,13 @@ class BookingDialog {
                               ),
                               Row(
                                 children: [
-                                  CustomTextField(
+                                  InputerBoxSimbol(
                                     width: 300,
                                     controller: roomRateController,
                                     labelText: 'Room Rate',
                                   ),
                                   const SizedBox(width: 10),
-                                  CustomTextField(
+                                  InputerBoxSimbol(
                                     width: 240,
                                     controller: extraChargeController,
                                     labelText: 'Extra Charge',
@@ -345,19 +329,19 @@ class BookingDialog {
                               ),
                               Row(
                                 children: [
-                                  CustomTextField(
+                                  InputerBoxSimbol(
                                     width: 180,
                                     controller: totalPaymentController,
                                     labelText: 'Total Payment',
                                   ),
                                   const SizedBox(width: 10),
-                                  CustomTextField(
+                                  InputerBoxSimbol(
                                     width: 180,
                                     controller: totalChargeController,
                                     labelText: 'Total Charge',
                                   ),
                                   const SizedBox(width: 10),
-                                  CustomTextField(
+                                  InputerBoxSimbol(
                                     width: 170,
                                     controller: totalBalanceController,
                                     labelText: 'Total Balance',
@@ -419,54 +403,7 @@ class BookingDialog {
                       color: Colors.blue,
                       label: "Save",
                       background: Colors.blue.shade900,
-                      action: () {
-                        final guestName = guestNameController.text;
-                        final gender = genderController.text;
-                        final dob = dobController.text;
-                        final country = countryController.text;
-                        final adult = adultController.text;
-                        final child = childController.text;
-                        final phone = phoneController.text;
-                        final address = addressController.text;
-                        final cardId = cardIdController.text;
-                        final email = emailController.text;
-                        final guestNote = guestNoteController.text;
-                        final bookingId = bookingIdController.text;
-                        final checkIn = checkInController.text;
-                        final checkOut = checkOutController.text;
-                        final night = nightController.text;
-                        final roomType = roomTypeController.text;
-                        final roomNumber = roomNumberController.text;
-                        final roomRate = roomRateController.text;
-                        final extraCharge = extraChargeController.text;
-                        final totalPayment = totalPaymentController.text;
-                        final totalCharge = totalChargeController.text;
-                        final totalBalance = totalBalanceController.text;
-                        // Create a map containing the booking data
-                        submitUpdatedData(
-                            guestName,
-                            gender,
-                            dob,
-                            country,
-                            adult,
-                            child,
-                            phone,
-                            address,
-                            cardId,
-                            email,
-                            guestNote,
-                            checkOut,
-                            roomType,
-                            roomNumber,
-                            roomRate,
-                            extraCharge,
-                            totalPayment,
-                            totalCharge,
-                            totalBalance,
-                            checkIn,
-                            roomType,
-                            roomId!);
-                      },
+                      action: () => fetchBookingData(),
                     ),
                   ],
                 ),
@@ -485,7 +422,7 @@ class BookingDialog {
     String country,
     String adult,
     String child,
-    String phone_number,
+    String phoneNumber,
     String address,
     String cardId,
     String email,
@@ -502,9 +439,9 @@ class BookingDialog {
     String roomType,
     int room_id,
   ) async {
-    const String baseUrl1 = 'http://localhost:8000/api/booking/insert';
+    const String baseUrl1 = 'http://127.0.0.1:8000/api/booking/all';
     final url = Uri.parse(
-        '$baseUrl1?room_id=$room_id&name=$name&gender=$gender&dob=$dob&country=$country&adult=$adult&child=$child&phone_number=$phone_number&address=$address&cardId=$cardId&email=$email&checkout_date=$checkout_date&room_type=$room_type&roomNumber=$roomNumber&roomRate=$roomRate&extra_charge=$extraCharge&total_payment=$totalPayment&totalCharge=$totalCharge&totalBalance=$totalBalance&checkin_date=$checkin_date&payment_status=leabheng');
+        '$baseUrl1?room_id=$room_id&name=$name&gender=$gender&dob=$dob&country=$country&adult=$adult&child=$child&phone_number=$phoneNumber&address=$address&cardId=$cardId&email=$email&checkout_date=$checkout_date&room_type=$room_type&roomNumber=$roomNumber&roomRate=$roomRate&extra_charge=$extraCharge&total_payment=$totalPayment&totalCharge=$totalCharge&totalBalance=$totalBalance&checkin_date=$checkin_date&payment_status=leabheng');
 
     final response = await http.post(url);
     if (response.statusCode == 200) {
@@ -531,12 +468,6 @@ class BookingDialog {
   }
 
   void showBookingDetailsDialog(Map<String, dynamic> booking) {
-    DateTime today = DateTime.now();
-    DateTime todaycorrent = DateTime(today.year, today.month, today.day);
-    DateTime todaycorrentCheckout =
-        DateTime(today.year, today.month, today.day + 1);
-    String selectedValue;
-
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -620,12 +551,12 @@ class BookingDialog {
                                 children: [
                                   Boxdetail(
                                       title: "Adult",
-                                      value: booking['adults'].toString() ?? '',
+                                      value: booking['adults'].toString(),
                                       width: 600),
                                   const SizedBox(width: 20),
                                   Boxdetail(
                                       title: "Child",
-                                      value: booking['child'].toString() ?? '',
+                                      value: booking['child'].toString(),
                                       width: 600),
                                 ],
                               ),
@@ -646,9 +577,7 @@ class BookingDialog {
                                 children: [
                                   Boxdetail(
                                       title: "Phone Number",
-                                      value:
-                                          booking['phone_number'].toString() ??
-                                              '',
+                                      value: booking['phone_number'].toString(),
                                       width: 600),
                                   const SizedBox(width: 10),
                                   Boxdetail(
@@ -697,14 +626,14 @@ class BookingDialog {
                                 Boxdetail(
                                   title: "Booking ID",
                                   value: booking['guest_id'].toString(),
-                                  width: 300,
+                                  width: 240,
                                 ),
                               ],
                             ),
                             Row(
                               children: [
                                 Boxdetail(
-                                  title: "Check In Date",
+                                  title: "Check-In",
                                   value: booking['gender'] ?? '',
                                   width: 400,
                                 ),
@@ -712,7 +641,7 @@ class BookingDialog {
                                   width: 10,
                                 ),
                                 Boxdetail(
-                                  title: "Check Out Date",
+                                  title: "Check-Out",
                                   value: booking['name'],
                                   width: 300,
                                 ),
@@ -720,7 +649,7 @@ class BookingDialog {
                                   width: 10,
                                 ),
                                 Boxdetail(
-                                  title: "Date Of Birth",
+                                  title: "Night",
                                   value: booking['dob'] ?? '',
                                   width: 300,
                                 ),

@@ -187,9 +187,7 @@ class _DatePickerTextFieldState extends State<DatePickerTextField> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
-                  _selectedDate != null
-                      ? "${_selectedDate!.toLocal()}".split(' ')[0]
-                      : 'Select Date',
+                  formatDateToDdMmmYyyy(_selectedDate),
                   style: const TextStyle(fontSize: 16),
                 ),
                 const Icon(Icons.calendar_today, color: Colors.blue),
@@ -199,6 +197,33 @@ class _DatePickerTextFieldState extends State<DatePickerTextField> {
         ),
       ],
     );
+  }
+
+  String formatDateToDdMmmYyyy(DateTime? date) {
+    if (date == null) {
+      return 'Select Date';
+    }
+
+    final months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec'
+    ];
+
+    final day = date.day.toString().padLeft(2, '0');
+    final month = months[date.month - 1];
+    final year = date.year;
+
+    return '$day-$month-$year';
   }
 }
 
@@ -227,6 +252,7 @@ class CustomDropdownButton extends StatefulWidget {
   });
 
   @override
+  // ignore: library_private_types_in_public_api
   _CustomDropdownButtonState createState() => _CustomDropdownButtonState();
 }
 

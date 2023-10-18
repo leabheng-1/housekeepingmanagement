@@ -1,206 +1,102 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:housekeepingmanagement/system_widget/system_color.dart';
-import 'package:housekeepingmanagement/system_widget/system_icon.dart';
-import 'package:housekeepingmanagement/controller/main_controller.dart';
-import 'package:housekeepingmanagement/dashboard/dashboard.dart';
-import 'package:housekeepingmanagement/dashboard/frontdesk.dart';
-import 'package:housekeepingmanagement/dashboard/guest_in_house.dart';
-import 'package:housekeepingmanagement/dashboard/house_keeping.dart';
-import 'package:housekeepingmanagement/dashboard/report.dart';
+import 'package:http/http.dart' as http;
 
-class Testing extends StatefulWidget {
-  const Testing({Key? key}) : super(key: key);
-
-  @override
-  State<Testing> createState() => _TestingState();
-}
-
-class _TestingState extends State<Testing> {
-  int _selectedIndex = 0;
-  bool showNavigationBar = false;
-
-  late List<Widget> list = [
-    Dashboard(),
-    FrontDesk(),
-    Housekeeping(),
-    GuestInHouse(),
-    Report()
-  ];
-  final List<String> _destinations = [
-    'Dashboard',
-    'Frontdesk',
-    'Housekeeping',
-    'Guest In-House',
-    'Report'
-  ];
-
-  Widget _buildNavigationRail() {
-    final MainController controller = Get.put(MainController());
-    return NavigationRail(
-      minWidth: 50,
-      extended: controller.isExpanded.value,
-      labelType: NavigationRailLabelType.none,
-      selectedIndex: _selectedIndex,
-      leading: const CircleAvatar(
-        backgroundImage: AssetImage(
-          "assets/images/logo.jpg",
-        ),
-      ),
-      onDestinationSelected: (int index) {
-        setState(
-          () {
-            _selectedIndex = index;
-            showNavigationBar = !showNavigationBar;
-          },
-        );
-      },
-      destinations: const <NavigationRailDestination>[
-        NavigationRailDestination(
-          icon: Icon(Icons.widgets),
-          selectedIcon: Icon(Icons.widgets),
-          label: Text('Dashboard'),
-        ),
-        NavigationRailDestination(
-          icon: Icon(Icons.photo_camera_front_outlined),
-          selectedIcon: Icon(Icons.photo_camera_front_outlined),
-          label: Text('FrontDesk'),
-        ),
-        NavigationRailDestination(
-          icon: Icon(Icons.meeting_room_outlined),
-          selectedIcon: Icon(Icons.meeting_room_outlined),
-          label: Text(" Housekeeping"),
-        ),
-        NavigationRailDestination(
-          icon: Icon(
-            iconController.inHouseIcon,
-          ),
-          selectedIcon: Icon(Icons.local_hotel_outlined),
-          label: Text(" Guest In-House"),
-        ),
-        NavigationRailDestination(
-          icon: Icon(Icons.assessment_outlined),
-          selectedIcon: Icon(Icons.assessment_outlined),
-          label: Text("Report"),
-        ),
-      ],
-      groupAlignment: 0.0,
-    );
-  }
+class TestingAPI extends StatelessWidget {
+  const TestingAPI({Key? key});
 
   @override
   Widget build(BuildContext context) {
-    final MainController controller = Get.put(MainController());
-    return Obx(
-      () => Scaffold(
-        backgroundColor: const Color(0xFFEEF1F6),
-        body: Column(
-          children: [
-            Row(
-              children: [
-                Column(
-                  children: [
-                    SizedBox(
-                      height: 700,
-                      child: _buildNavigationRail(),
-                    ),
-                  ],
-                ),
-                Expanded(
-                  child: Column(
-                    children: <Widget>[
-                      Padding(
-                        padding:
-                            const EdgeInsets.only(top: 10, left: 30, right: 10),
-                        child: Container(
-                          height: 50,
-                          decoration: BoxDecoration(
-                            color: ColorController.backgroundColor,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  const SizedBox(width: 10),
-                                  IconButton(
-                                    icon: const Icon(Icons.menu),
-                                    onPressed: () {
-                                      controller.isExpanded(
-                                          !controller.isExpanded.value);
-                                    },
-                                  ),
-                                  Text(
-                                    _destinations[_selectedIndex],
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(right: 20),
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      Icons.account_circle_outlined,
-                                      size: 40,
-                                      color: Colors.grey[600],
-                                    ),
-                                    IconButton(
-                                      onPressed: () {},
-                                      icon: Icon(
-                                        Icons.keyboard_arrow_down,
-                                        color: Colors.grey[500],
-                                      ),
-                                    ),
-                                    const Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          "Admin",
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                        Text(
-                                          "Receptionist",
-                                          style: TextStyle(
-                                            color: Colors.grey,
-                                          ),
-                                        ),
-                                      ],
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: list[_selectedIndex],
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Container(
-                  height: 30,
-                  width: 600,
-                  color: Colors.red,
-                )
-              ],
-            ),
-          ],
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('API Example'),
+        ),
+        body: Center(
+          child: ElevatedButton(
+            onPressed: () {
+              _showAlertDialog(context);
+            },
+            child: const Text('Fetch API Data'),
+          ),
         ),
       ),
     );
   }
+}
+
+Future<void> _showAlertDialog(BuildContext context) async {
+  String? inputText; // Store the input text from TextFormField
+  String apiResponse = 'No data';
+
+  return showDialog<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Enter Text'),
+        content: TextFormField(
+          decoration: const InputDecoration(
+            labelText: 'Text',
+          ),
+          onChanged: (value) {
+            inputText = value; // Update inputText on text change
+          },
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Close the dialog
+            },
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () async {
+              if (inputText != null) {
+                // Send the input text to the API
+                final response = await http.post(
+                  'http://127.0.0.1:8000/api/booking/all' as Uri,
+                  body: {'text': inputText},
+                );
+
+                // Handle API response
+                if (response.statusCode == 200) {
+                  // Successful API call
+                  apiResponse = 'Data saved to API: $inputText';
+                } else {
+                  // Error in API call
+                  apiResponse =
+                      'Failed to save data to API. Status code: ${response.statusCode}';
+                }
+
+                Navigator.of(context).pop();
+                _showApiResponse(context, apiResponse);
+              }
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+Future<void> _showApiResponse(BuildContext context, String responseText) {
+  return showDialog<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('API Response'),
+        content: SingleChildScrollView(
+          child: Text(responseText),
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      );
+    },
+  );
 }
