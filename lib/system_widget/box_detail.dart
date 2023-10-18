@@ -14,7 +14,7 @@ class Boxdetail extends StatelessWidget {
       required this.value,
       this.backgroundColor = const Color(0xFFF6F6F6),
       this.borderRadius = 10.0,
-      required this.width,
+      this.width = 450,
       this.height = 40});
 
   @override
