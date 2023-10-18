@@ -96,8 +96,13 @@ class BtnAction extends StatelessWidget {
             ),
             child: Icon(
               icon,
+<<<<<<< HEAD
+              size: 15,
+              color: Colors.white, // Icon color
+=======
               size: 20,
               color: Colors.white,
+>>>>>>> 5e97334138f456cd8f8a5492783cade513e66994
             ),
           ),
           const SizedBox(width: 8.0),

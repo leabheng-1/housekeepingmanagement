@@ -108,7 +108,41 @@ class BookingDialog {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),
+<<<<<<< HEAD
           content: Container(
+=======
+<<<<<<< HEAD
+        ),
+        actions: [
+           BtnAction(
+  icon: Icons.star,
+  textColor: Colors.white,
+  color: Colors.blue,
+  label: "Cancel",
+  action: () {
+       Navigator.of(context).pop();
+  },
+),
+ BtnAction(
+  icon: Icons.star,
+  textColor: Colors.white,
+  color: Colors.blue,
+  label: "Create",
+  action: () {
+       final guestName = guestNameController.text;
+    final gender = genderController.text ;
+    final dob = dobController.text;
+    final country = countryController.text;
+    final adult = adultController.text;
+    final child = childController.text;
+    final phone = phoneController.text;
+    final address = addressController.text;
+    final cardId = cardIdController.text;
+    final email = emailController.text;
+    final guestNote = guestNoteController.text;
+=======
+          content: SizedBox(
+>>>>>>> 924ac210b3b7a59b2617a37a2a5d7974d64549f0
             height: 590,
             color: const Color(0xffffffff),
             child: Column(
@@ -414,6 +448,7 @@ class BookingDialog {
       },
     );
   }
+>>>>>>> 5e97334138f456cd8f8a5492783cade513e66994
 
   Future<void> submitUpdatedData(
     String name,
@@ -437,6 +472,16 @@ class BookingDialog {
     String totalBalance,
     String checkin_date,
     String roomType,
+<<<<<<< HEAD
+        int room_id,
+    ) async {
+  final String baseUrl1 = 'http://localhost:8000/api/booking/insert';
+   final url = Uri.parse('$baseUrl1?room_id=$room_id&name=$name&gender=$gender&dob=$dob&country=$country&adult=$adult&child=$child&phone_number=$phone_number&address=$address&cardId=$cardId&email=$email&checkout_date=$checkout_date&room_type=$room_type&roomNumber=$roomNumber&roomRate=$roomRate&extra_charge=$extraCharge&total_payment=$totalPayment&tcharges=$totalCharge&totalBalance=$totalBalance&checkin_date=$checkin_date&payment_status=leabheng');
+  
+    final response = await http.post(url);
+    if (response.statusCode == 200) {
+      print(totalCharge);
+=======
     int room_id,
   ) async {
     const String baseUrl1 = 'http://127.0.0.1:8000/api/booking/all';
@@ -446,6 +491,7 @@ class BookingDialog {
     final response = await http.post(url);
     if (response.statusCode == 200) {
       // ignore: use_build_context_synchronously
+>>>>>>> 5e97334138f456cd8f8a5492783cade513e66994
       AwesomeDialog(
         width: 500,
         context: context,
@@ -468,6 +514,222 @@ class BookingDialog {
   }
 
   void showBookingDetailsDialog(Map<String, dynamic> booking) {
+<<<<<<< HEAD
+=======
+    DateTime today = DateTime.now();
+    DateTime todaycorrent = DateTime(today.year, today.month, today.day);
+    DateTime todaycorrentCheckout =
+        DateTime(today.year, today.month, today.day + 1);
+    String selectedValue;
+
+<<<<<<< HEAD
+      showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Container(
+          child: Text('Booking Details', style: TextStyle(fontWeight: FontWeight.bold)),
+        ),
+        
+        content: 
+        Container(
+  margin: EdgeInsets.only(top: 20), // Set your desired top margin here
+  child: Row(
+    children: [   
+      Expanded(
+      flex: 4,
+      child:  
+      
+      buildLabelAndContent('Guest Information', [
+       
+        Row(
+        children: [           
+Boxdetail(
+  title: "Guest ID",
+  value: booking['guest_id'].toString(),
+),      
+SizedBox(width: 20),
+Boxdetail(
+  title: "Guest Name",
+  value:  booking['name'],
+  
+),
+ ]
+        ),
+        Row(
+        children: [           
+Boxdetail(
+  title: "Gender",
+  value: booking['gender'] ?? '',
+),      
+SizedBox(width: 20),
+Boxdetail(
+  title: "Date Of Birth",
+  value:  booking['dob'] ?? '' ,
+),
+ ]
+        ),
+ Row(
+        children: [           
+Boxdetail(
+  title: "Adults",
+  value: booking['adults'].toString() ?? '' ,
+),      
+SizedBox(width: 20),
+Boxdetail(
+  title: "Child",
+  value:  booking['child'].toString() ?? '' ,
+),
+ ]
+        ),
+ Row(
+        children: [           
+Boxdetail(
+  title: "Country d ",
+  value: booking['country'] ?? '',
+),      
+SizedBox(width: 20),
+Boxdetail(
+  title: "Address",
+  value:  booking['address'] ?? '' ,
+),
+ ]
+        ),
+ Row(
+        children: [           
+Boxdetail(
+  title: "Phone Number",
+  value: booking['phone_number'].toString() ?? '',
+),      
+SizedBox(width: 20),
+Boxdetail(
+  title: "Email",
+  value:  booking['email'] ?? '' ,
+),
+ ]
+        ), 
+  Row(
+        children: [           
+Boxdetail(
+   width:900,
+  title: "passport_number",
+  value: booking['Passport Number'].toString(),
+), 
+
+ ]
+        ),
+Row(
+          children: [
+            Boxdetail(title: "Note", value: booking['note'] , height: 200, width:900)
+          ],
+        )                        
+
+      ],() {
+              // This is the action that will be executed when the button is pressed
+              print('Button Pressed!');
+            }),
+      ),
+      SizedBox(width: 20),
+      Expanded(
+      flex: 6,
+      child: 
+      buildLabelAndContent('Booking Information ', [
+        Row(
+        children: [           
+Boxdetail(
+  title: "Guest ID",
+  value: booking['guest_id'].toString(),
+),      
+SizedBox(width: 20),
+Boxdetail(
+  title: "Guest Name",
+  value:  booking['name'],
+  
+),
+ ]
+        ),
+        Row(
+        children: [           
+Boxdetail(
+  title: "Gender",
+  value: booking['gender'] ?? '',
+),
+      Boxdetail(
+  title: "Date Of Birth",
+  value:  booking['dob'] ?? '' ,
+),
+ ]
+        ),
+ Row(
+        children: [           
+Boxdetail(
+  title: "Adults",
+  value: booking['adults'].toString() ?? '' ,
+),      
+SizedBox(width: 20),
+Boxdetail(
+  title: "Child",
+  value:  booking['child'].toString() ?? '' ,
+),
+ ]
+        ),
+ Row(
+        children: [           
+Boxdetail(
+  title: "Country",
+  value: booking['country'] ?? '',
+),      
+SizedBox(width: 20),
+Boxdetail(
+  title: "Address",
+  value:  booking['address'] ?? '' ,
+),
+ ]
+        ),
+ Row(
+        children: [           
+Boxdetail(
+  title: "Phone Number",
+  value: booking['phone_number'].toString() ?? '',
+),      
+SizedBox(width: 20),
+Boxdetail(
+  title: "Email",
+  value:  booking['email'] ?? '' ,
+),
+ ]
+        ), 
+  Row(
+        children: [           
+Boxdetail(
+  title: "passport_number",
+  value: booking['Passport Number'].toString(),
+),      
+SizedBox(width: 20),
+
+ ]
+        ),
+     
+Row(
+          children: [
+            Boxdetail(title: "Note", value: booking['note'] , height: 200 , width:900,)
+          ],
+        )
+      ],() {
+              // This is the action that will be executed when the button is pressed
+              print('Button Pressed!');
+            }),
+      )
+    ],
+  
+  ),
+  
+),
+        actions: [
+          Row(
+             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+=======
+>>>>>>> 924ac210b3b7a59b2617a37a2a5d7974d64549f0
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -476,6 +738,7 @@ class BookingDialog {
             borderRadius: BorderRadius.circular(10.0),
           ),
           content: Column(
+>>>>>>> 5e97334138f456cd8f8a5492783cade513e66994
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

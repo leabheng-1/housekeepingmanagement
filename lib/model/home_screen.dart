@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:housekeepingmanagement/model/footer.dart';
 import 'package:housekeepingmanagement/system_widget/system_icon.dart';
 import 'package:housekeepingmanagement/controller/main_controller.dart';
 import 'package:housekeepingmanagement/dashboard/dashboard.dart';
@@ -7,6 +8,7 @@ import 'package:housekeepingmanagement/dashboard/frontdesk.dart';
 import 'package:housekeepingmanagement/dashboard/guest_in_house.dart';
 import 'package:housekeepingmanagement/dashboard/house_keeping.dart';
 import 'package:housekeepingmanagement/dashboard/report.dart';
+import 'package:intl/intl.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -178,6 +180,22 @@ class _HomeScreenState extends State<HomeScreen> {
                   Expanded(
                     child: list[_selectedIndex],
                   ),
+                  Container(
+  margin: EdgeInsets.only(left:5,right:5),
+  alignment: Alignment.bottomCenter,
+  padding:EdgeInsets.all(15),
+  decoration: BoxDecoration(
+    color: Colors.white,
+    borderRadius: BorderRadius.only(
+      topLeft: Radius.circular(30.0),
+      topRight: Radius.circular(30.0),
+    ),
+  ),
+  child:footer()
+  
+   
+)
+
                 ],
               ),
             ),
