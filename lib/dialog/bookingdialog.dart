@@ -700,7 +700,7 @@ Visibility(
     icon: Icons.star,
     textColor: Colors.white,
     color: Colors.blue,
-    label: "Check Out 1",
+    label: "Check Out",
     action: () {
       onCheck(context, booking['booking_id'],'checkout');
     },
