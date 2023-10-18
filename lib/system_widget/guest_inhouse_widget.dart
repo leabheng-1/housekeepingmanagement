@@ -196,41 +196,33 @@ class _HkDataTableState extends State<HkDataTable> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(children: [
-                Boxdetail(
-                  title: "Date",
-                  value: hk.date,
-                ),
+                Boxdetail(title: "Date", value: hk.date, width: 450),
               ]),
               Row(children: [
-                Boxdetail(
-                  title: "Room Type",
-                  value: hk.roomType,
-                ),
+                Boxdetail(title: "Room Type", value: hk.roomType, width: 450),
                 const SizedBox(width: 20),
                 Boxdetail(
                   title: "Room Number",
                   value: hk.roomNumber.toString(),
+                  width: 450,
                 ),
               ]),
               Row(
                 children: [
                   Boxdetail(
-                    title: "Room Status ",
-                    value: hk.roomStatus,
-                  ),
+                      title: "Room Status ", value: hk.roomStatus, width: 450),
                   const SizedBox(width: 20),
                   Boxdetail(
                       title: "Housekeeping Status",
                       value: hk.housekeepingStatus,
-                      backgroundColor: roomStatusColor),
+                      backgroundColor: roomStatusColor,
+                      width: 450),
                 ],
               ),
               Row(
                 children: [
                   Boxdetail(
-                    title: "Housekeeper",
-                    value: hk.housekeeper,
-                  ),
+                      title: "Housekeeper", value: hk.housekeeper, width: 450),
                 ],
               ),
               Expanded(

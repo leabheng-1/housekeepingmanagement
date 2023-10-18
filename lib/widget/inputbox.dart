@@ -1,6 +1,3 @@
-import 'package:dropdown_button2/dropdown_button2.dart';
-import 'package:flutter/material.dart';
-
 import 'package:flutter/material.dart';
 import 'package:housekeepingmanagement/system_widget/system_color.dart';
 
@@ -11,20 +8,21 @@ class CustomTextField extends StatelessWidget {
   final double borderRadius;
   final double borderWidth;
   final double width;
-  final double height; // Height of the container
-  final double inputHeight; // Height of the input field
-  final bool isNumeric; // Indicates whether the input should be numeric or not
+  final double height;
+  final double inputHeight;
+  final bool isNumeric;
 
-  CustomTextField({
+  const CustomTextField({
+    super.key,
     this.controller,
     required this.labelText,
-    this.borderColor = Colors.black, // Border color
-    this.borderRadius = 10.0, // Border radius
-    this.borderWidth = 1.0, // Border width
-    this.width = 450, // Default margin
-    this.height = 40, // Height of the container
-    this.inputHeight = 30, // Height of the input field
-    this.isNumeric = false, // Default to regular text input
+    this.borderColor = const Color(0xFFb4b4b4),
+    this.borderRadius = 10.0,
+    this.borderWidth = 1.0,
+    this.width = 450,
+    this.height = 40,
+    this.inputHeight = 30,
+    this.isNumeric = false,
   });
 
   @override
@@ -32,80 +30,79 @@ class CustomTextField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: EdgeInsets.only(left: 10), // Set margin around the SizedBox
-          child: SizedBox(height: 10), // Add spacing here
+        const Padding(
+          padding: EdgeInsets.only(left: 10),
+          child: SizedBox(height: 10),
         ),
         Text(
           labelText,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.bold,
           ),
         ),
         Container(
           width: width,
-          height: height, // Set the height of the container
-
-          padding: EdgeInsets.all(10),
+          height: height,
+          padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: const Color(0xFFf6f6f6),
             borderRadius: BorderRadius.circular(borderRadius),
             border: Border.all(
-              color: borderColor, // Border color
-              width: borderWidth, // Border width
+              color: borderColor,
+              width: borderWidth,
             ),
           ),
+          alignment: Alignment.center,
           child: Center(
             child: TextFormField(
-              keyboardType:TextInputType.number,
+              keyboardType: TextInputType.number,
               controller: controller,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 border: InputBorder.none,
                 contentPadding: EdgeInsets.symmetric(vertical: 13),
               ),
-              style: TextStyle(fontSize: 16), // Adjust font size as needed
+              style: const TextStyle(fontSize: 16),
             ),
           ),
-          alignment: Alignment.center, // Align the contents (Text) to the center
         ),
       ],
     );
   }
 }
 
-
-
 class DatePickerTextField extends StatefulWidget {
   final TextEditingController? controller;
   final String labelText;
-   final String mindate;
+  final String mindate;
   final String enddate;
-  final DateTime checkcurrnetdate;    
+  final DateTime checkcurrnetdate;
   final Color borderColor;
   final double borderRadius;
   final double borderWidth;
   final double width;
-  final double height; // Height of the container
-  final double inputHeight; // Height of the input field
+  final double height;
+  final double inputHeight;
   final void Function(DateTime selectedDate) onDateSelectedDate;
 
-  DatePickerTextField({
+  const DatePickerTextField({
+    super.key,
     this.controller,
     required this.labelText,
-    this.borderColor = Colors.black, // Border color
-    this.borderRadius = 10.0, // Border radius
-    this.borderWidth = 1.0, // Border width
-    this.width = 450, // Default margin
-    this.height = 40, // Height of the container
-    this.inputHeight = 30,  this.mindate =  '1900-1-1' ,
-    this.enddate = '2500-1-1', 
+    this.borderColor = const Color(0xFFb4b4b4),
+    this.borderRadius = 10.0,
+    this.borderWidth = 1.0,
+    this.width = 450,
+    this.height = 40,
+    this.inputHeight = 30,
+    this.mindate = '1900-1-1',
+    this.enddate = '2500-1-1',
     required this.checkcurrnetdate,
     required this.onDateSelectedDate,
-     // Height of the input field
   });
 
   @override
+  // ignore: library_private_types_in_public_api
   _DatePickerTextFieldState createState() => _DatePickerTextFieldState();
 }
 
@@ -115,36 +112,37 @@ class _DatePickerTextFieldState extends State<DatePickerTextField> {
   @override
   void initState() {
     super.initState();
-    _selectedDate =  widget.checkcurrnetdate; // Initialize with today's date
+    _selectedDate = widget.checkcurrnetdate;
   }
 
   Future<void> _selectDate(BuildContext context) async {
     String mindate = widget.mindate;
-        String maxdate = widget.enddate;
-List<String> minCom = mindate.split('-');
-List<String> maxCom = maxdate.split('-');
-int yearMin = int.parse(minCom[0]);
-int monthMin = int.parse(minCom[1]);
-int dayMin = int.parse(minCom[2]);
-int yearMax = int.parse(maxCom[0]);
-int monthMax = int.parse(maxCom[1]);
-int dayMax = int.parse(maxCom[2]);
+    String maxdate = widget.enddate;
+    List<String> minCom = mindate.split('-');
+    List<String> maxCom = maxdate.split('-');
+    int yearMin = int.parse(minCom[0]);
+    int monthMin = int.parse(minCom[1]);
+    int dayMin = int.parse(minCom[2]);
+    int yearMax = int.parse(maxCom[0]);
+    int monthMax = int.parse(maxCom[1]);
+    int dayMax = int.parse(maxCom[2]);
     final DateTime currentDate = _selectedDate ?? DateTime.now();
-  final DateTime firstAllowedDate = DateTime(yearMin, monthMin, dayMin); // Set your minimum allowed date
-  final DateTime lastAllowedDate = DateTime(yearMax, monthMax, dayMax); // Set your maximum allowed date
+    final DateTime firstAllowedDate = DateTime(yearMin, monthMin, dayMin);
+    final DateTime lastAllowedDate = DateTime(yearMax, monthMax, dayMax);
 
-  final DateTime picked = (await showDatePicker(
-    context: context,
-    initialDate: currentDate,
-    firstDate: firstAllowedDate,
-    lastDate: lastAllowedDate,
-  )) ?? currentDate;
+    final DateTime picked = (await showDatePicker(
+          context: context,
+          initialDate: currentDate,
+          firstDate: firstAllowedDate,
+          lastDate: lastAllowedDate,
+        )) ??
+        currentDate;
 
-    if (picked != null && picked != _selectedDate) {
-       widget.onDateSelectedDate(picked);
+    if (picked != _selectedDate) {
+      widget.onDateSelectedDate(picked);
       setState(() {
         _selectedDate = picked;
-        
+
         if (widget.controller != null) {
           widget.controller!.text = "${picked.toLocal()}".split(' ')[0];
         }
@@ -157,21 +155,21 @@ int dayMax = int.parse(maxCom[2]);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
+        const Padding(
           padding: EdgeInsets.only(left: 10),
           child: SizedBox(height: 10),
         ),
         Text(
           widget.labelText,
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.bold,
           ),
         ),
         Container(
-          width:widget.width,
+          width: widget.width,
           height: widget.height,
-          padding: EdgeInsets.all(6),
+          padding: const EdgeInsets.all(6),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(widget.borderRadius),
@@ -180,6 +178,7 @@ int dayMax = int.parse(maxCom[2]);
               width: widget.borderWidth,
             ),
           ),
+          alignment: Alignment.center,
           child: InkWell(
             onTap: () {
               _selectDate(context);
@@ -191,13 +190,12 @@ int dayMax = int.parse(maxCom[2]);
                   _selectedDate != null
                       ? "${_selectedDate!.toLocal()}".split(' ')[0]
                       : 'Select Date',
-                  style: TextStyle(fontSize: 16),
+                  style: const TextStyle(fontSize: 16),
                 ),
-                Icon(Icons.calendar_today, color: Colors.blue),
+                const Icon(Icons.calendar_today, color: Colors.blue),
               ],
             ),
           ),
-          alignment: Alignment.center,
         ),
       ],
     );
@@ -209,22 +207,23 @@ class CustomDropdownButton extends StatefulWidget {
   final List<String> items;
   final String? selectedValue;
   final String? labelText;
-  
+
   final ValueChanged<String?>? onChanged;
   final String hintText;
   final double fontSize;
   final Color bg;
-final double marginTop;
-  CustomDropdownButton({
+  final double marginTop;
+  const CustomDropdownButton({
+    super.key,
     required this.width,
-    this.bg = Colors.white,
+    this.bg = const Color(0xFFf6f6f6),
     required this.items,
     required this.selectedValue,
     required this.onChanged,
     this.labelText = '',
-    this.marginTop=0,
-    required this.hintText, // Change label to hintText
-    this.fontSize = 14.0, // Default font size is 14.0
+    this.marginTop = 0,
+    required this.hintText,
+    this.fontSize = 14.0,
   });
 
   @override
@@ -235,72 +234,73 @@ class _CustomDropdownButtonState extends State<CustomDropdownButton> {
   @override
   Widget build(BuildContext context) {
     return Column(
-  crossAxisAlignment: CrossAxisAlignment.start,
-  children: [
-    Visibility(
-      visible: widget.labelText != null && widget.labelText!.isNotEmpty,
-      child: Padding(
-        padding: EdgeInsets.only(left: 10),
-        child: SizedBox(height: 10),
-      ),
-    ),
-    Visibility(
-      visible: widget.labelText != null && widget.labelText!.isNotEmpty,
-      child: Text(
-        widget.labelText!,
-        style: TextStyle(
-          color: Colors.black,
-          fontWeight: FontWeight.bold,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Visibility(
+          visible: widget.labelText != null && widget.labelText!.isNotEmpty,
+          child: const Padding(
+            padding: EdgeInsets.only(left: 10),
+            child: SizedBox(height: 10),
+          ),
         ),
-      ),
-    ),
-    Container(
-      height: 40,
-      width: widget.width,
-      margin: EdgeInsets.only(top: widget.marginTop),
-      decoration: BoxDecoration(
-        color: widget.bg,
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(
-          color: Colors.black45,
-        ),
-      ),
-      child: DropdownButtonFormField<String>(
-        isExpanded: true,
-        decoration: InputDecoration(
-          hintText: widget.hintText,
-          hintStyle: TextStyle(fontSize: widget.fontSize),
-          contentPadding: EdgeInsets.only(left: 10, top: 0, bottom: 8, right: 0),
-          border: InputBorder.none,
-        ),
-        value: widget.selectedValue,
-        items: widget.items.map((item) {
-          return DropdownMenuItem<String>(
-            value: item,
-            child: Text(
-              item,
-              style: TextStyle(
-                fontSize: widget.fontSize,
-              ),
+        Visibility(
+          visible: widget.labelText != null && widget.labelText!.isNotEmpty,
+          child: Text(
+            widget.labelText!,
+            style: const TextStyle(
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
             ),
-          );
-        }).toList(),
-        onChanged: widget.onChanged,
-        selectedItemBuilder: (BuildContext context) {
-          return widget.items.map<Widget>((String item) {
-            return Text(
-              item,
-              style: TextStyle(
-                fontSize: widget.fontSize,
-                fontWeight: FontWeight.bold,
-              ),
-            );
-          }).toList();
-        },
-      ),
-    ),
-  ],
-);
+          ),
+        ),
+        Container(
+          height: 40,
+          width: widget.width,
+          margin: EdgeInsets.only(top: widget.marginTop),
+          decoration: BoxDecoration(
+            color: widget.bg,
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(
+              color: const Color(0xFFb4b4b4),
+            ),
+          ),
+          child: DropdownButtonFormField<String>(
+            isExpanded: true,
+            decoration: InputDecoration(
+              hintText: widget.hintText,
+              hintStyle: TextStyle(fontSize: widget.fontSize),
+              contentPadding:
+                  const EdgeInsets.only(left: 10, top: 0, bottom: 8, right: 0),
+              border: InputBorder.none,
+            ),
+            value: widget.selectedValue,
+            items: widget.items.map((item) {
+              return DropdownMenuItem<String>(
+                value: item,
+                child: Text(
+                  item,
+                  style: TextStyle(
+                    fontSize: widget.fontSize,
+                  ),
+                ),
+              );
+            }).toList(),
+            onChanged: widget.onChanged,
+            selectedItemBuilder: (BuildContext context) {
+              return widget.items.map<Widget>((String item) {
+                return Text(
+                  item,
+                  style: TextStyle(
+                    fontSize: widget.fontSize,
+                    fontWeight: FontWeight.bold,
+                  ),
+                );
+              }).toList();
+            },
+          ),
+        ),
+      ],
+    );
   }
 }
 
@@ -310,7 +310,8 @@ class IconBox extends StatefulWidget {
   final int initialActiveIndex;
   final Function(int) onChange;
 
-  IconBox({
+  const IconBox({
+    super.key,
     required this.icon1,
     required this.icon2,
     this.initialActiveIndex = 0,
@@ -318,6 +319,7 @@ class IconBox extends StatefulWidget {
   });
 
   @override
+  // ignore: library_private_types_in_public_api
   _IconBoxState createState() => _IconBoxState();
 }
 
@@ -332,7 +334,7 @@ class _IconBoxState extends State<IconBox> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(3.0),
+      padding: const EdgeInsets.all(3.0),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(5.0),
@@ -340,7 +342,7 @@ class _IconBoxState extends State<IconBox> {
       child: Row(
         children: [
           buildIcon(0, widget.icon1),
-          SizedBox(width: 5),
+          const SizedBox(width: 5),
           buildIcon(1, widget.icon2),
         ],
       ),
@@ -358,13 +360,14 @@ class _IconBoxState extends State<IconBox> {
             activeIndex = index;
           });
 
-          // Call the onChange callback with the new active index.
           widget.onChange(activeIndex);
         },
         child: Container(
-          padding: EdgeInsets.all(5.0),
+          padding: const EdgeInsets.all(5.0),
           decoration: BoxDecoration(
-            color: isActive ? ColorController.activeColor.withOpacity(0.2) : Colors.white,
+            color: isActive
+                ? ColorController.activeColor.withOpacity(0.2)
+                : Colors.white,
             borderRadius: BorderRadius.circular(5.0),
           ),
           child: Icon(

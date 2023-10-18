@@ -23,7 +23,7 @@ class CustomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(left: 3, right: 14, top: 3, bottom: 3),
+      padding: const EdgeInsets.only(left: 3, right: 14, top: 3, bottom: 3),
       decoration: BoxDecoration(
         color: buttonBackgroundColor,
         borderRadius: BorderRadius.circular(10.0),
@@ -35,14 +35,14 @@ class CustomButton extends StatelessWidget {
               color: iconBackgroundColor,
               borderRadius: BorderRadius.circular(10.0),
             ),
-            padding: EdgeInsets.all(3.0),
+            padding: const EdgeInsets.all(3.0),
             child: Icon(
               iconData,
               color: iconColor,
               size: iconSize,
             ),
           ),
-          SizedBox(width: 8.0),
+          const SizedBox(width: 8.0),
           Text(
             title,
             style: TextStyle(
@@ -55,54 +55,62 @@ class CustomButton extends StatelessWidget {
     );
   }
 }
+
 class BtnAction extends StatelessWidget {
   final IconData icon;
   final Color color;
   final String label;
-  final VoidCallback? action; // Make action optional by using VoidCallback?
-
+  final VoidCallback? action;
+  final Color background;
   final Color textColor;
 
-  BtnAction({
+  const BtnAction({
+    super.key,
     required this.icon,
     required this.color,
     required this.label,
-    this.action, // Make action optional
+    this.action,
     required this.textColor,
+    required this.background,
   });
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: action, // Specify the onPressed callback function
+      onPressed: action,
       style: ElevatedButton.styleFrom(
-        primary: color, // Set the background color with 50% opacity
+        backgroundColor: color,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.0), // Adjust the button's border radius as needed
+          borderRadius: BorderRadius.circular(8.0),
         ),
-        padding: EdgeInsets.only(left: 5, top:13, bottom:13, right: 10), // Adjust padding as needed
+        padding: const EdgeInsets.only(left: 5, top: 13, bottom: 13, right: 10),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Container(
-            padding: EdgeInsets.all(8.0), // Adjust the padding for the icon background
+            padding: const EdgeInsets.all(8.0),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8.0),
-              color: const Color.fromARGB(255, 0, 0, 0).withOpacity(0.5), // Background color for the icon with 50% opacity
+              color: background,
             ),
             child: Icon(
               icon,
+<<<<<<< HEAD
               size: 15,
               color: Colors.white, // Icon color
+=======
+              size: 20,
+              color: Colors.white,
+>>>>>>> 5e97334138f456cd8f8a5492783cade513e66994
             ),
           ),
-          SizedBox(width: 8.0), // Add spacing between icon and label
+          const SizedBox(width: 8.0),
           Text(
             label,
             style: TextStyle(
-              fontSize: 16.0, // Adjust the font size as needed
-              color: textColor, // Set the text color based on the parameter
+              fontSize: 16.0,
+              color: textColor,
             ),
           ),
         ],
