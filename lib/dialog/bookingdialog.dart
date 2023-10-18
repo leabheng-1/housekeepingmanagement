@@ -14,19 +14,8 @@ class BookingDialog {
   final BuildContext context;
   final VoidCallback reloadDataCallback;
   BookingDialog(this.context, this.reloadDataCallback);
-  Future<void> fetchBookingData() async {
-    const url = 'http://127.0.0.1:8000/api/booking/insert';
-    try {
-      final response = await http.post(
-        Uri.parse(url),
-      );
+  
 
-      if (response.statusCode == 200) {
-      } else {
-        throw Exception('Failed to load booking data');
-      }
-    } catch (error) {}
-  }
 
   void showCreateBookingDialog(Map<String, dynamic> booking) {
     int? bookingId = booking['booking_id'] as int?;
@@ -108,11 +97,7 @@ class BookingDialog {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
           ),
-<<<<<<< HEAD
-          content: Container(
-=======
-<<<<<<< HEAD
-        ),
+
         actions: [
            BtnAction(
   icon: Icons.star,
@@ -121,13 +106,13 @@ class BookingDialog {
   label: "Cancel",
   action: () {
        Navigator.of(context).pop();
-  },
+  }, background: Colors.red,
 ),
  BtnAction(
   icon: Icons.star,
   textColor: Colors.white,
   color: Colors.blue,
-  label: "Create",
+  label: "Create",background: Colors.red,
   action: () {
        final guestName = guestNameController.text;
     final gender = genderController.text ;
@@ -140,9 +125,9 @@ class BookingDialog {
     final cardId = cardIdController.text;
     final email = emailController.text;
     final guestNote = guestNoteController.text;
-=======
+
           content: SizedBox(
->>>>>>> 924ac210b3b7a59b2617a37a2a5d7974d64549f0
+
             height: 590,
             color: const Color(0xffffffff),
             child: Column(
@@ -444,11 +429,10 @@ class BookingDialog {
               ],
             ),
           ],
-        );
+        , );
       },
     );
-  }
->>>>>>> 5e97334138f456cd8f8a5492783cade513e66994
+  }}
 
   Future<void> submitUpdatedData(
     String name,
