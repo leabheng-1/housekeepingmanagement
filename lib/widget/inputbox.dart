@@ -561,21 +561,6 @@ class _DateRangeWidgetState extends State<DateRangeWidget> {
       ),
     ),
     
-    Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center, // Center vertically
-        crossAxisAlignment: CrossAxisAlignment.center, // Center horizontally
-        children: [
-          Text(
-            'To',
-            style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
-      ),
-    ),
     
     Center(
       child: Column(
