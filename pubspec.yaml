@@ -50,9 +50,7 @@ dependencies:
   bs_flutter_datatable: ^1.2.5
   dropdown_button2: ^2.3.9
   getwidget: ^4.0.0
-<<<<<<< HEAD
   dio: ^5.3.3
-=======
   pdf: ^3.10.4
   printing: ^5.11.0
   google_fonts: ^6.1.0
@@ -61,7 +59,6 @@ dependencies:
   open_file: ^3.3.2
   flutter_pdfview: ^1.3.2
   url_launcher: ^6.1.14
->>>>>>> 924ac210b3b7a59b2617a37a2a5d7974d64549f0
 
 dev_dependencies:
   flutter_test:

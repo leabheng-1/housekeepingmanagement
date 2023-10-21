@@ -31,17 +31,13 @@ class ColorController {
   static const Color occupiedcolor = Color(0xFF7370ED);
   static const Color bottonbackcolor = Color(0xFFFFFFFF);
   static const Color iconbackgroundcolor = Color(0xFFE0E4FF);
-
- static const Color btnBookingColor = Color(0xFF8585FF);
+  static const Color btnBookingColor = Color(0xFF8585FF);
   static const Color barColor = Color(0xFFA5C2D5);
   static const Color boxBooingColor = Color(0xFFE7E8FF);
   static const Color activeColor = Color(0xFF5AAAFF);
+  static const Color legendColor = Color(0xFF002BFE);
 
-  
-  
-
-
-   static Color getHKColor(String hkState) {
+  static Color getHKColor(String hkState) {
     switch (hkState.toLowerCase()) {
       case "cleaning":
         return cleaningColor;
@@ -53,7 +49,8 @@ class ColorController {
         return Colors.black;
     }
   }
- static bookingStatus(String? bookingStatus) {
+
+  static bookingStatus(String? bookingStatus) {
     switch (bookingStatus?.toLowerCase()) {
       case "in-house":
         return checkInColor;
@@ -62,14 +59,13 @@ class ColorController {
       case "void":
         return blockColor;
       case "no-show":
-        return allRoomsColor;     
+        return allRoomsColor;
       case "block":
         return blockColor;
       case "booking":
-        return allRoomsColor;       
+        return allRoomsColor;
       default:
-        return allRoomsColor; // Default color if the state is not recognized
+        return allRoomsColor;
     }
-}
-
+  }
 }

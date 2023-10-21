@@ -1,6 +1,7 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:housekeepingmanagement/system_widget/btn.dart';
+import 'package:housekeepingmanagement/system_widget/system_icon.dart';
 
 class morebtnaction extends StatefulWidget {
   const morebtnaction({super.key});
@@ -15,12 +16,12 @@ class _morebtnactionState extends State<morebtnaction> {
   Widget build(BuildContext context) {
     return DropdownButtonHideUnderline(
       child: DropdownButton2(
-        customButton: const BtnAction(
-          icon: Icons.star,
+        customButton: BtnAction(
+          icon: iconController.settiongIcon,
           textColor: Colors.white,
-          color: Colors.blue,
-          label: "Check In",
-          background: Colors.blue,
+          color: Colors.white,
+          label: "Option",
+          background: const Color(0xFFAB13E2),
         ),
         items: [
           ...MenuItems.firstItems.map(
@@ -45,7 +46,7 @@ class _morebtnactionState extends State<morebtnaction> {
           padding: const EdgeInsets.symmetric(vertical: 6),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(4),
-            color: Colors.redAccent,
+            color: Colors.white,
           ),
           offset: const Offset(0, 8),
         ),
@@ -84,7 +85,7 @@ abstract class MenuItems {
   static Widget buildItem(MenuItem item) {
     return Row(
       children: [
-        Icon(item.icon, color: Colors.white, size: 22),
+        Icon(item.icon, color: Colors.black, size: 22),
         const SizedBox(
           width: 10,
         ),
@@ -92,7 +93,7 @@ abstract class MenuItems {
           child: Text(
             item.text,
             style: const TextStyle(
-              color: Colors.white,
+              color: Colors.black,
             ),
           ),
         ),
@@ -103,16 +104,12 @@ abstract class MenuItems {
   static void onChanged(BuildContext context, MenuItem item) {
     switch (item) {
       case MenuItems.home:
-        //Do something
         break;
       case MenuItems.settings:
-        //Do something
         break;
       case MenuItems.share:
-        //Do something
         break;
       case MenuItems.logout:
-        //Do something
         break;
     }
   }
