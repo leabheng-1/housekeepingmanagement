@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
+ const Color defaultTextColor = Color(0xFFFFFFFF);
 class SubButtonFrontdeskWidget extends StatelessWidget {
   Icon icon;
   String title = "";
   int value = 0;
   Color backgroundColor;
   Color iconbackground;
+  Color textColor;
   SubButtonFrontdeskWidget(
       {super.key,
       required this.icon,
       required this.value,
       required this.title,
       required this.backgroundColor,
-      required this.iconbackground});
+      this.iconbackground = const Color(0x66000000),
+      this.textColor =defaultTextColor });
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +37,7 @@ class SubButtonFrontdeskWidget extends StatelessWidget {
       height: 40,
       width: 40,
       decoration: BoxDecoration(
-        color: Colors.black.withOpacity(0.4),
+        color: iconbackground ,
         borderRadius: BorderRadius.circular(10),
       ),
       child: icon,
@@ -46,10 +49,10 @@ class SubButtonFrontdeskWidget extends StatelessWidget {
       width: 80,
       child: Text(
         title,
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.bold,
-          color: Colors.white,
+          color: textColor ,
         ),
       ),
     ),
@@ -58,10 +61,10 @@ class SubButtonFrontdeskWidget extends StatelessWidget {
         alignment: Alignment.centerRight,
         child: Text(
           value.toString(),
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
+            color: textColor,
           ),
         ),
       ),

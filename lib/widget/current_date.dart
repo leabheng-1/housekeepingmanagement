@@ -69,19 +69,18 @@ class CurrentDate extends StatelessWidget {
                   width: 40,
                 ),
                 SizedBox(
-                  width: 150,
                   child: Text(
                     "${now.day}",
                     style:
-                        const TextStyle(color: Colors.black87, fontSize: 100),
+                        const TextStyle(color: Colors.black87, fontSize: 70),
                   ),
                 ),
+                SizedBox(width:80,),
                 SizedBox(
-                  width: 150,
                   child: Text(
                     " ${DateFormat('MMM').format(now)}",
                     style: const TextStyle(
-                      fontSize: 70,
+                      fontSize: 50,
                       color: Colors.black87,
                     ),
                   ),

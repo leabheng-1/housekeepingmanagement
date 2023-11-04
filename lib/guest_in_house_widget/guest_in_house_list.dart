@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:housekeepingmanagement/dialog/editGuest.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -15,7 +16,7 @@ class _GuestInHouseListState extends State<GuestInHouseList> {
   List<bool> selectedCheckboxes = [];
   String? selectedDropdownValue;
   bool selectAll = false;
-
+bool loading = false;
   @override
   void initState() {
     super.initState();
@@ -24,10 +25,12 @@ class _GuestInHouseListState extends State<GuestInHouseList> {
 
   Future<void> fetchData() async {
     try {
+       loading = false;
       final response = await http
           .get(Uri.parse('http://localhost:8000/api/booking/allTime'));
 
       if (response.statusCode == 200) {
+        bool loading = true;
         Map<String, dynamic> data = json.decode(response.body);
         setState(() {
           bookingsData = List<Map<String, dynamic>>.from(data['data']);
@@ -56,7 +59,11 @@ class _GuestInHouseListState extends State<GuestInHouseList> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
+    return loading
+                                  ? const Center(
+                                      child: CircularProgressIndicator(),
+                                    )
+                                  : Expanded(
       child: DataTable(
         columnSpacing: 15.0,
         columns: [
@@ -125,8 +132,8 @@ class _GuestInHouseListState extends State<GuestInHouseList> {
               DataCell(
                 Text(
                   calculateDifference(
-                    booking['arrival_date'],
-                    booking['departure_date'],
+                    booking!['arrival_date'],
+                    booking!['departure_date'],
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -164,7 +171,12 @@ class _GuestInHouseListState extends State<GuestInHouseList> {
                     SizedBox(
                       width: 60,
                       child: TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                            editGuestDialog(
+                                                            context, fetchData)
+                                                        .showCreateeditGuestDialog(
+                                                            booking);
+                        },
                         style: ButtonStyle(
                           shape:
                               MaterialStateProperty.all<RoundedRectangleBorder>(

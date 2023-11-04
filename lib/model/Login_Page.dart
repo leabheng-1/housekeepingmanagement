@@ -37,6 +37,7 @@ class _LoginPageState extends State<LoginPage> {
       });
       final token = responseData['data']['token']['name'];
       SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('name', username);
       prefs.setString('token', token);
       // ignore: use_build_context_synchronously
       Navigator.pushReplacement(
@@ -68,24 +69,67 @@ class _LoginPageState extends State<LoginPage> {
       body: Row(
         children: [
           Expanded(
-            flex: 3,
-            child: Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                width: double.infinity,
-                height: double.infinity,
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Colors.blue, Colors.green],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  borderRadius: BorderRadius.only(
-                    bottomRight: Radius.circular(999),
+  flex: 3,
+  child: Align(
+    alignment: Alignment.bottomLeft,
+    child: Container(
+      child: Container(
+        width: double.infinity,
+        height: double.infinity,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/backgroundlogin.png'),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Container(
+          margin: EdgeInsets.only(left: 100),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'WELCOME',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 50,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                'UNIQUE PALM ANGKOR VILLA',
+                style: TextStyle(
+                  color: Color.fromARGB(243, 208, 208, 208),
+                  fontSize: 30,
+                ),
+              ),
+              Text(
+                'SORPHOUN VILLA THE PASSED',
+                style: TextStyle(
+                  color: Color.fromARGB(243, 208, 208, 208),
+                  fontSize: 25,
+                ),
+              ),
+              Align(
+                alignment: Alignment.bottomLeft,
+                child: Text(
+                  'Copy Right',
+                  style: TextStyle(
+                    color: Color.fromARGB(243, 208, 208, 208),
+                    fontSize: 16,
                   ),
                 ),
               ),
-            ),
+            ],
+          ),
+        ),
+      ),
+    ),
+  ),
+),
+
+          SizedBox(
+            width: 180,
           ),
           Expanded(
             flex: 2,

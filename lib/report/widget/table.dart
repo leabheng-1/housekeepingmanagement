@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:housekeepingmanagement/report/widget/exportbtn.dart';
-import 'package:housekeepingmanagement/system_widget/btn.dart';
-import 'package:housekeepingmanagement/widget/Datebooking.dart';
-import 'package:housekeepingmanagement/widget/current_date.dart';
 import 'package:housekeepingmanagement/widget/inputbox.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -16,7 +13,7 @@ String start_date = '';
 String end_date = '';
 String room_type = 'All'; 
 String Url = '';
-String room_number_filter = '';
+String room_number_filter = 'ALL';
 
   List<String> roomNumbers = ["All"];
 class _dailyReportState extends State<dailyReport> {
@@ -25,7 +22,8 @@ class _dailyReportState extends State<dailyReport> {
   Future<void> fetchData() async {
       
     final response = await http.get(Uri.parse('http://127.0.0.1:8000/api/report/daily?start_date=$start_date&end_date=$end_date&room_type=$room_type'));
-    Url='http://127.0.0.1:8000/api/report/daily?start_date=$start_date&end_date=$end_date&room_type=$room_type&room_number=$room_number_filter';
+    Url='http://127.0.0.1:8000/api/report/daily?start_date=$start_date&end_date=$end_date&room_type=$room_type';
+print(Url);
     if (response.statusCode == 200) {
       fetchDataroom();
       setState(() {

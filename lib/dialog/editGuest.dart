@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:housekeepingmanagement/dashboard/frontdesk.dart';
 import 'package:housekeepingmanagement/dialog/barDialog.dart';
 import 'package:housekeepingmanagement/dialog/editBooking.dart';
-import 'package:housekeepingmanagement/dialog/editGuest.dart';
 import 'package:housekeepingmanagement/frontdesk/widget/Morebtnaction.dart';
 import 'package:housekeepingmanagement/system_widget/box_detail.dart';
 import 'package:housekeepingmanagement/system_widget/btn.dart';
@@ -19,7 +18,7 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'dart:convert';
 
-class BookingDialog {
+class editGuestDialog {
   // final VoidCallback reloadDataCallback;
   final BuildContext context;
     final VoidCallback reloadDataCallback;
@@ -55,8 +54,8 @@ TextEditingController totalBalanceController = TextEditingController();
 
 String? minSelectDate;
 String? selectCountry ;
-  BookingDialog(this.context ,this.reloadDataCallback);
-   void showCreateBookingDialog(Map<String, dynamic> booking) {
+  editGuestDialog(this.context ,this.reloadDataCallback);
+   void showCreateeditGuestDialog(Map<String, dynamic> booking) {
     int? bookingId = booking['booking_id'] as int?;
 int? id = booking['id'] as int?;
 int? guestId = booking['guest_id'] as int?;
@@ -153,7 +152,7 @@ guestNoteController.text = note ?? '';
            
                     CustomTextField(
                       controller: guestNameController,
-                      labelText: 'Guest Name',
+                      labelText: booking['checkin_date'].toString(),
                       width: 265,
                       
                     ), SizedBox(width: 20), CustomDropdownButton(
@@ -246,103 +245,12 @@ guestNoteController.text = note ?? '';
                     )]),  SizedBox(width: 20), 
                     CustomTextField(
                       controller: guestNoteController,
-                      labelText: 'Guest Noted',
+                      labelText: 'Guest Note',
                       height:200,
                       width:550,
                     ),
                   ]
                   ,() {
-               
-            }
-                ),
-              ),
-              SizedBox(width: 20), // Add spacing between columns
-              Expanded(
-                child: buildLabelAndContent('Booking Information',[
-                      SizedBox(width: 20), 
-                 DateRangePickerWidget(
-              controller: checkOutController,
-              labelText: 'Check-Out Date',
-              checkin:checkInController,
-              checkout:checkOutController,
-              night:nightController,
-              checkcurrentdate: checkOutDate,
-              onDateSelectedDate: (selectedDate) {
-               
-                
-             
-              }
-              , onChange: (DateTime checkin, DateTime checkout, int nights) {
-              
-roomRateCal = double.parse(roomRateController.text);
-totalChargeController.text = (nights * roomRateCal).toString();
-  checkOutController.text = checkout.toString();
-                  checkInController.text = checkin.toString();
-                },
-            ),
-        
-           Row(
-      children: [ 
-
-        CustomDropdownButton(
-            width: 400,
-            labelText: 'Room Type',
-            items: ['No set', 'Single Room', 'Twin Room'],
-            selectedValue:roomTypeController.text ,
-            hintText: 'Room Type',
-            onChanged: (value) {
-                roomTypeController.text = value!;
-            },
-          ),SizedBox(width: 20), 
-
-                    CustomTextField(
-                      width: 130,
-                      controller: roomNumberController,
-                      labelText: 'Room Number',
-                    )
-      ]),
-       Row(
-      children: [ 
-                    CustomTextField(
-                      width: 300,
-                      controller: roomRateController,
-                      labelText: 'Room Rate',
-                    ),SizedBox(width: 20),
-                    CustomTextField(
-                      width: 230,
-                      controller: extraChargeController,
-                      labelText: 'Extra Charge',
-                    ),
-      ]),
-        Row(
-      children: [ 
-                    CustomTextField(
-                      width: 510/3,
-                      controller: totalPaymentController,
-                      labelText: 'Total Payment',
-                    ),SizedBox(width: 20),
-                    CustomTextField(
-                      width: 510/3,
-                      controller: totalChargeController,
-                      labelText: 'Total Charge',
-                    ),SizedBox(width: 20),
-                    CustomTextField(
-                      width: 510/3,
-                      controller: totalBalanceController,
-                      labelText: 'Total Balance',
-                    )
-      ]),Row(
-        children: [
-           CustomTextField(
-                      controller: guestNoteController,
-                      labelText: 'Booking Note',
-                      height:200,
-                      width:550,
-                    ),
-        ],
-      )
-                  ],() {
-              // This is the action that will be executed when the button is pressed
               print('Button Pressed!');
             }
                 ),
@@ -400,6 +308,7 @@ SizedBox(width:20,),
     final totalBalance = totalBalanceController.text;
     // Create a map containing the booking data
      submitUpdatedData(
+  booking['booking_id'].toString(),    
   guestName,
   gender,
   dob,
@@ -411,7 +320,7 @@ SizedBox(width:20,),
   cardId,
   email,
   guestNote,
-  checkOut,  // Use checkOut directly
+  booking['checkout_date'].toString(),  // Use checkOut directly
   roomType,  // Use roomType directly
   roomNumber,
   roomRate,
@@ -419,7 +328,7 @@ SizedBox(width:20,),
   totalPayment,
   totalCharge,
   totalBalance,
-  checkIn,   // Use checkIn directly
+  booking['checkin_date'].toString(),   // Use checkIn directly
   roomType,
   roomId! ); },
 )
@@ -431,7 +340,9 @@ SizedBox(width:20,),
     },
   );
 }
-Future<void> submitUpdatedData(    String name,
+Future<void> submitUpdatedData(    
+  String booking_id,
+  String name,
     String gender ,
     String dob,
     String country,
@@ -454,10 +365,10 @@ Future<void> submitUpdatedData(    String name,
     String roomType,
         int room_id,
     ) async {
-  final String baseUrl1 = 'http://localhost:8000/api/booking/insert';
-   final url = Uri.parse('$baseUrl1?room_id=$room_id&booking_status=Booking&name=$name&gender=$gender&dob=$dob&country=$country&adult=$adult&child=$child&phone_number=$phone_number&address=$address&cardId=$cardId&email=$email&checkout_date=$checkout_date&room_type=$room_type&roomNumber=$roomNumber&roomRate=$roomRate&extra_charge=$extraCharge&total_payment=$totalPayment&charges=$totalCharge&totalBalance=$totalBalance&checkin_date=$checkin_date&payment_status=leabheng');
+  final String baseUrl1 = 'http://localhost:8000/api/booking/update/$booking_id';
+   final url = Uri.parse('$baseUrl1?room_id=$room_id&booking_status=Booking&name=$name&gender=$gender&dob=$dob&country=$country&adult=$adult&child=$child&phone_number=$phone_number&address=$address&cardId=$cardId&email=$email&room_type=$room_type&roomNumber=$roomNumber&roomRate=$roomRate&extra_charge=$extraCharge&total_payment=$totalPayment&charges=$totalCharge&totalBalance=$totalBalance&payment_status=leabheng');
   
-    final response = await http.post(url);
+    final response = await http.put(url);
     if (response.statusCode == 200) {
          
     
@@ -597,10 +508,8 @@ Row(
         )                        
 
       ],() {
-          editGuestDialog(
-                                                            context, reloadDataCallback)
-                                                        .showCreateeditGuestDialog(
-                                                            booking);
+              // This is the action that will be executed when the button is pressed
+              print('Button Pressed!');
             },isBtn:true),
       ),
       SizedBox(width: 20),
@@ -684,7 +593,7 @@ Row(
           ],
         )
       ],() {
-                 editBookingDialog(
+               editBookingDialog(
                                                             context, reloadDataCallback)
                                                         .showCreateeditBookingDialog(
                                                             booking);

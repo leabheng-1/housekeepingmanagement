@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:housekeepingmanagement/system_widget/system_color.dart';
+import 'package:housekeepingmanagement/widget/sub_button/sub_button_frontdesd_widget.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'card_number_widget.dart';
@@ -36,158 +37,123 @@ class DashboardToday extends StatelessWidget {
         } else {
           final data = snapshot.data!['data'];
 
-          return Padding(
-            padding: const EdgeInsets.only(left: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
+          return 
                 Container(
-                  height: 240,
-                  width: 670,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    borderRadius: BorderRadius.circular(10),
-                  ),
                   child: Padding(
-                    padding: const EdgeInsets.all(15.0),
+                    padding: const EdgeInsets.only(left:15,top:15),
                     child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          children: [
-                            Text(
-                              "Today",
-                              style: TextStyle(
-                                  color: Colors.grey.shade700,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
+    Text(
+      "Today",
+      style: TextStyle(
+        color: Colors.grey.shade700,
+        fontSize: 18,
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+  
+
                         Padding(
-                          padding: const EdgeInsets.only(left: 10),
-                          child: Row(
-                            children: [
-                              Column(
-                                children: [
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
-                                  Row(
-                                    children: [
-                                      CardNumberWidget(
-                                          icon: const Icon(
-                                            Icons.bed_sharp,
-                                            color: Colors.white,
-                                          ),
-                                          title: "Total Room",
-                                          value: data['totalRoom'],
-                                          backgroundColor:
-                                              ColorController.totalroom)
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Row(
-                                    children: [
-                                      CardNumberWidget(
-                                        icon: const Icon(
-                                          Icons.dry_cleaning,
-                                          color: Colors.white,
-                                        ),
-                                        title: "Dirty",
-                                        value: data['available_rooms'],
-                                        backgroundColor:
-                                            ColorController.dirtyColor,
-                                      )
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Row(
-                                    children: [
-                                      CardNumberWidget(
-                                          icon: const Icon(
-                                            Icons.cleaning_services_outlined,
-                                            color: Colors.white,
-                                          ),
-                                          title: "Clean",
-                                          value: data['clean']['count'],
-                                          backgroundColor:
-                                              ColorController.clean)
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(
-                                width: 20,
-                              ),
-                              Column(
-                                children: [
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
-                                  Row(
-                                    children: [
-                                      CardNumberWidget(
-                                        icon: const Icon(
-                                          Icons.file_download_done,
-                                          color: Colors.white,
-                                        ),
-                                        title: "Available",
-                                        value: data['cleaning']['count'],
-                                        backgroundColor:
-                                            ColorController.availableColor,
-                                      )
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Row(
-                                    children: [
-                                      CardNumberWidget(
-                                        icon: const Icon(
-                                          iconController.occupiedIcon,
-                                          color: Colors.white,
-                                        ),
-                                        title: "Occupied",
-                                        value: data['occupied'],
-                                        backgroundColor:
-                                            ColorController.occupiedcolor,
-                                      )
-                                    ],
-                                  ),
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Row(
-                                    children: [
-                                      CardNumberWidget(
-                                        icon: const Icon(
-                                          iconController.blocked,
-                                          color: Colors.white,
-                                        ),
-                                        title: "Blocked",
-                                        value: data['block'],
-                                        backgroundColor:
-                                            ColorController.blockColor,
-                                      )
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ],
+                          padding: const EdgeInsets.only(right:20,top:25),
+                          child:
+                            Column(
+              children: [
+                Row(
+                  children: [
+                    SubButtonFrontdeskWidget(
+                      icon: const Icon(
+                        iconController.allRoomsIcon,
+                        color: Colors.white,
+                      ),
+                      title: "TotalRoom",
+                      value: data['totalRoom'],
+                      textColor: Colors.black,backgroundColor: ColorController.backgroundstatustoday,
+                      iconbackground: ColorController.totalroom,
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    SubButtonFrontdeskWidget(
+                      icon: const Icon(
+                        iconController.availableIcon,
+                        color: Colors.white,
+                      ),
+                      title: "Available",
+                      value: data?['count_departure'] ?? '',
+                      textColor: Colors.black,backgroundColor: ColorController.backgroundstatustoday,
+                      iconbackground: ColorController.availableColor,
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  children: [
+                    SubButtonFrontdeskWidget(
+                      icon: const Icon(
+                        Icons.cleaning_services_outlined,
+                        color: Colors.white,
+                      ),
+                      title: "dirty",
+                            value: data['dirty']['count'],
+                      textColor: Colors.black,backgroundColor: ColorController.backgroundstatustoday,
+                      iconbackground: ColorController.dirty,
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    SubButtonFrontdeskWidget(
+                      icon: const Icon(
+                        iconController.occupiedIcon,
+                        color: Colors.white,
+                      ),
+                      title: "Occupied",
+                      value: data?['occupied'] ?? '',
+                      textColor: Colors.black,backgroundColor: ColorController.backgroundstatustoday,
+                      iconbackground: ColorController.occupiedcolor,
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  children: [
+                    SubButtonFrontdeskWidget(
+                      icon: const Icon(
+                        Icons.cleaning_services_outlined,
+                        color: Colors.white,
+                      ),
+                      title: "Clean",
+                            value: data['clean']['count'],
+                      textColor: Colors.black,backgroundColor: ColorController.backgroundstatustoday,
+                      iconbackground: ColorController.clean,
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    SubButtonFrontdeskWidget(
+                      icon: const Icon(
+                        iconController.blockIcon,
+                        color: Colors.white,
+                      ),
+                      title: "Block",
+                      value: data!['block'] ?? '',
+                      textColor: Colors.black,backgroundColor: ColorController.backgroundstatustoday,
+                      iconbackground: ColorController.blockColor,
+                    ),
+                  ],
+                ),
+                // Other rows and widgets...
+              ],
+            )
                           ),
-                        ),
                       ],
                     ),
                   ),
-                ),
-              ],
-            ),
-          );
+                );
         }
       },
     );

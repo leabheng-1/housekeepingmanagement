@@ -23,7 +23,7 @@ class iconController {
   static const IconData fanIcon = Icons.wind_power;
   static IconData saveIcon = Icons.edit_calendar_outlined;
   static IconData closeIcon = Icons.close;
-  static IconData settiongIcon = Icons.settings;
+  static const IconData settiongIcon = Icons.settings;
 
   static airMethod(String? airMethod) {
     switch (airMethod?.toLowerCase()) {
@@ -40,20 +40,21 @@ class iconController {
   static const IconData noshowIcon = Icons.usb_rounded;
   static bookingStatus(String? bookingStatus) {
     switch (bookingStatus?.toLowerCase()) {
-      case "in-house":
+      case "in house":
         return inHouseIcon;
       case "cancel":
         return CancelIcon;
       case "void":
         return fanIcon;
-      case "no-show":
-        return fanIcon;
+      case "no show":
+        return noshow;
       case "block":
         return blockIcon;
       case "booking":
-        return fanIcon;
+        return arrivalsIcon;
       default:
         return Icons.check; // Default color if the state is not recognized
     }
   }
+  
 }

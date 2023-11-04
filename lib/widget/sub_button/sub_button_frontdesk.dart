@@ -60,7 +60,6 @@ class _SubButtonFrontdeskState extends State<SubButtonFrontdesk> {
                       title: "Check-In",
                       value: data?['checkin_count'],
                       backgroundColor: ColorController.checkInColor,
-                      iconbackground: Colors.blue.shade800,
                     ),
                     const SizedBox(
                       width: 10,
@@ -73,7 +72,7 @@ class _SubButtonFrontdeskState extends State<SubButtonFrontdesk> {
                       title: "Arrival",
                       value: data?['count_arrival'] ?? '',
                       backgroundColor: ColorController.arrivalsColor,
-                      iconbackground: Colors.purple.shade900,
+
                     ),
                   ],
                 ),
@@ -90,7 +89,6 @@ class _SubButtonFrontdeskState extends State<SubButtonFrontdesk> {
                       title: "Check-Out",
                       value: data?['checkout_count'] ?? '',
                       backgroundColor: ColorController.checkOutColor,
-                      iconbackground: Colors.orange.shade900,
                     ),
                     const SizedBox(
                       width: 10,
@@ -103,7 +101,6 @@ class _SubButtonFrontdeskState extends State<SubButtonFrontdesk> {
                       title: "Departure",
                       value: data?['count_departure'] ?? '',
                       backgroundColor: ColorController.departuresColor,
-                      iconbackground: Colors.grey.shade700,
                     ),
                   ],
                 ),
@@ -120,7 +117,6 @@ class _SubButtonFrontdeskState extends State<SubButtonFrontdesk> {
                       title: "Available",
                       value: data?['available_rooms'] ?? '',
                       backgroundColor: ColorController.availableColor,
-                      iconbackground: Colors.blue.shade800,
                     ),
                     const SizedBox(
                       width: 10,
@@ -133,7 +129,6 @@ class _SubButtonFrontdeskState extends State<SubButtonFrontdesk> {
                       title: "Inhouse",
                       value: data?['inHouse'] ?? '',
                       backgroundColor: ColorController.inhouse,
-                      iconbackground: Colors.blue.shade800,
                     ),
                   ],
                 ),

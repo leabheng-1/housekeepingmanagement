@@ -4,7 +4,7 @@ import 'package:housekeepingmanagement/widget/app_color.dart';
 import 'package:housekeepingmanagement/widget/color_extensions.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
+bool loading = false;
 class ApiResponse {
   final bool success;
   final Map<String, dynamic> data;
@@ -48,6 +48,7 @@ class GuestChartState extends State<GuestChart> {
 
   @override
   void initState() {
+    loading = true;
     super.initState();
     fetchDataAndSetGlobal();
   }
@@ -57,8 +58,9 @@ class GuestChartState extends State<GuestChart> {
 
     try {
       final response = await http.get(apiUrl);
-
+        
       if (response.statusCode == 200) {
+        loading = false;
         final jsonData = json.decode(response.body);
         setState(() {
           globalApiResponse = ApiResponse.fromJson(jsonData);
@@ -75,7 +77,12 @@ class GuestChartState extends State<GuestChart> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return loading
+          ? Align(
+  alignment: Alignment.center,
+  child: CircularProgressIndicator(),
+)
+: SizedBox(
       width: 350,
       height: 250,
       child: AspectRatio(
@@ -152,7 +159,7 @@ class GuestChartState extends State<GuestChart> {
     double y, {
     bool isTouched = false,
     Color? barColor,
-    double width = 32,
+    double width = 25,
     List<int> showTooltips = const [],
   }) {
     barColor ??= widget.barColor;

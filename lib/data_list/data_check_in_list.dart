@@ -1,7 +1,10 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:housekeepingmanagement/data_list/textbutton_list.dart';
+import 'package:housekeepingmanagement/dialog/bookingdialog.dart';
 import 'package:housekeepingmanagement/system_widget/guest_inhouse_widget.dart';
 import 'package:housekeepingmanagement/system_widget/system_color.dart';
+import 'package:housekeepingmanagement/widget/checkinandcheckout.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -236,18 +239,38 @@ class _DataCheckInListState extends State<DataCheckInList> {
                                 height: 0.1,
                                 width: 0.05,
                                 backgroundColor: Colors.green,
-                              ),
-                              TextButttonList(
-                                title: 'Edit',
-                                height: 0.1,
-                                width: 0.06,
-                                backgroundColor: Colors.blue.shade600,
+                                onPressed: () {
+                                   BookingDialog(
+                                                            context, fetchData)
+                                                        .showBookingDetailsDialog(
+                                                            booking);
+  },
                               ),
                               TextButttonList(
                                 title: 'Check-In',
                                 height: 0.1,
                                 width: 0.06,
                                 backgroundColor: Colors.purple.shade800,
+                                onPressed: (){
+                                  AwesomeDialog(
+          width: 650,
+                      context: context,
+                      keyboardAware: true,
+                      dismissOnBackKeyPress: false,
+                      dialogType: DialogType.warning,
+                      animType: AnimType.bottomSlide,
+                      btnCancelText: "NO",
+                      btnOkText: "YES",
+                      title: booking['booking_id'].toString(),
+                      // padding: const EdgeInsets.all(5.0),
+                      desc:
+                          'You will be logged out of your account and returned to the login page.',
+                      btnCancelOnPress: () {},
+                      btnOkOnPress: () {
+                         onCheck(context, booking['booking_id'],'checkin',fetchData);
+                      },
+                    ).show();
+                                },
                               ),
                             ],
                           ),

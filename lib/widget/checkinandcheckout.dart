@@ -4,10 +4,11 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-Future<void> onCheck(BuildContext context, int bookingid , String check) async {
-  final String baseUrl1 = 'http://localhost:8000/api/booking/$check';
+Future<void> onCheck(BuildContext context, int bookingid , String check , VoidCallback? action) async {
+
+  final String baseUrl1 = 'http://localhost:8000/api/booking/updatestatus/$check';
   final url = Uri.parse('$baseUrl1/$bookingid');
-  final response = await http.post(url);
+  final response = await http.put(url);
   final jsonResponse = json.decode(response.body);
   final errorMessage = jsonResponse['message'];
 
@@ -17,9 +18,11 @@ Future<void> onCheck(BuildContext context, int bookingid , String check) async {
       width: 500,
       context: context,
       dialogType: DialogType.success,
-      title: 'Booking Created Successfully',
+      title:'$check Successfully',
       desc: errorMessage,
-      btnOkOnPress: () {},
+      btnOkOnPress: () {
+        action?.call();
+      },
     ).show();
     print('Booking created successfully.');
   } else if (response.statusCode == 400) {

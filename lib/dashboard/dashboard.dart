@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:housekeepingmanagement/dashboard/boxwidget.dart';
 import 'package:housekeepingmanagement/data_list/data_check_in_list.dart';
 import 'package:housekeepingmanagement/data_list/data_check_out_list.dart';
 import 'package:housekeepingmanagement/widget/current_date.dart';
@@ -32,109 +33,129 @@ class _DashboardState extends State<Dashboard> {
     double screenWidth = MediaQuery.of(context).size.width;
     double buttonWidth = screenWidth > 600 ? 160.0 : 120.0;
 
-    return Column(
+    return  SingleChildScrollView(
+     child: Container(
+        padding: EdgeInsets.all(10),
+        height: 950,
+        child: Column(
+          children: <Widget>[
+            // First Row with 30% height
+            Expanded(
+              flex: 3, // 30% height
+              child: Row(
+                children: <Widget>[
+                 Expanded(
+  flex: 2, // 1/3 of the first row
+  child: boxdetailwidget(DashboardToday())
+),
+
+
+                  SizedBox(
+                    width: 15,
+                  ),
+                  Expanded(
+                    flex: 1, // 1/3 of the first row
+                    child: boxdetailwidget(GuestChart(),backgroundColor:Color.fromARGB(255, 109, 87, 255))
+                  ),
+                  SizedBox(
+                    width: 15,
+                  ),
+                  Expanded(
+                    flex: 1, // 1/3 of the first row
+                    child:  boxdetailwidget(CurrentDate())
+                  ),
+                ],
+              ),
+            ),
+            // Second Row with 70% height
+            SizedBox(
+                    height: 15,
+                  ),
+            Expanded(
+              flex: 7, // 70% height
+              child: Container(
+                child:Column(
+            children: [
+    Row(
       children: [
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 20),
-            child: Row(
-              children: <Widget>[
-                const DashboardToday(),
-                const SizedBox(
-                  width: 40,
+        SizedBox(width: 20,),
+        TextButton(
+          onPressed: () {
+            setState(() {
+              listviewClicked = true;
+              gridviewClicked = false;
+            });
+          },
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.resolveWith<Color>(
+              (Set<MaterialState> states) {
+                return listviewClicked
+                    ? const Color(0xFFDBEDF8)
+                    : Colors.grey.shade400;
+              },
+            ),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20.0), // Set the top-left corner radius
+                  topRight: Radius.circular(20.0), // Set the top-right corner radius
                 ),
-                Row(
-                  children: [
-                    Container(
-                      height: 250,
-                      decoration: BoxDecoration(
-                        color: const Color.fromARGB(255, 39, 154, 248),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: GuestChart(),
-                    )
-                  ],
-                ),
-                const SizedBox(
-                  width: 30,
-                ),
-                const CurrentDate(),
-              ],
+              ),
+            ),
+          ),
+          child: 
+          Padding(
+            padding: EdgeInsets.all(10.0), // Adjust the left and right padding here
+            child: Text(
+              "CHECK-IN",
+              style: TextStyle(
+                color: listviewClicked ? Colors.blue : Colors.black,
+              ),
             ),
           ),
         ),
-        const SizedBox(
-          height: 20,
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 30),
-          child: Row(
-            children: [
-              SizedBox(
-                height: 40,
-                width: buttonWidth,
-                child: TextButton(
-                  onPressed: () {
-                    setState(() {
-                      listviewClicked = true;
-                      gridviewClicked = false;
-                    });
-                  },
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                      (Set<MaterialState> states) {
-                        return listviewClicked
-                            ? const Color(0xFFDBEDF8)
-                            : Colors.grey.shade400;
-                      },
-                    ),
-                  ),
-                  child: Text(
-                    "CHECK-IN",
-                    style: TextStyle(
-                      color: listviewClicked ? Colors.blue : Colors.black,
-                    ),
-                  ),
-                ),
+        SizedBox(width:10,),
+        TextButton(
+        onPressed: () {
+          setState(() {
+            listviewClicked = false;
+            gridviewClicked = true;
+          });
+        },
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.resolveWith<Color>(
+            (Set<MaterialState> states) {
+              return gridviewClicked
+                  ? const Color(0xFFDBEDF8)
+                  : Colors.grey.shade400;
+            },
+          ),
+          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20.0), // Set the top-left corner radius
+                topRight: Radius.circular(20.0), // Set the top-right corner radius
               ),
-              const SizedBox(
-                width: 10,
-              ),
-              SizedBox(
-                height: 40,
-                width: buttonWidth,
-                child: TextButton(
-                  onPressed: () {
-                    setState(() {
-                      listviewClicked = false;
-                      gridviewClicked = true;
-                    });
-                  },
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                      (Set<MaterialState> states) {
-                        return gridviewClicked
-                            ? const Color(0xFFDBEDF8)
-                            : Colors.grey.shade400;
-                      },
-                    ),
-                  ),
-                  child: Text(
-                    "CHECK-OUT",
-                    style: TextStyle(
-                      color: gridviewClicked ? Colors.blue : Colors.black,
-                    ),
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
         ),
-        Expanded(
+        child: Padding(
+          padding: EdgeInsets.all(10.0), // Adjust the left and right padding here
+          child: Text(
+            "CHECK-OUT",
+            style: TextStyle(
+              color: gridviewClicked ? Colors.blue : Colors.black,
+            ),
+          ),
+        ),
+      ),
+      ],
+    ),
+
+Expanded(
           child: Padding(
             padding:
-                const EdgeInsets.only(left: 30, right: 10, bottom: 20, top: 10),
+                const EdgeInsets.only(left: 0),
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.grey[200],
@@ -172,6 +193,14 @@ class _DashboardState extends State<Dashboard> {
           ),
         ),
       ],
-    );
+    )
+              ),
+            ),
+          ],
+        ),
+      )
+    ); 
+    
+ 
   }
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:housekeepingmanagement/system_widget/system_color.dart';
 
 Widget buildLabelAndContent(
-    String label, List<Widget> content, VoidCallback action) {
+    String label, List<Widget> content, VoidCallback action , {bool isBtn = false}) {
   return Stack(
     clipBehavior: Clip.none,
     children: [
@@ -50,7 +50,7 @@ Widget buildLabelAndContent(
           ),
         ),
       ),
-      Positioned(
+      if (isBtn) Positioned(
         top: 10,
         right: 10,
         child: Container(
@@ -61,7 +61,7 @@ Widget buildLabelAndContent(
             borderRadius:
                 BorderRadius.circular(20), // Adjust the radius as needed
           ),
-          child: IconButton(
+          child:  IconButton(
             onPressed: action,
             icon: Icon(Icons.edit),
             color: Colors.blue,

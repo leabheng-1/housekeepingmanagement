@@ -530,7 +530,7 @@ class _FrontDeskState extends State<FrontDesk> {
                                                                                   'room_status'] ??
                                                                               ''),
                                                                           size:
-                                                                              12,
+                                                                              16,
                                                                           color:
                                                                               Colors.white),
                                                                     ),
@@ -538,27 +538,28 @@ class _FrontDeskState extends State<FrontDesk> {
                                                                   const SizedBox(
                                                                       width:
                                                                           10),
-                                                                  if (booking[
-                                                                          'booking_id'] !=
-                                                                      null)
+                                                                  if (booking['booking_id'] !=null)
                                                                     Tooltip(
                                                                       message:
-                                                                          'Your Tooltip Message 2',
+                                                                          booking['balance'].toString(),
                                                                       child:
                                                                           Container(
                                                                         width:
                                                                             35,
                                                                         height:
                                                                             35,
-                                                                        decoration:
-                                                                            const BoxDecoration(
+                                                                        decoration: BoxDecoration(
                                                                           shape:
                                                                               BoxShape.circle,
-                                                                          color:
-                                                                              Colors.blue,
+                                                                          color: ColorController.bookingStatus(booking['payment_status'] ??
+                                                                            ''),
                                                                         ),
-                                                                        child:
-                                                                            statusIcon,
+                                                                        child:Icon(
+                                                                          iconController.dollar,
+                                                                          size:
+                                                                              16,
+                                                                          color:
+                                                                              Colors.white),
                                                                       ),
                                                                     ),
                                                                 ],

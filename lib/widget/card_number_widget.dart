@@ -18,8 +18,6 @@ class CardNumberWidget extends StatelessWidget {
     return Row(
       children: [
         Container(
-          height: 50,
-          width: 300,
           decoration: BoxDecoration(
             color: Colors.grey[300],
             borderRadius: BorderRadius.circular(10),
@@ -29,8 +27,6 @@ class CardNumberWidget extends StatelessWidget {
             child: Row(
               children: [
                 Container(
-                    height: 40,
-                    width: 40,
                     decoration: BoxDecoration(
                       color: backgroundColor,
                       borderRadius: BorderRadius.circular(10),
@@ -38,17 +34,13 @@ class CardNumberWidget extends StatelessWidget {
                     child: icon),
                 const SizedBox(
                   width: 18,
-                ),
-                SizedBox(
-                  width: 130,
-                  child: Text(
+                ), Text(
                     title,
                     style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: Colors.grey[600]),
                   ),
-                ),
                 Text(
                   value.toString(),
                   style: TextStyle(

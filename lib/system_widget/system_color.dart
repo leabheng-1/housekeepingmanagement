@@ -31,12 +31,15 @@ class ColorController {
   static const Color occupiedcolor = Color(0xFF7370ED);
   static const Color bottonbackcolor = Color(0xFFFFFFFF);
   static const Color iconbackgroundcolor = Color(0xFFE0E4FF);
+  static const Color backgroundstatustoday = Color(0xFFF7F7F7);
 
  static const Color btnBookingColor = Color(0xFF8585FF);
   static const Color barColor = Color(0xFFA5C2D5);
   static const Color boxBooingColor = Color(0xFFE7E8FF);
   static const Color activeColor = Color(0xFF5AAAFF);
-
+    static const Color moreOptionColor = Color(0xFFac12e6);
+    static const Color bgIconColorop =     Color.fromARGB(52, 0, 0, 0)
+;
   
   
 
@@ -55,20 +58,32 @@ class ColorController {
   }
  static bookingStatus(String? bookingStatus) {
     switch (bookingStatus?.toLowerCase()) {
-      case "in-house":
-        return checkInColor;
+      case "in house":
+        return inhouse;
       case "cancel":
         return checkOutColor;
       case "void":
         return blockColor;
-      case "no-show":
-        return allRoomsColor;     
+      case "no show":
+        return noshow;     
       case "block":
         return blockColor;
       case "booking":
-        return allRoomsColor;       
+        return arrivalsColor;       
       default:
         return allRoomsColor; // Default color if the state is not recognized
+    }
+}
+ static paymentStatus(String? bookingStatus) {
+    switch (bookingStatus?.toLowerCase()) {
+      case "uppaid":
+        return unPaid;
+      case "deposit":
+        return deposit;
+      case "paid":
+        return paid;      
+      default:
+        return Colors.white; // Default color if the state is not recognized
     }
 }
 

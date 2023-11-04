@@ -7,7 +7,7 @@ import 'package:housekeepingmanagement/system_widget/system_color.dart';
 import 'package:http/http.dart' as http;
 // ignore: depend_on_referenced_packages
 import 'package:intl/intl.dart';
-
+bool loading = true;
 class Hk {
   final int id;
   final int roomId;
@@ -80,10 +80,12 @@ class _HkDataTableState extends State<HkDataTable> {
   }
 
   Future<void> fetchData() async {
+    loading = true;
     final response = await http.get(
         Uri.parse('http://localhost:8000/api/booking/all?page=$currentPage'));
 
     if (response.statusCode == 200) {
+      loading = false;
       final jsonData = json.decode(response.body);
       final List<dynamic> jsonDataList = jsonData['data']['data'];
       final totalRecords = jsonData['data']['total'];
@@ -475,7 +477,11 @@ class _HkDataTableState extends State<HkDataTable> {
   @override
   Widget build(BuildContext context) {
     String formattedDate = DateFormat('dd-MM-yyyy').format(currentDate);
-    return Container(
+    return  loading
+                                  ? const Center(
+                                      child: CircularProgressIndicator(),
+                                    )
+                                  : Container(
       decoration: BoxDecoration(
         color: const Color.fromARGB(
             255, 255, 255, 255), // Set your desired background color

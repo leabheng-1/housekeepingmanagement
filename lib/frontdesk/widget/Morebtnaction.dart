@@ -1,26 +1,32 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:housekeepingmanagement/system_widget/btn.dart';
+import 'package:housekeepingmanagement/system_widget/system_color.dart';
+import 'package:housekeepingmanagement/system_widget/system_icon.dart';
+import 'package:housekeepingmanagement/widget/checkinandcheckout.dart';
 
-class morebtnaction extends StatefulWidget {
-  const morebtnaction({super.key});
+class moreoptionbtnaction extends StatefulWidget {
+   int bookingId;
+  // Constructor that takes a key and a String
+   moreoptionbtnaction(this.bookingId);
 
   @override
-  State<morebtnaction> createState() => _morebtnactionState();
+  State<moreoptionbtnaction> createState() => _moreoptionbtnactionState();
 }
 
 // ignore: camel_case_types
-class _morebtnactionState extends State<morebtnaction> {
+class _moreoptionbtnactionState extends State<moreoptionbtnaction> {
   @override
   Widget build(BuildContext context) {
     return DropdownButtonHideUnderline(
       child: DropdownButton2(
         customButton: const BtnAction(
-          icon: Icons.star,
+          icon: iconController.settiongIcon,
           textColor: Colors.white,
-          color: Colors.blue,
-          label: "Check In",
-          background: Colors.blue,
+          color: ColorController.moreOptionColor,
+          label: "More Option",
+          background: ColorController.bgIconColorop,
         ),
         items: [
           ...MenuItems.firstItems.map(
@@ -28,32 +34,23 @@ class _morebtnactionState extends State<morebtnaction> {
               value: item,
               child: MenuItems.buildItem(item),
             ),
-          ),
-          const DropdownMenuItem<Divider>(enabled: false, child: Divider()),
-          ...MenuItems.secondItems.map(
-            (item) => DropdownMenuItem<MenuItem>(
-              value: item,
-              child: MenuItems.buildItem(item),
-            ),
-          ),
+          )
         ],
         onChanged: (value) {
-          MenuItems.onChanged(context, value! as MenuItem);
-        },
+  MenuItems.onChanged(context, value! as MenuItem, widget.bookingId);
+},
         dropdownStyleData: DropdownStyleData(
           width: 160,
           padding: const EdgeInsets.symmetric(vertical: 6),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(4),
-            color: Colors.redAccent,
+            color: Color.fromARGB(255, 110, 110, 110),
           ),
           offset: const Offset(0, 8),
         ),
         menuItemStyleData: MenuItemStyleData(
           customHeights: [
             ...List<double>.filled(MenuItems.firstItems.length, 48),
-            8,
-            ...List<double>.filled(MenuItems.secondItems.length, 48),
           ],
           padding: const EdgeInsets.only(left: 16, right: 16),
         ),
@@ -73,13 +70,12 @@ class MenuItem {
 }
 
 abstract class MenuItems {
-  static const List<MenuItem> firstItems = [home, share, settings];
-  static const List<MenuItem> secondItems = [logout];
+  static const List<MenuItem> firstItems = [NoShow, Cancel, UndoCheckIn,UndoCheckOut];
 
-  static const home = MenuItem(text: 'Home', icon: Icons.home);
-  static const share = MenuItem(text: 'Share', icon: Icons.share);
-  static const settings = MenuItem(text: 'Settings', icon: Icons.settings);
-  static const logout = MenuItem(text: 'Log Out', icon: Icons.logout);
+  static const NoShow = MenuItem(text: 'No Show', icon: iconController.noshow);
+  static const Cancel = MenuItem(text: 'Cancel', icon: iconController.CancelIcon);
+  static const UndoCheckIn = MenuItem(text: 'Undo Check In', icon: iconController.checkInIcon);
+  static const UndoCheckOut = MenuItem(text: 'Undo Check Out', icon: iconController.checkOutIcon);
 
   static Widget buildItem(MenuItem item) {
     return Row(
@@ -99,19 +95,96 @@ abstract class MenuItems {
       ],
     );
   }
+static void noac(){
 
-  static void onChanged(BuildContext context, MenuItem item) {
+}
+  static void onChanged(BuildContext context, MenuItem item, int bookingId) {
     switch (item) {
-      case MenuItems.home:
+      case MenuItems.NoShow:
+      print(bookingId);
+         AwesomeDialog(
+          width: 650,
+                      context: context,
+                      keyboardAware: true,
+                      dismissOnBackKeyPress: false,
+                      dialogType: DialogType.warning,
+                      animType: AnimType.bottomSlide,
+                      btnCancelText: "NO",
+                      btnOkText: "YES",
+                      title: 'DO YOU WANT TO NO SHOW THIS BOOKING',
+                      // padding: const EdgeInsets.all(5.0),
+                      desc:
+                          'This Booking Will Remove From Room Table',
+                      btnCancelOnPress: () {},
+                      btnOkOnPress: () {   
+                             onCheck(context, bookingId,'no_show',noac);
+                      },
+                    ).show();
+        break;
+      case MenuItems.UndoCheckIn:
+       AwesomeDialog(
+          width: 650,
+                      context: context,
+                      keyboardAware: true,
+                      dismissOnBackKeyPress: false,
+                      dialogType: DialogType.warning,
+                      animType: AnimType.bottomSlide,
+                      btnCancelText: "NO",
+                      btnOkText: "YES",
+                      title: 'DO YOU WANT TO NO SHOW THIS BOOKING',
+                      // padding: const EdgeInsets.all(5.0),
+                      desc:
+                          'This Booking Will Remove From Room Table',
+                      btnCancelOnPress: () {},
+                      btnOkOnPress: () {   
+                             onCheck(context, bookingId,'no_show',noac);
+                      },
+                    ).show();
+      onCheck(context, bookingId,'undocheckin',noac);
         //Do something
         break;
-      case MenuItems.settings:
+       case MenuItems.UndoCheckOut:
+        AwesomeDialog(
+          width: 650,
+                      context: context,
+                      keyboardAware: true,
+                      dismissOnBackKeyPress: false,
+                      dialogType: DialogType.warning,
+                      animType: AnimType.bottomSlide,
+                      btnCancelText: "NO",
+                      btnOkText: "YES",
+                      title: 'DO YOU WANT TO Undo Check Out THIS BOOKING',
+                      // padding: const EdgeInsets.all(5.0),
+                      desc:
+                          'This Booking Will BACK IN HOUSE',
+                      btnCancelOnPress: () {},
+                      btnOkOnPress: () {   
+                           onCheck(context, bookingId,'undocheckout',noac);
+                      },
+                    ).show();
+       
         //Do something
-        break;
-      case MenuItems.share:
-        //Do something
-        break;
-      case MenuItems.logout:
+        break;  
+      case MenuItems.Cancel:
+       AwesomeDialog(
+          width: 650,
+                      context: context,
+                      keyboardAware: true,
+                      dismissOnBackKeyPress: false,
+                      dialogType: DialogType.warning,
+                      animType: AnimType.bottomSlide,
+                      btnCancelText: "NO",
+                      btnOkText: "YES",
+                      title: 'DO YOU WANT TO CANCEL THIS BOOKING',
+                      // padding: const EdgeInsets.all(5.0),
+                      desc:
+                          'This Booking Will Remove From Room Table',
+                      btnCancelOnPress: () {},
+                      btnOkOnPress: () {   
+                              onCheck(context, bookingId,'cancel',noac);
+                      },
+                    ).show();
+    
         //Do something
         break;
     }

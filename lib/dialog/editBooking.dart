@@ -3,7 +3,6 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:housekeepingmanagement/dashboard/frontdesk.dart';
 import 'package:housekeepingmanagement/dialog/barDialog.dart';
-import 'package:housekeepingmanagement/dialog/editBooking.dart';
 import 'package:housekeepingmanagement/dialog/editGuest.dart';
 import 'package:housekeepingmanagement/frontdesk/widget/Morebtnaction.dart';
 import 'package:housekeepingmanagement/system_widget/box_detail.dart';
@@ -19,7 +18,7 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'dart:convert';
 
-class BookingDialog {
+class editBookingDialog {
   // final VoidCallback reloadDataCallback;
   final BuildContext context;
     final VoidCallback reloadDataCallback;
@@ -55,8 +54,8 @@ TextEditingController totalBalanceController = TextEditingController();
 
 String? minSelectDate;
 String? selectCountry ;
-  BookingDialog(this.context ,this.reloadDataCallback);
-   void showCreateBookingDialog(Map<String, dynamic> booking) {
+  editBookingDialog(this.context ,this.reloadDataCallback);
+   void showCreateeditBookingDialog(Map<String, dynamic> booking) {
     int? bookingId = booking['booking_id'] as int?;
 int? id = booking['id'] as int?;
 int? guestId = booking['guest_id'] as int?;
@@ -144,119 +143,7 @@ guestNoteController.text = note ?? '';
   margin: EdgeInsets.only(top: 20),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child:buildLabelAndContent('Guest Information', 
-                   [
-                    Row(
-      children: [
-           
-                    CustomTextField(
-                      controller: guestNameController,
-                      labelText: 'Guest Name',
-                      width: 265,
-                      
-                    ), SizedBox(width: 20), CustomDropdownButton(
-                      labelText: 'Gender',
-            width: 265,
-            items: ['No set', 'Male', 'Female'],
-            selectedValue:genderController.text ,
-            hintText: 'Room Status',
-            onChanged: (value) {
-                genderController.text = value!;
-
-            },
-          )
-          
-      ]),
-          Row(
-      children: [
-        
-                    DatePickerTextField(
-                    checkcurrnetdate: DateTime(2000),
-                      controller: dobController,
-                      labelText: 'DOB',
-                      width: 265,
-                      
-                       onDateSelectedDate: (selectedDate) {
-              // Handle the selected date here
-              print('Selected Date: $selectedDate');
-            },
-                    ),
-                      SizedBox(width: 20), 
-                   selectCountry_dropdown(
-          width: 270,
-          labelText: 'Country',
-            selectedValue:countryController.text ,
-            hintText: 'Room Status',
-            onChanged: (value) {
-                countryController.text = value!;
-                print(countryController.text);
-
-            },
-      ),
-      ]),
-
-         Row(
-      children: [ 
-        
-                    CustomTextField(
-                      controller: adultController,
-                      labelText: 'Adult',
-                      width: 265,
-                    ),
-                      SizedBox(width: 20), 
-                    CustomTextField(
-                      controller: childController,
-                      labelText: 'Child',
-                      width: 265,
-                    )
-      ]),
-          Row(
-      children: [
-                    CustomTextField(
-                      controller: phoneController,
-                      labelText: 'Phone Number',
-                      width: 265,
-                    ),
-                      SizedBox(width: 20),
-                        CustomTextField(
-                      controller: cardIdController,
-                      labelText: 'Card ID',
-                      width: 265,
-                    ) 
-                    
-      ]),
-      Row(
-        children: [
-          CustomTextField(
-                      controller: addressController,
-                      labelText: 'Address',
-                      width: 550,
-                    )
-        ],
-      ),
-          Row(
-      children: [
-                   
-                    CustomTextField(
-                      controller: emailController,
-                      labelText: 'Email',
-                      width: 550,
-                    )]),  SizedBox(width: 20), 
-                    CustomTextField(
-                      controller: guestNoteController,
-                      labelText: 'Guest Noted',
-                      height:200,
-                      width:550,
-                    ),
-                  ]
-                  ,() {
-               
-            }
-                ),
-              ),
-              SizedBox(width: 20), // Add spacing between columns
+            children: [// Add spacing between columns
               Expanded(
                 child: buildLabelAndContent('Booking Information',[
                       SizedBox(width: 20), 
@@ -400,6 +287,7 @@ SizedBox(width:20,),
     final totalBalance = totalBalanceController.text;
     // Create a map containing the booking data
      submitUpdatedData(
+    booking['booking_id'].toString(),       
   guestName,
   gender,
   dob,
@@ -431,7 +319,9 @@ SizedBox(width:20,),
     },
   );
 }
-Future<void> submitUpdatedData(    String name,
+Future<void> submitUpdatedData(    
+    String booking_id,
+  String name,
     String gender ,
     String dob,
     String country,
@@ -454,10 +344,10 @@ Future<void> submitUpdatedData(    String name,
     String roomType,
         int room_id,
     ) async {
-  final String baseUrl1 = 'http://localhost:8000/api/booking/insert';
+  final String baseUrl1 = 'http://localhost:8000/api/booking/update/$booking_id';
    final url = Uri.parse('$baseUrl1?room_id=$room_id&booking_status=Booking&name=$name&gender=$gender&dob=$dob&country=$country&adult=$adult&child=$child&phone_number=$phone_number&address=$address&cardId=$cardId&email=$email&checkout_date=$checkout_date&room_type=$room_type&roomNumber=$roomNumber&roomRate=$roomRate&extra_charge=$extraCharge&total_payment=$totalPayment&charges=$totalCharge&totalBalance=$totalBalance&checkin_date=$checkin_date&payment_status=leabheng');
   
-    final response = await http.post(url);
+    final response = await http.put(url);
     if (response.statusCode == 200) {
          
     
@@ -684,10 +574,8 @@ Row(
           ],
         )
       ],() {
-                 editBookingDialog(
-                                                            context, reloadDataCallback)
-                                                        .showCreateeditBookingDialog(
-                                                            booking);
+              // This is the action that will be executed when the button is pressed
+              print('Button Pressed!');
             },isBtn: true),
       )
     ],
@@ -727,7 +615,7 @@ Row(
   ),
 ),
 Visibility(
-  visible: DateTime.parse(booking['checkout_date']).isBefore(todaycorrentCheckout) || DateTime.parse(booking['checkout_date']).isAtSameMomentAs(todaycorrentCheckout),  // Show "Check Out" button if checkOutDate is in the past
+  visible:( DateTime.parse(booking['checkout_date']).isBefore(todaycorrentCheckout) || DateTime.parse(booking['checkout_date']).isAtSameMomentAs(todaycorrentCheckout) ) && booking['booking_status'] == 'In house' ,  // Show "Check Out" button if checkOutDate is in the past
   child: BtnAction(
     background: Color.fromARGB(52, 0, 0, 0),
     icon: iconController.checkOutIcon,

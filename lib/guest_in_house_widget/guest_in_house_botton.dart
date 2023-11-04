@@ -13,7 +13,7 @@ class GuestInHouseBotton extends StatefulWidget {
 
 class _GuestInHouseBottonState extends State<GuestInHouseBotton> {
   Map<String, dynamic>? apiResponse;
-
+  bool isLoading = true;
   @override
   void initState() {
     super.initState();
@@ -21,10 +21,12 @@ class _GuestInHouseBottonState extends State<GuestInHouseBotton> {
   }
 
   Future<void> fetchData() async {
+      isLoading = true;
     final response = await http
         .get(Uri.parse('http://localhost:8000/api/dashboard/todayStatus'));
 
     if (response.statusCode == 200) {
+      isLoading = false;
       setState(() {
         apiResponse = json.decode(response.body);
       });
@@ -36,7 +38,11 @@ class _GuestInHouseBottonState extends State<GuestInHouseBotton> {
   @override
   Widget build(BuildContext context) {
     final data = apiResponse!['data'];
-    return Expanded(
+    return  isLoading
+                                  ? const Center(
+                                      child: CircularProgressIndicator(),
+                                    )
+                                  : Expanded(
       child: Padding(
         padding: const EdgeInsets.only(left: 30, right: 10, top: 15),
         child: Container(
@@ -63,6 +69,7 @@ class _GuestInHouseBottonState extends State<GuestInHouseBotton> {
                     iconbackground: Colors.blue.shade800,
                   ),
                 ),
+                SizedBox(width:15,),
                 Expanded(
                   child: SubButtonFrontdeskWidget(
                     icon: const Icon(
@@ -75,6 +82,7 @@ class _GuestInHouseBottonState extends State<GuestInHouseBotton> {
                     iconbackground: Colors.purple.shade900,
                   ),
                 ),
+                  SizedBox(width:15,),
                 Expanded(
                   child: SubButtonFrontdeskWidget(
                     icon: const Icon(
@@ -87,6 +95,7 @@ class _GuestInHouseBottonState extends State<GuestInHouseBotton> {
                     iconbackground: Colors.orange.shade900,
                   ),
                 ),
+                  SizedBox(width:15,),
                 Expanded(
                   child: SubButtonFrontdeskWidget(
                     icon: const Icon(
@@ -99,6 +108,7 @@ class _GuestInHouseBottonState extends State<GuestInHouseBotton> {
                     iconbackground: Colors.grey.shade700,
                   ),
                 ),
+                  SizedBox(width:15,),
                 Expanded(
                   child: SubButtonFrontdeskWidget(
                     icon: const Icon(
@@ -111,6 +121,7 @@ class _GuestInHouseBottonState extends State<GuestInHouseBotton> {
                     iconbackground: Colors.blue.shade800,
                   ),
                 ),
+                  SizedBox(width:15,),
                 Expanded(
                   child: SubButtonFrontdeskWidget(
                     icon: const Icon(
@@ -123,6 +134,7 @@ class _GuestInHouseBottonState extends State<GuestInHouseBotton> {
                     iconbackground: Colors.blue.shade800,
                   ),
                 ),
+                  SizedBox(width:30,),
               ],
             ),
           ),
