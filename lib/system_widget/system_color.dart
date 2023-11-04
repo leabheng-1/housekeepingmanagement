@@ -44,7 +44,7 @@ class ColorController {
   
 
 
-   static Color getHKColor(String hkState) {
+  static Color getHKColor(String hkState) {
     switch (hkState.toLowerCase()) {
       case "cleaning":
         return cleaningColor;
@@ -56,7 +56,8 @@ class ColorController {
         return Colors.black;
     }
   }
- static bookingStatus(String? bookingStatus) {
+
+  static bookingStatus(String? bookingStatus) {
     switch (bookingStatus?.toLowerCase()) {
       case "in house":
         return inhouse;
@@ -71,7 +72,7 @@ class ColorController {
       case "booking":
         return arrivalsColor;       
       default:
-        return allRoomsColor; // Default color if the state is not recognized
+        return allRoomsColor;
     }
 }
  static paymentStatus(String? bookingStatus) {

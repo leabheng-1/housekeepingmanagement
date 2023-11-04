@@ -30,22 +30,23 @@ Widget buildLabelAndContent(
         ),
       ),
       Positioned(
-        top: -20, // Adjust this value to control the overlap
+        top: -20,
         left: 20,
         child: ConstrainedBox(
-          constraints: BoxConstraints(
-            maxWidth: 200, // Set the maximum width for the label
+          constraints: const BoxConstraints(
+            maxWidth: 200,
           ),
           child: Container(
             decoration: BoxDecoration(
-              color: ColorController.barColor,
+              color: ColorController.activeColor,
               borderRadius: BorderRadius.circular(10.0),
             ),
-            padding: EdgeInsets.only(left: 15, right: 15, top: 8, bottom: 8),
+            padding:
+                const EdgeInsets.only(left: 15, right: 15, top: 8, bottom: 8),
             child: Text(
               label,
-              style:
-                  TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+              style: const TextStyle(
+                  fontWeight: FontWeight.bold, color: Colors.white),
             ),
           ),
         ),
@@ -57,15 +58,14 @@ Widget buildLabelAndContent(
           width: 35,
           height: 35,
           decoration: BoxDecoration(
-            color: ColorController.barColor, // Set the background color here
-            borderRadius:
-                BorderRadius.circular(20), // Adjust the radius as needed
+            color: ColorController.barColor,
+            borderRadius: BorderRadius.circular(20),
           ),
           child:  IconButton(
             onPressed: action,
-            icon: Icon(Icons.edit),
+            icon: const Icon(Icons.edit),
             color: Colors.blue,
-            iconSize: 16, // Customize the button color as needed
+            iconSize: 16,
           ),
         ),
       )
