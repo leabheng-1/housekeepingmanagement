@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:housekeepingmanagement/dialog/statusDialog.dart';
 import 'package:housekeepingmanagement/system_widget/system_color.dart';
 import 'package:housekeepingmanagement/system_widget/system_icon.dart';
 import 'package:housekeepingmanagement/widget/sub_button/sub_button_frontdesd_widget.dart';
@@ -43,6 +44,7 @@ class _SubButtonFrontdeskState extends State<SubButtonFrontdesk> {
   @override
   Widget build(BuildContext context) {
     final data = apiResponse != null ? apiResponse!['data'] : null;
+
     return Column(children: [
       isLoading
           ? const Center(
@@ -56,10 +58,20 @@ class _SubButtonFrontdeskState extends State<SubButtonFrontdesk> {
                       icon: const Icon(
                         iconController.checkInIcon,
                         color: Colors.white,
+                     
                       ),
-                      title: "Check-In",
+                      title: "Check In",
                       value: data?['checkin_count'],
                       backgroundColor: ColorController.checkInColor,
+                       action: () {
+                      
+                         statusDialog(
+                                                            context, fetchData , 'Today Check In')
+                                                        .showCreatestatusDialog(
+                                                            data['checkInBookings']);
+                                            
+                      
+                        }
                     ),
                     const SizedBox(
                       width: 10,
@@ -72,7 +84,15 @@ class _SubButtonFrontdeskState extends State<SubButtonFrontdesk> {
                       title: "Arrival",
                       value: data?['count_arrival'] ?? '',
                       backgroundColor: ColorController.arrivalsColor,
-
+                        action: () {
+                      
+                         statusDialog(
+                                                            context, fetchData , 'Arrival')
+                                                        .showCreatestatusDialog(
+                                                            data['arrivalBookings']);
+                                            
+                      
+                        }
                     ),
                   ],
                 ),
@@ -89,6 +109,13 @@ class _SubButtonFrontdeskState extends State<SubButtonFrontdesk> {
                       title: "Check-Out",
                       value: data?['checkout_count'] ?? '',
                       backgroundColor: ColorController.checkOutColor,
+                      action:() {
+                         statusDialog(
+                                                            context, fetchData ,'Today Check Out')
+                                                        .showCreatestatusDialog(
+                                                            data['checkOutBookings']);
+                                            
+                      },
                     ),
                     const SizedBox(
                       width: 10,
@@ -101,6 +128,15 @@ class _SubButtonFrontdeskState extends State<SubButtonFrontdesk> {
                       title: "Departure",
                       value: data?['count_departure'] ?? '',
                       backgroundColor: ColorController.departuresColor,
+                         action: () {
+                      
+                         statusDialog(
+                                                            context, fetchData , 'Departure')
+                                                        .showCreatestatusDialog(
+                                                            data['departureBookings']);
+                                            
+                      
+                        }
                     ),
                   ],
                 ),
@@ -117,6 +153,16 @@ class _SubButtonFrontdeskState extends State<SubButtonFrontdesk> {
                       title: "Available",
                       value: data?['available_rooms'] ?? '',
                       backgroundColor: ColorController.availableColor,
+                      action: () {
+                      
+                         statusDialog(
+                                                            context, fetchData , 'Departure')
+                                                        .showCreatestatusDialog(
+                                                            data['availableRoomBooking']);
+                                            
+                      
+                        }
+                      
                     ),
                     const SizedBox(
                       width: 10,
@@ -129,6 +175,15 @@ class _SubButtonFrontdeskState extends State<SubButtonFrontdesk> {
                       title: "Inhouse",
                       value: data?['inHouse'] ?? '',
                       backgroundColor: ColorController.inhouse,
+                        action: () {
+                      
+                         statusDialog(
+                                                            context, fetchData , 'Today In House')
+                                                        .showCreatestatusDialog(
+                                                            data['InhousetBookings']);
+                                            
+                      
+                        }
                     ),
                   ],
                 ),

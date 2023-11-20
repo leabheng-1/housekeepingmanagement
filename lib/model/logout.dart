@@ -89,10 +89,9 @@ class MenuItem {
 }
 
 abstract class MenuItems {
-  static const List<MenuItem> firstItems = [logout, share];
+  static const List<MenuItem> firstItems = [logout];
 
   static const logout = MenuItem(text: 'Logout', icon: Icons.logout);
-  static const share = MenuItem(text: 'EXCEL', icon: Icons.share);
 
   static Widget buildItem(MenuItem item) {
     return Row(
@@ -136,9 +135,6 @@ abstract class MenuItems {
                       },
                     ).show();
                 break;
-      case MenuItems.share:
-      
-        break;
     }
   }
   

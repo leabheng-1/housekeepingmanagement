@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:housekeepingmanagement/dialog/Guestdailog.dart';
 import 'package:housekeepingmanagement/dialog/editGuest.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -27,7 +28,7 @@ bool loading = false;
     try {
        loading = false;
       final response = await http
-          .get(Uri.parse('http://localhost:8000/api/booking/allTime'));
+          .get(Uri.parse('http://localhost:8000/api/guests/select_all'));
 
       if (response.statusCode == 200) {
         bool loading = true;
@@ -102,7 +103,12 @@ bool loading = false;
         rows: bookingsData.asMap().entries.map((entry) {
           int index = entry.key;
           Map<String, dynamic> booking = entry.value;
-          return DataRow(
+          return loading ? DataRow(
+                                      cells:[
+              DataCell( CircularProgressIndicator()
+              )],
+                                    )
+                                  : DataRow(
             cells: [
               DataCell(
                 Checkbox(
@@ -144,27 +150,33 @@ bool loading = false;
               DataCell(
                 Row(
                   children: [
-                    SizedBox(
-                      width: 70.0,
-                      child: TextButton(
-                        onPressed: () {},
-                        style: ButtonStyle(
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                          ),
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                            const Color(0xFF419674),
-                          ),
-                        ),
-                        child: const Text(
-                          'View',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ),
+//                     SizedBox(
+//                       width: 70.0,
+//                       child: TextButton(
+//                         onPressed: () {
+// print(booking);
+//                           viewGuestDetail(
+//                                                             context, fetchData)
+//                                                         .showBookingDetailsDialog(
+//                                                             booking);
+//                         },
+//                         style: ButtonStyle(
+//                           shape:
+//                               MaterialStateProperty.all<RoundedRectangleBorder>(
+//                             RoundedRectangleBorder(
+//                               borderRadius: BorderRadius.circular(20),
+//                             ),
+//                           ),
+//                           backgroundColor: MaterialStateProperty.all<Color>(
+//                             const Color(0xFF419674),
+//                           ),
+//                         ),
+//                         child: const Text(
+//                           'View',
+//                           style: TextStyle(color: Colors.white),
+//                         ),
+//                       ),
+//                     ),
                     const SizedBox(
                       width: 10,
                     ),

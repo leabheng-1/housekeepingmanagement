@@ -21,8 +21,9 @@ class iconController {
   static const IconData clean = Icons.cleaning_services_outlined;
   static const IconData heatIcon = Icons.heat_pump;
   static const IconData fanIcon = Icons.wind_power;
-  static IconData saveIcon = Icons.edit_calendar_outlined;
+  static IconData saveIcon = Icons.save;
   static IconData closeIcon = Icons.close;
+  static IconData editIcon = Icons.edit;
   static const IconData settiongIcon = Icons.settings;
 
   static airMethod(String? airMethod) {
@@ -31,8 +32,10 @@ class iconController {
         return heatIcon;
       case "fan":
         return fanIcon;
+      case "all":
+        return fanIcon;  
       default:
-        return fanIcon;
+        return ;
     }
   }
 

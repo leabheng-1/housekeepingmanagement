@@ -3,6 +3,8 @@
 import 'package:flutter/material.dart';
 import 'package:housekeepingmanagement/data_booking/add_booking_dialog.dart';
 import 'package:housekeepingmanagement/dialog/bookingdialog.dart';
+import 'package:housekeepingmanagement/frontdesk/widget/ListView.dart';
+import 'package:housekeepingmanagement/frontdesk/widget/gridView.dart';
 import 'package:housekeepingmanagement/housekeeping_status/housekeeping_botton.dart';
 import 'package:housekeepingmanagement/system_widget/eventcalendar.dart';
 import 'package:housekeepingmanagement/system_widget/system_color.dart';
@@ -54,17 +56,18 @@ class _FrontDeskState extends State<FrontDesk> {
     isLoading = true;
     String formattedDate = DateFormat('yyyy-MM-dd').format(dateurl);
     final response = await http.get(Uri.parse(
-        'http://localhost:8000/api/booking/all?date=${formattedDate}&room_status=${roomStatusfilter}&housekeeping_status=${housekeepingStatusfilter}&guest_name=${guestStatusfilter}'));
+        'http://localhost:8000/api/booking/all?date=${formattedDate}&booking_status=${roomStatusfilter}&housekeeping_status=${housekeepingStatusfilter}&guest_name=${guestStatusfilter}'));
     print(
-        'http://localhost:8000/api/booking/all?date=${formattedDate}&room_status=${roomStatusfilter}&housekeeping_status=${housekeepingStatusfilter}&guest_name=${guestStatusfilter}');
+        'http://localhost:8000/api/booking/all?date=${formattedDate}&booking_status=${roomStatusfilter}&housekeeping_status=${housekeepingStatusfilter}&guest_name=${guestStatusfilter}');
 
     if (response.statusCode == 200) {
+      isLoading = false;
       final Map<String, dynamic> responseData = json.decode(response.body);
       setState(() {
         bookings = responseData['data'];
         message = responseData['message'];
 
-        isLoading = false;
+        
       });
     } else {
       print('Failed to load booking data');
@@ -78,6 +81,8 @@ class _FrontDeskState extends State<FrontDesk> {
   DateTime? _selectedDay;
   DateTime? _rangeStart;
   DateTime? _rangeEnd;
+  int is_list_view = 4;
+  bool list_view = false;
   String url1 = '';
 
   @override
@@ -135,6 +140,50 @@ class _FrontDeskState extends State<FrontDesk> {
   @override
   Widget build(BuildContext context) {
     Map<String, dynamic> newbooking = {};
+     newbooking = {
+      "booking_id": null,
+      "id": null,
+      "guest_id": null,
+      "room_type": null,
+      "room_id": 0,
+      "payment_id": null,
+      "booking_status": null,
+      "cancel_date": null,
+      "arrival_date": null,
+      "departure_date": null,
+      "checkin_date": null,
+      "checkout_date": null,
+      "adults": null,
+      "child": null,
+      "created_by": null,
+      "note": null,
+      "roomId": null,
+      "room_number":null,
+      "room_status":null,
+      "roomtype":null,
+      "floor": null,
+      "room_rate": null,
+      "housekeeper": null,
+      "air_method": null,
+      "payment": null,
+      "payment_status": null,
+      "extra_charge": null,
+      "charges": null,
+      "balance": null,
+      "item_extra_charge": null,
+      "name": null,
+      "gender": null,
+      "phone_number": null,
+      "email": null,
+      "country": null,
+      "dob": null,
+      "passport_number": null,
+      "card_id": null,
+      "other_information": null,
+      "is_delete": null,
+      "housekeeping_status": null,
+      "date": null
+    };
     return SingleChildScrollView(
       child: Container(
         padding: const EdgeInsets.all(10),
@@ -149,6 +198,7 @@ class _FrontDeskState extends State<FrontDesk> {
                 children: [
                   AddBookingDialog(
                     action: () {
+                      
                       BookingDialog(context, reloadData)
                           .showCreateBookingDialog(newbooking);
                     },
@@ -216,7 +266,7 @@ class _FrontDeskState extends State<FrontDesk> {
                                           calendarFormat: _calendarFormat,
                                           rangeSelectionMode:
                                               _rangeSelectionMode,
-                                          eventLoader: _getEventsForDay,
+                                          // eventLoader: _getEventsForDay,
                                           startingDayOfWeek:
                                               StartingDayOfWeek.monday,
                                           calendarStyle: const CalendarStyle(
@@ -302,8 +352,19 @@ class _FrontDeskState extends State<FrontDesk> {
                                   IconBox(
                                     icon1: Icons.grid_view_rounded,
                                     icon2: Icons.list,
-                                    initialActiveIndex: 1,
-                                    onChange: (newActiveIndex) {},
+                                    initialActiveIndex: 0,
+                                    onChange: (newActiveIndex) {
+                                      if (newActiveIndex == 0) {
+                                       is_list_view = 4; 
+                                       list_view =false;
+                                      }else{
+                                        list_view = true;
+is_list_view = 1;
+                                      }
+                                      isLoading = true;
+ fetchBookingData();
+
+                                    },
                                   )
                                 ],
                               ),
@@ -317,11 +378,11 @@ class _FrontDeskState extends State<FrontDesk> {
                                       child: CircularProgressIndicator(),
                                     )
                                   : ListView.builder(
-                                      itemCount: (bookings.length / 4).ceil(),
+                                      itemCount: (bookings.length / is_list_view).ceil(),
                                       itemBuilder:
                                           (BuildContext context, int rowIndex) {
-                                        int startIndex = rowIndex * 4;
-                                        int endIndex = (rowIndex + 1) * 4;
+                                        int startIndex = rowIndex * is_list_view;
+                                        int endIndex = (rowIndex + 1) * is_list_view;
                                         if (endIndex > bookings.length) {
                                           endIndex = bookings.length;
                                         }
@@ -376,200 +437,9 @@ class _FrontDeskState extends State<FrontDesk> {
                                                 },
                                                 child: Column(
                                                   children: [
-                                                    Container(
-                                                      height: 140,
-                                                      margin:
-                                                          const EdgeInsets.all(
-                                                              8.0),
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              16.0),
-                                                      decoration: BoxDecoration(
-                                                        color: ColorController
-                                                            .boxBooingColor,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(20.0),
-                                                      ),
-                                                      child: Stack(
-                                                        children: [
-                                                          Align(
-                                                            alignment: Alignment
-                                                                .topRight,
-                                                            child: Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .end,
-                                                              children: [
-                                                                Tooltip(
-                                                                  message:
-                                                                      'Room Need ${booking['air_method']} ',
-                                                                  child:
-                                                                      Container(
-                                                                    width: 35,
-                                                                    height: 35,
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                      shape: BoxShape
-                                                                          .circle,
-                                                                      color: Colors
-                                                                          .black
-                                                                          .withOpacity(
-                                                                              0.1),
-                                                                    ),
-                                                                    child: Icon(
-                                                                      iconController
-                                                                          .airMethod(
-                                                                              booking['air_method']),
-                                                                      size: 16,
-                                                                      color: const Color
-                                                                          .fromARGB(
-                                                                          255,
-                                                                          255,
-                                                                          255,
-                                                                          255),
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                          Column(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            children: [
-                                                              Text(
-                                                                '${booking['room_number']}',
-                                                                style:
-                                                                    const TextStyle(
-                                                                  fontSize: 24,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  height: 1,
-                                                                ),
-                                                              ),
-                                                              const SizedBox(
-                                                                  height: 2),
-                                                              Text(
-                                                                '${booking['name']}',
-                                                                style:
-                                                                    const TextStyle(
-                                                                        height:
-                                                                            1,
-                                                                        fontSize:
-                                                                            16),
-                                                              ),
-                                                              Row(children: [
-                                                                Text(
-                                                                  '${booking['checkin_date']} - ',
-                                                                  style: const TextStyle(
-                                                                      height: 1,
-                                                                      fontSize:
-                                                                          12),
-                                                                ),
-                                                                Text(
-                                                                  '${booking['checkout_date']}',
-                                                                  style: const TextStyle(
-                                                                      height: 1,
-                                                                      fontSize:
-                                                                          12),
-                                                                ),
-                                                              ]),
-                                                              const SizedBox(
-                                                                  height: 19),
-                                                              Row(
-                                                                children: [
-                                                                  Tooltip(
-                                                                    message:
-                                                                        'This Room ${booking['housekeeping_status'] ?? ''}',
-                                                                    child:
-                                                                        Container(
-                                                                      width: 35,
-                                                                      height:
-                                                                          35,
-                                                                      decoration:
-                                                                          BoxDecoration(
-                                                                        shape: BoxShape
-                                                                            .circle,
-                                                                        color: ColorController.getHKColor(booking['housekeeping_status'] ??
-                                                                            ''),
-                                                                      ),
-                                                                      child: const Icon(
-                                                                          iconController
-                                                                              .khIcon,
-                                                                          size:
-                                                                              12,
-                                                                          color:
-                                                                              Colors.white),
-                                                                    ),
-                                                                  ),
-                                                                  const SizedBox(
-                                                                      width:
-                                                                          10),
-                                                                  Tooltip(
-                                                                    message:
-                                                                        'Room ${booking['booking_status'] ?? booking['room_status'] ?? ''}',
-                                                                    child:
-                                                                        Container(
-                                                                      width: 35,
-                                                                      height:
-                                                                          35,
-                                                                      decoration:
-                                                                          BoxDecoration(
-                                                                        shape: BoxShape
-                                                                            .circle,
-                                                                        color: ColorController.bookingStatus(booking['booking_status'] ??
-                                                                            booking['room_status'] ??
-                                                                            ''),
-                                                                      ),
-                                                                      child: Icon(
-                                                                          iconController.bookingStatus(booking['booking_status'] ??
-                                                                              booking[
-                                                                                  'room_status'] ??
-                                                                              ''),
-                                                                          size:
-                                                                              16,
-                                                                          color:
-                                                                              Colors.white),
-                                                                    ),
-                                                                  ),
-                                                                  const SizedBox(
-                                                                      width:
-                                                                          10),
-                                                                  if (booking['booking_id'] !=null)
-                                                                    Tooltip(
-                                                                      message:
-                                                                          booking['balance'].toString(),
-                                                                      child:
-                                                                          Container(
-                                                                        width:
-                                                                            35,
-                                                                        height:
-                                                                            35,
-                                                                        decoration: BoxDecoration(
-                                                                          shape:
-                                                                              BoxShape.circle,
-                                                                          color: ColorController.bookingStatus(booking['payment_status'] ??
-                                                                            ''),
-                                                                        ),
-                                                                        child:Icon(
-                                                                          iconController.dollar,
-                                                                          size:
-                                                                              16,
-                                                                          color:
-                                                                              Colors.white),
-                                                                      ),
-                                                                    ),
-                                                                ],
-                                                              )
-                                                            ],
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ],
+                                                    list_view ? ListViewbooking(booking: booking,) :
+                                                    gridViewbooking(booking: booking,)
+                                                                                ],
                                                 ),
                                               ),
                                             ),

@@ -84,7 +84,7 @@ class GuestChartState extends State<GuestChart> {
 )
 : SizedBox(
       width: 350,
-      height: 250,
+      height: 270,
       child: AspectRatio(
         aspectRatio: 1,
         child: Stack(
@@ -134,7 +134,7 @@ class GuestChartState extends State<GuestChart> {
                     ],
                   ),
                   const SizedBox(
-                    height: 38,
+                    height: 10,
                   ),
                   Expanded(
                     child: Padding(

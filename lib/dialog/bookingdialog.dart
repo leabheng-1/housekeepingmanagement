@@ -1,13 +1,14 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
-import 'package:housekeepingmanagement/dashboard/frontdesk.dart';
+import 'package:get/state_manager.dart';
 import 'package:housekeepingmanagement/dialog/barDialog.dart';
 import 'package:housekeepingmanagement/dialog/editBooking.dart';
 import 'package:housekeepingmanagement/dialog/editGuest.dart';
+import 'package:housekeepingmanagement/dialog/selectRoom.dart';
 import 'package:housekeepingmanagement/frontdesk/widget/Morebtnaction.dart';
 import 'package:housekeepingmanagement/system_widget/box_detail.dart';
 import 'package:housekeepingmanagement/system_widget/btn.dart';
+import 'package:housekeepingmanagement/system_widget/CheckBoxCustomRoomRate.dart';
 import 'package:housekeepingmanagement/system_widget/system_color.dart';
 import 'package:housekeepingmanagement/system_widget/system_icon.dart';
 import 'package:housekeepingmanagement/widget/Datebooking.dart';
@@ -15,9 +16,98 @@ import 'package:housekeepingmanagement/widget/checkinandcheckout.dart';
 import 'package:housekeepingmanagement/widget/country.dart';
 import 'package:housekeepingmanagement/widget/inputbox.dart';
 import 'package:housekeepingmanagement/widget/legend.dart';
+import 'package:housekeepingmanagement/widget/paymentcheck.dart';
 import 'package:http/http.dart' as http;
-import 'package:intl/intl.dart';
-import 'dart:convert';
+
+
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: MyHomePage(),
+    );
+  }
+}
+
+class MyHomePage extends StatelessWidget {
+  final GlobalKey<RefreshableDialogState> dialogKey = GlobalKey();
+
+  void _showDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return RefreshableDialog(
+          key: dialogKey,
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Dialog Refresh Example"),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            _showDialog(context);
+          },
+          child: Text("Show Dialog"),
+        ),
+      ),
+    );
+  }
+}
+
+class RefreshableDialog extends StatefulWidget {
+  RefreshableDialog({Key? key}) : super(key: key);
+
+  @override
+  RefreshableDialogState createState() => RefreshableDialogState();
+}
+
+class RefreshableDialogState extends State<RefreshableDialog> {
+  // You can add data or state that you want to refresh in the dialog here
+
+  void refreshDialog() {
+    // Call this method to refresh the dialog content
+    setState(() {
+      // Update your dialog content or data here
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text("Refreshable Dialog"),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Your dialog content goes here
+          // You can display dynamic data or widgets that need to be refreshed
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: Text("Close"),
+        ),
+      ],
+    );
+  }
+}
+
+
 
 class BookingDialog {
   // final VoidCallback reloadDataCallback;
@@ -36,19 +126,21 @@ TextEditingController addressController = TextEditingController();
 TextEditingController cardIdController = TextEditingController();
 TextEditingController emailController = TextEditingController();
 TextEditingController guestNoteController = TextEditingController();
-
+TextEditingController bookingNoteController = TextEditingController();
 TextEditingController bookingIdController = TextEditingController();
 TextEditingController checkInController = TextEditingController();
 TextEditingController checkOutController = TextEditingController();
 TextEditingController nightController = TextEditingController();
 TextEditingController roomTypeController = TextEditingController();
+TextEditingController BookingAirMethodController = TextEditingController();
 TextEditingController roomNumberController = TextEditingController();
 TextEditingController roomRateController = TextEditingController();
 TextEditingController extraChargeController = TextEditingController();
 TextEditingController totalPaymentController = TextEditingController();
 TextEditingController totalChargeController = TextEditingController();
 TextEditingController totalBalanceController = TextEditingController();
-
+TextEditingController roomIdController= TextEditingController();
+TextEditingController getroomrateController= TextEditingController();
 // Check if the values are not null before assigning them to the controllers
 
 
@@ -57,13 +149,15 @@ String? minSelectDate;
 String? selectCountry ;
   BookingDialog(this.context ,this.reloadDataCallback);
    void showCreateBookingDialog(Map<String, dynamic> booking) {
+   
     int? bookingId = booking['booking_id'] as int?;
 int? id = booking['id'] as int?;
 int? guestId = booking['guest_id'] as int?;
 String? roomType = booking['roomtype'] as String?;
-int? roomId = booking['room_id'] as int?;
+roomIdController.text = booking['room_id'].toString();
 int? paymentId = booking['payment_id'] as int?;
 String? bookingStatus = booking['booking_status'] as String?;
+String? paymentStatus = booking['payment_status'] as String?;
 String? cancelDate = booking['cancel_date'] as String?;
 String? arrivalDate = booking['arrival_date'] as String?;
 String? departureDate = booking['departure_date'] as String?;
@@ -79,11 +173,11 @@ String? roomNumber = booking['room_number'] as String?;
 String? roomStatus = booking['room_status'] as String?;
 String? roomtype = booking['roomtype'] as String?;
 int? floor = booking['floor'] as int?;
-String? roomRate = booking['room_rate'] as String?;
+String? roomRate = booking['booking_room_rate'] ?? booking['room_rate'] as String?;
+
 String? housekeeper = booking['housekeeper'] as String?;
-String? airMethod = booking['air_method'] as String?;
+String? airMethod = booking['booking_air_method'] as String?;
 int? payment = booking['payment'] as int?;
-String? paymentStatus = booking['payment_status'] as String?;
 String? extraCharge = booking['extra_charge'] as String?;
 int? charges = booking['charges'] as int?;
 String? balance = booking['balance'] as String?;
@@ -110,18 +204,19 @@ DateTime checkOutDate = DateTime.parse(checkOutController.text);
 
 int differenceInDays = checkOutDate.difference(checkInDate).inDays;
 nightController.text = differenceInDays.toString() ?? '1';
-
-roomTypeController.text = roomType ?? 'No set';
+roomTypeController.text =  roomType ?? 'No set';
+BookingAirMethodController.text =  airMethod ?? 'No set';
 roomNumberController.text = roomNumber ?? '';
-roomRateController.text = roomRate ?? '10';
-extraChargeController.text = extraCharge ?? '';
-totalPaymentController.text = payment?.toString() ?? '';
+roomRateController.text =  roomRate ?? '\$10';
+String dpRoomRate  = roomRate ?? '\$0' ;
+extraChargeController.text = extraCharge ?? '\$0';
+totalPaymentController.text = payment?.toString() ?? '\$0';
 int nightCal = int.parse(nightController.text) ;
-double roomRateCal = double.parse(roomRateController.text);
+double roomRateCal = double.parse(roomRateController.text.replaceAll('\$', ''));
 double result = nightCal * roomRateCal;
 
-totalChargeController.text = charges?.toString() ?? result.toString();
-totalBalanceController.text = balance ?? '';
+totalChargeController.text = charges?.toString() ?? '\$' +  result.toString();
+totalBalanceController.text = balance ??  '\$0';
 
 guestNameController.text = name ?? '';
 genderController.text = gender ?? 'No set';
@@ -133,13 +228,35 @@ phoneController.text = phoneNumber ?? '';
 cardIdController.text = cardId ?? '';
 emailController.text = email ?? '';
 guestNoteController.text = note ?? '';
+bookingNoteController.text = note ?? '';
 
+ bool isInputRoomRate = true;
+  bool isChecked = false;
+     double totalCharge = double.parse(totalChargeController.text.replaceAll('\$', '')) ?? 0;
+      double totalBalance = double.parse(totalBalanceController.text.replaceAll('\$', '')) ?? 0;
+        double extraCharge_val = double.parse(extraChargeController.text.replaceAll('\$', '')) ?? 0; 
+  // double roomRateCal = double.parse(roomRateController.text);
+   void updateFields(int nights) {
+  
+    roomRateCal = double.parse(roomRateController.text.replaceAll('\$', ''));
+    totalCharge = (nights * roomRateCal ) + (double.parse(extraChargeController.text.replaceAll('\$', '')) ?? 0) ;
+    totalBalance = totalCharge - ( (double.parse(totalPaymentController.text.replaceAll('\$', '')) ?? 0 ) + (double.parse(extraChargeController.text.replaceAll('\$', '')) ?? 0) );
+    totalChargeController.text = '\$' + totalCharge.toString();
+    totalBalanceController.text = '\$' + totalBalance.toString();
+    PaymentStatusChecker paymentStatusCheck = PaymentStatusChecker(totalCharge, totalBalance);
+  paymentStatus = paymentStatusCheck.checkPaymentStatus();
+  } 
+  List<dynamic> roomData = [];
+  List<String> roomNumbers = roomData.map((room) => room["room_number"] as String).toList();
   showDialog(
+
+    
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
         
         title: TitleBar(title: 'Create Booking'),
+        
         content:   Container(
   margin: EdgeInsets.only(top: 20),
           child: Row(
@@ -204,17 +321,20 @@ guestNoteController.text = note ?? '';
                       controller: adultController,
                       labelText: 'Adult',
                       width: 265,
+                      isNumeric:true, 
                     ),
                       SizedBox(width: 20), 
                     CustomTextField(
                       controller: childController,
                       labelText: 'Child',
                       width: 265,
+                       isNumeric:true,
                     )
       ]),
           Row(
       children: [
                     CustomTextField(
+                       isNumeric:true,
                       controller: phoneController,
                       labelText: 'Phone Number',
                       width: 265,
@@ -240,6 +360,7 @@ guestNoteController.text = note ?? '';
       children: [
                    
                     CustomTextField(
+                      
                       controller: emailController,
                       labelText: 'Email',
                       width: 550,
@@ -261,81 +382,117 @@ guestNoteController.text = note ?? '';
                 child: buildLabelAndContent('Booking Information',[
                       SizedBox(width: 20), 
                  DateRangePickerWidget(
-              controller: checkOutController,
               labelText: 'Check-Out Date',
               checkin:checkInController,
               checkout:checkOutController,
               night:nightController,
               checkcurrentdate: checkOutDate,
               onDateSelectedDate: (selectedDate) {
-               
-                
-             
+            
               }
               , onChange: (DateTime checkin, DateTime checkout, int nights) {
-              
-roomRateCal = double.parse(roomRateController.text);
-totalChargeController.text = (nights * roomRateCal).toString();
-  checkOutController.text = checkout.toString();
-                  checkInController.text = checkin.toString();
+                checkInController.text = checkin.toString();
+                checkOutController.text = checkout.toString();
+updateFields(nights);
+nightCal = nights;
                 },
             ),
         
            Row(
       children: [ 
-
-        CustomDropdownButton(
-            width: 400,
-            labelText: 'Room Type',
-            items: ['No set', 'Single Room', 'Twin Room'],
-            selectedValue:roomTypeController.text ,
-            hintText: 'Room Type',
+CheckSelectRoomRate(
+  roomTypeController: roomTypeController,
+  roomNumberController: roomNumberController,
+  roomIdController: roomIdController,
+  getroomrateController:getroomrateController,
+  onTextChanged:(value){
+    
+    isChecked=true;
+                //  roomRateController.text = getroomrateController.text;
+          },
+  
+  ),
+          SizedBox(width: 20), 
+          CustomDropdownButton(
+            width: 150,
+            labelText: 'Air Method',
+            items: ['No set', 'Fan', 'Conditioner','All'],
+            selectedValue:BookingAirMethodController.text ,
+            hintText: 'Booking Air Method',
             onChanged: (value) {
-                roomTypeController.text = value!;
+                BookingAirMethodController.text = value!;
             },
-          ),SizedBox(width: 20), 
-
-                    CustomTextField(
-                      width: 130,
-                      controller: roomNumberController,
-                      labelText: 'Room Number',
-                    )
+          )
+//                   CustomTextField(
+//   width: 110,
+//   controller: roomNumberController,
+//   labelText: 'Room Number',
+// )
       ]),
        Row(
       children: [ 
-                    CustomTextField(
-                      width: 300,
-                      controller: roomRateController,
-                      labelText: 'Room Rate',
-                    ),SizedBox(width: 20),
+                   CheckBoxCustomRoomRate(
+          isChecked: isChecked,
+          roomRateController:roomRateController,
+          onChanged: (newValue) {
+         
+            isChecked = newValue ?? false;
+            print(newValue);
+            if(newValue == true){
+              
+            }else{
+              roomRateController.text =  ( booking['room_rate'] ?? '\$0');
+            }
+            
+   updateFields(nightCal);
+          },
+          onTextChanged:(value){
+                 updateFields(nightCal);
+          }
+        )
+                    
+                    ,SizedBox(width: 20),
                     CustomTextField(
                       width: 230,
+                      isCurrency: true,
                       controller: extraChargeController,
                       labelText: 'Extra Charge',
+                      onChanged:(value){
+                 updateFields(nightCal);
+          },
                     ),
       ]),
         Row(
       children: [ 
                     CustomTextField(
                       width: 510/3,
+                      isCurrency: true,
                       controller: totalPaymentController,
                       labelText: 'Total Payment',
+                      onChanged:(value){
+                 updateFields(nightCal);
+          },
                     ),SizedBox(width: 20),
                     CustomTextField(
                       width: 510/3,
+                        isCurrency: true,
+                        enabled: false,
                       controller: totalChargeController,
                       labelText: 'Total Charge',
                     ),SizedBox(width: 20),
                     CustomTextField(
                       width: 510/3,
+                      enabled: false,
+                        isCurrency: true,
                       controller: totalBalanceController,
                       labelText: 'Total Balance',
                     )
       ]),Row(
         children: [
            CustomTextField(
-                      controller: guestNoteController,
+                      controller: bookingNoteController,
                       labelText: 'Booking Note',
+                      isNote: true,
                       height:200,
                       width:550,
                     ),
@@ -359,11 +516,16 @@ totalChargeController.text = (nights * roomRateCal).toString();
 children: [
            BtnAction(
    background: Color.fromARGB(52, 0, 0, 0),
-  icon: iconController.CancelIcon,
+  icon: iconController.closeIcon,
   textColor: Colors.white,
   color: Colors.red,
   label: "Cancel",
   action: () {
+      print(roomRateController.text);
+      print(totalBalanceController.text);
+      print(totalChargeController.text);
+       print(extraChargeController.text);
+           print(roomIdController.text);
        Navigator.of(context).pop();
   },
 ),
@@ -386,20 +548,25 @@ SizedBox(width:20,),
     final cardId = cardIdController.text;
     final email = emailController.text;
     final guestNote = guestNoteController.text;
+    final bookingNote = bookingNoteController.text;
 
     final bookingId = bookingIdController.text;
     final checkIn = checkInController.text;
     final checkOut = checkOutController.text;
     final night = nightController.text;
     final roomType = roomTypeController.text;
+    final bookingAirMethod = BookingAirMethodController.text;
     final roomNumber = roomNumberController.text;
-    final roomRate = roomRateController.text;
-    final extraCharge = extraChargeController.text;
-    final totalPayment = totalPaymentController.text;
-    final totalCharge = totalChargeController.text;
-    final totalBalance = totalBalanceController.text;
+    final roomRate = roomRateController.text.replaceAll('\$', '');
+    final extraCharge = extraChargeController.text.replaceAll('\$', '');
+    final totalPayment = totalPaymentController.text.replaceAll('\$', '');
+    final totalCharge = totalChargeController.text.replaceAll('\$', '');
+    final totalBalance = totalBalanceController.text.replaceAll('\$', '');
     // Create a map containing the booking data
      submitUpdatedData(
+      bookingNote,
+      bookingAirMethod,
+      paymentStatus ?? 'Unpaid',
   guestName,
   gender,
   dob,
@@ -414,14 +581,14 @@ SizedBox(width:20,),
   checkOut,  // Use checkOut directly
   roomType,  // Use roomType directly
   roomNumber,
-  roomRate,
-  extraCharge,
-  totalPayment,
-  totalCharge,
-  totalBalance,
+  roomRate.replaceAll('\$', ''),
+  extraCharge.replaceAll('\$', ''),
+  totalPayment.replaceAll('\$', ''),
+  totalCharge.replaceAll('\$', ''),
+  totalBalance.replaceAll('\$', ''),
   checkIn,   // Use checkIn directly
   roomType,
-  roomId! ); },
+  roomIdController.text ); },
 )
 ]
           )
@@ -431,7 +598,11 @@ SizedBox(width:20,),
     },
   );
 }
-Future<void> submitUpdatedData(    String name,
+Future<void> submitUpdatedData(  
+  String bookingNote,
+  String bookingAirMethod, 
+  String paymentStatus,
+   String name,
     String gender ,
     String dob,
     String country,
@@ -452,11 +623,10 @@ Future<void> submitUpdatedData(    String name,
     String totalBalance,
     String checkin_date,
     String roomType,
-        int room_id,
+        String room_id,
     ) async {
   final String baseUrl1 = 'http://localhost:8000/api/booking/insert';
-   final url = Uri.parse('$baseUrl1?room_id=$room_id&booking_status=Booking&name=$name&gender=$gender&dob=$dob&country=$country&adult=$adult&child=$child&phone_number=$phone_number&address=$address&cardId=$cardId&email=$email&checkout_date=$checkout_date&room_type=$room_type&roomNumber=$roomNumber&roomRate=$roomRate&extra_charge=$extraCharge&total_payment=$totalPayment&charges=$totalCharge&totalBalance=$totalBalance&checkin_date=$checkin_date&payment_status=leabheng');
-  
+   final url = Uri.parse('$baseUrl1?room_id=$room_id&booking_note=$bookingNote&booking_air_method=$bookingAirMethod&room_rate=$roomRate&booking_status=booking&name=$name&gender=$gender&dob=$dob&country=$country&adult=$adult&child=$child&phone_number=$phone_number&address=$address&cardId=$cardId&email=$email&checkout_date=$checkout_date&room_type=$room_type&roomNumber=$roomNumber&extra_charge=$extraCharge&payment=$totalPayment&charges=$totalCharge&balance=$totalBalance&checkin_date=$checkin_date&arrival_date=$checkin_date&departure_date=$checkout_date&payment_status=$paymentStatus');
     final response = await http.post(url);
     if (response.statusCode == 200) {
          
@@ -480,10 +650,10 @@ Future<void> submitUpdatedData(    String name,
       print('Response body: ${response.body}');
         // ignore: use_build_context_synchronously
         AwesomeDialog(
-         width: 500,  
+        width: 500,  
         context: context,
         dialogType: DialogType.error,
-        title: 'Booking Failed',
+        title: 'Booking successfully',
         desc: response.toString(),
         btnOkOnPress: () {
 
@@ -493,10 +663,21 @@ Future<void> submitUpdatedData(    String name,
 }
 
 //   // Define the Booking Details Dialog
+
   void showBookingDetailsDialog(Map<String, dynamic> booking) {
     DateTime today = DateTime.now();
 DateTime todaycorrent = DateTime(today.year, today.month, today.day );
 DateTime todaycorrentCheckout = DateTime(today.year, today.month, today.day + 1 );
+String checkInDateString = booking['checkin_date'];
+String checkOutDateString = booking['checkout_date'];
+
+DateTime checkInDate = DateTime.parse(checkInDateString);
+DateTime checkOutDate = DateTime.parse(checkOutDateString);
+
+Duration difference = checkOutDate.difference(checkInDate);
+int numberOfNights = difference.inDays;
+
+print('Number of nights: $numberOfNights');
 
       showDialog(
     context: context,
@@ -629,7 +810,7 @@ SizedBox(width: 20),
 ), 
 SizedBox(width: 20),  Boxdetail(
   title: "Night",
-  value:  booking['dob'] ?? '' ,
+  value:  numberOfNights.toString() ?? '' ,
 ),
  ]
         ),
@@ -650,12 +831,12 @@ Boxdetail(
         children: [           
 Boxdetail(
   title: "Room Rate",
-  value: booking['room_rate'] ?? '',
+  value: '\$' + ( booking['booking_room_rate' ].toString()  ?? booking['room_rate'].toString()),
 ),      
 SizedBox(width: 20),
 Boxdetail(
   title: "Extra Charge",
-  value:  booking['extra_charge'] ?? '' ,
+  value: '\$' + booking['extra_charge'].toString() ?? '' ,
 ),
  ]
         ),
@@ -663,24 +844,24 @@ Boxdetail(
         children: [           
 Boxdetail(
   title: "Payment",
-  value: booking['payment'].toString() ?? '',
+  value: '\$' + booking['payment'].toString() ?? '',
 ),      
 SizedBox(width: 20),
 Boxdetail(
   title: "Total charges",
-  value:  booking['charges'].toString() ?? '' ,
+  value: '\$' +  booking['charges'].toString() ?? '' ,
 ),
 SizedBox(width: 20),
 Boxdetail(
   title: "Total Balance",
-  value:  booking['balance'].toString() ?? '' ,
+  value: '\$' +  booking['balance'].toString() ?? '' ,
 ),
  ]
         ), 
      
 Row(
           children: [
-            Boxdetail(title: "Note", value: booking['note'] , height: 200 , width:900,)
+            Boxdetail(title: "Note", value: booking['booking_note'] , height: 200 , width:900,)
           ],
         )
       ],() {
@@ -714,7 +895,7 @@ Row(
                 children: [  
                  Visibility(
   visible:
-   (DateTime.parse(booking['checkin_date']).isBefore(todaycorrent) || DateTime.parse(booking['checkin_date']).isAtSameMomentAs(todaycorrent) ) && booking['booking_status'] != 'In house', // Show "Check In" button if checkInDate is in the future
+   (DateTime.parse(booking['checkin_date']).isBefore(todaycorrent) || DateTime.parse(booking['checkin_date']).isAtSameMomentAs(todaycorrent) ) && booking['booking_status'] != 'In House', // Show "Check In" button if checkInDate is in the future
   child: BtnAction(
     background: Color.fromARGB(52, 0, 0, 0),
     icon: iconController.checkOutIcon,
@@ -722,12 +903,16 @@ Row(
     color: ColorController.checkInColor,
     label: "Check In",
     action: () {
+      
       onCheck(context, booking['booking_id'],'checkin',reloadDataCallback);
+      
+
+      
     },
   ),
 ),
 Visibility(
-  visible: DateTime.parse(booking['checkout_date']).isBefore(todaycorrentCheckout) || DateTime.parse(booking['checkout_date']).isAtSameMomentAs(todaycorrentCheckout),  // Show "Check Out" button if checkOutDate is in the past
+  visible:( DateTime.parse(booking['checkout_date']).isBefore(todaycorrentCheckout) || DateTime.parse(booking['checkout_date']).isAtSameMomentAs(todaycorrentCheckout)) && booking['booking_status'] == 'In House' ,  // Show "Check Out" button if checkOutDate is in the past
   child: BtnAction(
     background: Color.fromARGB(52, 0, 0, 0),
     icon: iconController.checkOutIcon,

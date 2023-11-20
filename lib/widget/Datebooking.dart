@@ -52,6 +52,7 @@ class _DateRangePickerWidgetState extends State<DateRangePickerWidget> {
     super.initState();
     if (widget.night!.text.isNotEmpty) {
       _numberOfNights = int.parse(widget.night!.text);
+      _updateValues();
     }
     _checkInDate = widget.checkin!.text.isNotEmpty
         ? DateTime.parse(widget.checkin!.text)
@@ -59,6 +60,7 @@ class _DateRangePickerWidgetState extends State<DateRangePickerWidget> {
     _checkOutDate = widget.checkout!.text.isNotEmpty
         ? DateTime.parse(widget.checkout!.text)
         : _checkInDate!.add(
+          
             Duration(days: _numberOfNights),
           );
   }
@@ -78,7 +80,7 @@ class _DateRangePickerWidgetState extends State<DateRangePickerWidget> {
     final DateTime currentDate = isCheckIn ? _checkInDate! : _checkOutDate!;
     final DateTime firstAllowedDate = DateTime(yearMin, monthMin, dayMin);
     final DateTime lastAllowedDate = DateTime(yearMax, monthMax, dayMax);
-
+_updateValues();
     DateTime? picked = (await showDatePicker(
       context: context,
       initialDate: currentDate,
@@ -92,9 +94,12 @@ class _DateRangePickerWidgetState extends State<DateRangePickerWidget> {
           _checkInDate = picked;
 
           if (_checkOutDate!.isBefore(_checkInDate!)) {
+
             _checkOutDate = _checkInDate!.add(
+              
               Duration(days: _numberOfNights),
             );
+            
             _updateValues();
           }
         } else {
@@ -105,7 +110,8 @@ class _DateRangePickerWidgetState extends State<DateRangePickerWidget> {
             _updateValues();
           }
           _checkOutDate = picked;
-        }
+
+_updateValues();        }
 
         final duration = _checkOutDate!.difference(_checkInDate!);
         _numberOfNights = duration.inDays;

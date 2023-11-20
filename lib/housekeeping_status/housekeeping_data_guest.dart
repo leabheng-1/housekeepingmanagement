@@ -43,6 +43,7 @@ class _HouseKeepingDataGuestState extends State<HouseKeepingDataGuest> {
     }
 
     final data = apiResponse!['data'];
+    print(data);
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -54,7 +55,7 @@ class _HouseKeepingDataGuestState extends State<HouseKeepingDataGuest> {
               size: 40,
             ),
             title: "Total Room",
-            value: data['checkin_count'],
+            value: data['totalRoom'],
             backgroundColor: ColorController.bottonbackcolor,
             iconbackground: ColorController.iconbackgroundcolor,
           ),
@@ -70,7 +71,7 @@ class _HouseKeepingDataGuestState extends State<HouseKeepingDataGuest> {
               size: 40,
             ),
             title: "Cleaning",
-            value: data['count_arrival'],
+            value: data['cleaning']['count'],
             backgroundColor: ColorController.bottonbackcolor,
             iconbackground: const Color(0xFFFFFADC),
           ),
@@ -81,12 +82,12 @@ class _HouseKeepingDataGuestState extends State<HouseKeepingDataGuest> {
         Expanded(
           child: HouseKeepingWidget(
             icon: const Icon(
-              iconController.dirty,
+              iconController.clean,
               color: Color(0xFF4E4E32),
               size: 40,
             ),
             title: "Dirty",
-            value: data['checkout_count'],
+            value: data['dirty']['count'],
             backgroundColor: ColorController.bottonbackcolor,
             iconbackground: const Color(0xFFE1E1D6),
           ),

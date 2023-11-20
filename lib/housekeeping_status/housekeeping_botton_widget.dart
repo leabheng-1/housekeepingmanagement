@@ -54,11 +54,11 @@ class _SubButtonFrontdeskState extends State<HouseKeepingBottonWidget> {
             title: "Check-In",
             value: data['checkin_count'],
             backgroundColor: ColorController.checkInColor,
-            iconbackground: Colors.blue.shade800,
+            iconbackground: Color(0x66000000),
           ),
         ),
         const SizedBox(
-          width: 30,
+          width: 15,
         ),
         Expanded(
           child: HouseKeepingColorWidget(
@@ -69,11 +69,11 @@ class _SubButtonFrontdeskState extends State<HouseKeepingBottonWidget> {
             title: "Arrival",
             value: data['count_arrival'],
             backgroundColor: ColorController.arrivalsColor,
-            iconbackground: Colors.purple.shade900,
+            iconbackground: Color(0x66000000),
           ),
         ),
         const SizedBox(
-          width: 30,
+          width: 15,
         ),
         Expanded(
           child: HouseKeepingColorWidget(
@@ -84,11 +84,11 @@ class _SubButtonFrontdeskState extends State<HouseKeepingBottonWidget> {
             title: "Check-Out",
             value: data['checkout_count'],
             backgroundColor: ColorController.checkOutColor,
-            iconbackground: Colors.orange.shade900,
+            iconbackground: Color(0x66000000),
           ),
         ),
         const SizedBox(
-          width: 30,
+          width: 15,
         ),
         Expanded(
           child: HouseKeepingColorWidget(
@@ -99,11 +99,11 @@ class _SubButtonFrontdeskState extends State<HouseKeepingBottonWidget> {
             title: "Departure",
             value: data['count_departure'],
             backgroundColor: ColorController.departuresColor,
-            iconbackground: Colors.grey.shade700,
+            iconbackground: Color(0x66000000),
           ),
         ),
         const SizedBox(
-          width: 30,
+          width: 15,
         ),
         Expanded(
           child: HouseKeepingColorWidget(
@@ -114,11 +114,11 @@ class _SubButtonFrontdeskState extends State<HouseKeepingBottonWidget> {
             title: "Available",
             value: data['available_rooms'],
             backgroundColor: ColorController.availableColor,
-            iconbackground: Colors.blue.shade800,
+            iconbackground: Color(0x66000000),
           ),
         ),
         const SizedBox(
-          width: 30,
+          width: 15,
         ),
         Expanded(
           child: HouseKeepingColorWidget(
@@ -129,7 +129,7 @@ class _SubButtonFrontdeskState extends State<HouseKeepingBottonWidget> {
             title: "Inhouse",
             value: data['inHouse'],
             backgroundColor: ColorController.inhouse,
-            iconbackground: Colors.blue.shade800,
+            iconbackground: Color(0x66000000),
           ),
         ),
       ],

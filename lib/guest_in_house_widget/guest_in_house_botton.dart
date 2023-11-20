@@ -12,7 +12,7 @@ class GuestInHouseBotton extends StatefulWidget {
 }
 
 class _GuestInHouseBottonState extends State<GuestInHouseBotton> {
-  Map<String, dynamic>? apiResponse;
+  Map<String, dynamic>? apiResponse = {};
   bool isLoading = true;
   @override
   void initState() {
@@ -26,8 +26,9 @@ class _GuestInHouseBottonState extends State<GuestInHouseBotton> {
         .get(Uri.parse('http://localhost:8000/api/dashboard/todayStatus'));
 
     if (response.statusCode == 200) {
-      isLoading = false;
+
       setState(() {
+              isLoading = false;
         apiResponse = json.decode(response.body);
       });
     } else {
@@ -37,7 +38,7 @@ class _GuestInHouseBottonState extends State<GuestInHouseBotton> {
 
   @override
   Widget build(BuildContext context) {
-    final data = apiResponse!['data'];
+    final data = apiResponse!['data'] ?? '';
     return  isLoading
                                   ? const Center(
                                       child: CircularProgressIndicator(),
@@ -64,7 +65,7 @@ class _GuestInHouseBottonState extends State<GuestInHouseBotton> {
                       color: Colors.white,
                     ),
                     title: "Check-In",
-                    value: data['checkin_count'],
+                    value: data['checkin_count'] ?? '',
                     backgroundColor: const Color.fromARGB(255, 100, 138, 204),
                     iconbackground: Colors.blue.shade800,
                   ),
@@ -77,7 +78,7 @@ class _GuestInHouseBottonState extends State<GuestInHouseBotton> {
                       color: Colors.white,
                     ),
                     title: "Arrival",
-                    value: data['count_arrival'],
+                    value: data['count_arrival'] ?? '',
                     backgroundColor: Colors.blue.shade800,
                     iconbackground: Colors.purple.shade900,
                   ),
@@ -90,7 +91,7 @@ class _GuestInHouseBottonState extends State<GuestInHouseBotton> {
                       color: Colors.white,
                     ),
                     title: "Check-Out",
-                    value: data['checkout_count'],
+                    value: data['checkout_count'] ?? '',
                     backgroundColor: Colors.orange.shade500,
                     iconbackground: Colors.orange.shade900,
                   ),
@@ -103,7 +104,7 @@ class _GuestInHouseBottonState extends State<GuestInHouseBotton> {
                       color: Colors.white,
                     ),
                     title: "Departure",
-                    value: data['count_departure'],
+                    value: data['count_departure'] ?? '',
                     backgroundColor: Colors.grey.shade400,
                     iconbackground: Colors.grey.shade700,
                   ),
@@ -116,7 +117,7 @@ class _GuestInHouseBottonState extends State<GuestInHouseBotton> {
                       color: Colors.white,
                     ),
                     title: "Available",
-                    value: data['available_rooms'],
+                    value: data['available_rooms'] ?? '',
                     backgroundColor: Colors.blue.shade500,
                     iconbackground: Colors.blue.shade800,
                   ),
@@ -128,8 +129,8 @@ class _GuestInHouseBottonState extends State<GuestInHouseBotton> {
                       iconController.inHouseIcon,
                       color: Colors.white,
                     ),
-                    title: "Inhouse",
-                    value: data['inHouse'],
+                    title: "In House",
+                    value: data['inHouse'] ?? '',
                     backgroundColor: Colors.blue.shade300,
                     iconbackground: Colors.blue.shade800,
                   ),

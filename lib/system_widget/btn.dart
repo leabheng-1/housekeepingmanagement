@@ -96,7 +96,7 @@ class BtnAction extends StatelessWidget {
             ),
             child: Icon(
               icon,
-              size: 25,
+              size: 16,
               color: Colors.white, // Icon color
             ),
           ),

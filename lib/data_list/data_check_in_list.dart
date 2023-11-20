@@ -261,10 +261,10 @@ class _DataCheckInListState extends State<DataCheckInList> {
                       animType: AnimType.bottomSlide,
                       btnCancelText: "NO",
                       btnOkText: "YES",
-                      title: booking['booking_id'].toString(),
+                      title: 'Check In',
                       // padding: const EdgeInsets.all(5.0),
                       desc:
-                          'You will be logged out of your account and returned to the login page.',
+                          'Do you want Check this Booking',
                       btnCancelOnPress: () {},
                       btnOkOnPress: () {
                          onCheck(context, booking['booking_id'],'checkin',fetchData);

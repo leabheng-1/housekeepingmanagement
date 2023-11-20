@@ -1,9 +1,13 @@
+import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:housekeepingmanagement/system_widget/system_color.dart';
-
+import 'package:housekeepingmanagement/widget/CurrencyInputFormatter.dart';
+import 'package:money_input_formatter/money_input_formatter.dart';
 class CustomTextField extends StatelessWidget {
   final TextEditingController? controller;
   final String labelText;
+  final String? noteText;
   final Color borderColor;
   final double borderRadius;
   final double borderWidth;
@@ -11,11 +15,16 @@ class CustomTextField extends StatelessWidget {
   final double height;
   final double inputHeight;
   final bool isNumeric;
+  final bool isCurrency;
+  final bool enabled;
+  final bool isNote;
+  final ValueChanged<String>? onChanged; // New callback for text changes
 
-  const CustomTextField({
-    super.key,
+  CustomTextField({
+    Key? key,
     this.controller,
     required this.labelText,
+    this.noteText,
     this.borderColor = const Color(0xFFb4b4b4),
     this.borderRadius = 10.0,
     this.borderWidth = 1.0,
@@ -23,7 +32,11 @@ class CustomTextField extends StatelessWidget {
     this.height = 40,
     this.inputHeight = 30,
     this.isNumeric = false,
-  });
+    this.isCurrency = false,
+    this.enabled = true,
+    this.isNote = false,
+    this.onChanged, // Pass the callback function
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +45,7 @@ class CustomTextField extends StatelessWidget {
       children: [
         const Padding(
           padding: EdgeInsets.only(left: 10),
-          child: SizedBox(height: 10),
+          child: SizedBox(height: 2),
         ),
         Text(
           labelText,
@@ -41,6 +54,14 @@ class CustomTextField extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
+        if (isNote && noteText != null)
+          Text(
+            noteText!,
+            style: TextStyle(
+              color: Colors.grey,
+              fontSize: 12,
+            ),
+          ),
         Container(
           width: width,
           height: height,
@@ -53,23 +74,35 @@ class CustomTextField extends StatelessWidget {
               width: borderWidth,
             ),
           ),
-          alignment: Alignment.center,
-          child: Center(
-            child: TextFormField(
-              keyboardType: TextInputType.number,
-              controller: controller,
-              decoration: const InputDecoration(
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.symmetric(vertical: 13),
-              ),
-              style: const TextStyle(fontSize: 16),
+          alignment: Alignment.topLeft,
+          child: TextFormField(
+            keyboardType: isNumeric
+                ? TextInputType.number
+                : TextInputType.text,
+            enabled: enabled,
+            inputFormatters: isNumeric
+                ? <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly]
+                : (isCurrency
+                    ? [CurrencyInputFormatter()]
+                    : null),
+            controller: controller,
+            onChanged: (text) {
+              // Invoke the callback function when text changes
+              onChanged?.call(text);
+            },
+            decoration: const InputDecoration(
+              border: InputBorder.none,
+              contentPadding: EdgeInsets.symmetric(vertical: 13),
             ),
+            style: const TextStyle(fontSize: 16),
           ),
         ),
       ],
     );
   }
 }
+
+
 
 class DatePickerTextField extends StatefulWidget {
   final TextEditingController? controller;
@@ -232,12 +265,13 @@ class CustomDropdownButton extends StatefulWidget {
   final List<String> items;
   final String? selectedValue;
   final String? labelText;
-
+  final List<String> items_value;
   final ValueChanged<String?>? onChanged;
   final String hintText;
   final double fontSize;
   final Color bg;
   final double marginTop;
+  
   const CustomDropdownButton({
     super.key,
     required this.width,
@@ -245,6 +279,7 @@ class CustomDropdownButton extends StatefulWidget {
     required this.items,
     required this.selectedValue,
     required this.onChanged,
+    this.items_value = const [],
     this.labelText = '',
     this.marginTop = 0,
     required this.hintText,
@@ -257,6 +292,7 @@ class CustomDropdownButton extends StatefulWidget {
 }
 
 class _CustomDropdownButtonState extends State<CustomDropdownButton> {
+  
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -299,7 +335,8 @@ class _CustomDropdownButtonState extends State<CustomDropdownButton> {
                   const EdgeInsets.only(left: 10, top: 0, bottom: 8, right: 0),
               border: InputBorder.none,
             ),
-            value: widget.selectedValue,
+            
+            value: widget.selectedValue!.isNotEmpty && widget.items.contains(widget.selectedValue) ? widget.selectedValue : null,
             items: widget.items.map((item) {
               return DropdownMenuItem<String>(
                 value: item,
@@ -327,7 +364,9 @@ class _CustomDropdownButtonState extends State<CustomDropdownButton> {
         ),
       ],
     );
+    
   }
+  
 }
 
 class IconBox extends StatefulWidget {
@@ -335,6 +374,7 @@ class IconBox extends StatefulWidget {
   final IconData icon2;
   final int initialActiveIndex;
   final Function(int) onChange;
+  final int view ;
 
   const IconBox({
     super.key,
@@ -342,6 +382,7 @@ class IconBox extends StatefulWidget {
     required this.icon2,
     this.initialActiveIndex = 0,
     required this.onChange,
+    this.view = 1
   });
 
   @override

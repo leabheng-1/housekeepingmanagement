@@ -77,7 +77,7 @@ class ColorController {
 }
  static paymentStatus(String? bookingStatus) {
     switch (bookingStatus?.toLowerCase()) {
-      case "uppaid":
+      case "unpaid":
         return unPaid;
       case "deposit":
         return deposit;

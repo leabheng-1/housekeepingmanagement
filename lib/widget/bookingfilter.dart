@@ -27,8 +27,8 @@ class _CustomDropdownFilterState extends State<CustomDropdownFilter> {
         CustomDropdownButton(
              bg:Color.fromRGBO(255, 255, 255, 1),
             width: 200,
-            items: ['All','Clean', 'Cleaning', 'Dirty'],
-            selectedValue:  'Clean',
+            items: ['All','In House', 'Varaible', 'Block' , 'No Show' , 'Void' , 'Checked In' , 'Checked Out'],
+            selectedValue:  'All',
             hintText: 'Housekeeping Status',
             onChanged: (value) {
               setState(() {
@@ -42,7 +42,7 @@ class _CustomDropdownFilterState extends State<CustomDropdownFilter> {
              bg:Color.fromRGBO(255, 255, 255, 1),
             width: 200,
             items: ['All','Clean', 'Cleaning', 'Dirty'],
-            selectedValue:  'Clean',
+            selectedValue:  'All',
             hintText: 'Housekeeping Status',
             onChanged: (value) {
               setState(() {

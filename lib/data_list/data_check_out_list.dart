@@ -1,5 +1,7 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:housekeepingmanagement/data_list/textbutton_list.dart';
+import 'package:housekeepingmanagement/widget/checkinandcheckout.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -238,16 +240,30 @@ class _DataCheckOutListState extends State<DataCheckOutList> {
   },
                           ),
                           TextButttonList(
-                            title: 'Edit',
-                            height: 0.1,
-                            width: 0.06,
-                            backgroundColor: Colors.blue.shade600,
-                          ),
-                          TextButttonList(
                             title: 'Check-Out',
                             height: 0.1,
                             width: 0.06,
                             backgroundColor: Colors.purple.shade800,
+                            onPressed: (){
+                                    AwesomeDialog(
+          width: 650,
+                      context: context,
+                      keyboardAware: true,
+                      dismissOnBackKeyPress: false,
+                      dialogType: DialogType.warning,
+                      animType: AnimType.bottomSlide,
+                      btnCancelText: "NO",
+                      btnOkText: "YES",
+                      title: 'Check Out',
+                      // padding: const EdgeInsets.all(5.0),
+                      desc:
+                          'Do you want Check Out this Booking',
+                      btnCancelOnPress: () {},
+                      btnOkOnPress: () {
+                         onCheck(context, booking['booking_id'],'checkout',fetchData);
+                      },
+                    ).show();
+                            },
                           ),
                         ],
                       ),

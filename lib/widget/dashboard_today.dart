@@ -80,7 +80,7 @@ class DashboardToday extends StatelessWidget {
                         color: Colors.white,
                       ),
                       title: "Available",
-                      value: data?['count_departure'] ?? '',
+                      value: data?['available_rooms'] ?? 0,
                       textColor: Colors.black,backgroundColor: ColorController.backgroundstatustoday,
                       iconbackground: ColorController.availableColor,
                     ),
@@ -95,7 +95,7 @@ class DashboardToday extends StatelessWidget {
                       icon: const Icon(
                         Icons.cleaning_services_outlined,
                         color: Colors.white,
-                      ),
+                    ),
                       title: "dirty",
                             value: data['dirty']['count'],
                       textColor: Colors.black,backgroundColor: ColorController.backgroundstatustoday,

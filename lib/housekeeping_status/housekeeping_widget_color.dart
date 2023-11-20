@@ -18,11 +18,11 @@ class HouseKeepingColorWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double iconSize = MediaQuery.of(context).size.width > 600 ? 40 : 32;
+    double iconSize = 45;
     double containerWidth = MediaQuery.of(context).size.width > 600 ? 250 : 200;
 
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(10.0),
       child: Container(
         width: containerWidth,
         decoration: BoxDecoration(
@@ -30,7 +30,7 @@ class HouseKeepingColorWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
         ),
         child: Padding(
-          padding: const EdgeInsets.only(left: 15),
+          padding: const EdgeInsets.only(left: 10),
           child: Row(
             children: [
               Container(
