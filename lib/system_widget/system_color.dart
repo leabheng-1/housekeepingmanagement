@@ -6,6 +6,7 @@ class ColorController {
   static const Color textColor = Colors.black;
   static const Color backgroundColor = Colors.white;
   static const Color blockColor = Color(0xFFFC0D08);
+    static const Color CloseColor = Color(0xFFFC0D08);
   static const Color cleaningColor = Color(0xFFffe327);
   static const Color cleanColor = Color(0xFF1caa26);
   static const Color dirtyColor = Color(0xFF564f21);

@@ -37,23 +37,17 @@ class _HousekeepingButtonState extends State<HousekeepingButton> {
                   HouseKeepingStatus(
                     title: 'Dirty',
                     icon: Icons.cleaning_services_rounded,
-                    backgroundColor: _selectedIndex == 0
-                        ? Colors.blue.shade800
-                        : Colors.grey.shade800,
+                    backgroundColor: ColorController.dirty ,
                   ),
                   HouseKeepingStatus(
                     title: 'Cleaning',
                     icon: Icons.cleaning_services_rounded,
-                    backgroundColor: _selectedIndex == 0
-                        ? Colors.yellow.shade600
-                        : Colors.grey.shade800,
+                    backgroundColor: ColorController.cleaning,
                   ),
                   HouseKeepingStatus(
                     title: 'Clean',
                     icon: Icons.cleaning_services_rounded,
-                    backgroundColor: _selectedIndex == 0
-                        ? Colors.green
-                        : Colors.grey.shade800,
+                    backgroundColor:ColorController.clean,
                   ),
                 ],
               ),
@@ -83,11 +77,11 @@ class _HousekeepingButtonState extends State<HousekeepingButton> {
                   ),
                   HouseKeepingStatus(
                       title: 'Blocked',
-                      icon: Icons.cleaning_services_rounded,
+                      icon: iconController.blockIcon,
                       backgroundColor: ColorController.blockColor),
                   HouseKeepingStatus(
                       title: 'Cancel',
-                      icon: Icons.block,
+                      icon: iconController.CancelIcon,
                       backgroundColor: ColorController.cancel),
                   Padding(
                     padding: const EdgeInsets.only(right: 30),

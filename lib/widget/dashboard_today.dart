@@ -3,47 +3,57 @@ import 'package:housekeepingmanagement/system_widget/system_color.dart';
 import 'package:housekeepingmanagement/widget/sub_button/sub_button_frontdesd_widget.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'card_number_widget.dart';
 import 'package:housekeepingmanagement/system_widget/system_icon.dart';
+import 'package:skeletonizer/skeletonizer.dart';
+bool loading = true;
+class DashboardToday extends StatefulWidget {
+  const DashboardToday({Key? key}) : super(key: key);
 
-class DashboardToday extends StatelessWidget {
-  // ignore: use_key_in_widget_constructors
-  const DashboardToday({Key? key});
+  @override
+  _DashboardTodayState createState() => _DashboardTodayState();
+}
 
+class _DashboardTodayState extends State<DashboardToday> {
+  bool loading = false;
+  Map<String, dynamic>? responseData;
+  Map<String, dynamic> data = {};
+    void initState() {
+    super.initState();
+  fetchData();
+  loading = false;
+  }
   Future<Map<String, dynamic>> fetchData() async {
+    loading = false;
     final response = await http
         .get(Uri.parse('http://localhost:8000/api/dashboard/todayStatus'));
 
     if (response.statusCode == 200) {
+      loading = true;
+      responseData = json.decode(response.body);
+       setState(() {
+        data = responseData!['data'] ;
+      });
+      
       return json.decode(response.body);
     } else {
+       loading = true;
       throw Exception('Failed to load data from the API');
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: fetchData(),
-      builder: (context, AsyncSnapshot<Map<String, dynamic>> snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        } else if (snapshot.hasError) {
-          return Center(
-            child: Text('Error: ${snapshot.error}'),
-          );
-        } else {
-          final data = snapshot.data!['data'];
 
-          return 
+    return  
+          Skeletonizer(
+        enabled: !loading,
+        child:
                 Container(
                   child: Padding(
                     padding: const EdgeInsets.only(left:15,top:15),
                     child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
     Text(
       "Today",
       style: TextStyle(
@@ -66,8 +76,8 @@ class DashboardToday extends StatelessWidget {
                         iconController.allRoomsIcon,
                         color: Colors.white,
                       ),
-                      title: "TotalRoom",
-                      value: data['totalRoom'],
+                      title: "Total Room",
+                      value: data!['totalRoom'] ?? 0,
                       textColor: Colors.black,backgroundColor: ColorController.backgroundstatustoday,
                       iconbackground: ColorController.totalroom,
                     ),
@@ -96,8 +106,8 @@ class DashboardToday extends StatelessWidget {
                         Icons.cleaning_services_outlined,
                         color: Colors.white,
                     ),
-                      title: "dirty",
-                            value: data['dirty']['count'],
+                      title: "Dirty",
+                            value: data['dirty']?['count'] ?? 0,
                       textColor: Colors.black,backgroundColor: ColorController.backgroundstatustoday,
                       iconbackground: ColorController.dirty,
                     ),
@@ -110,7 +120,7 @@ class DashboardToday extends StatelessWidget {
                         color: Colors.white,
                       ),
                       title: "Occupied",
-                      value: data?['occupied'] ?? '',
+                      value: data?['occupied'] ?? 0,
                       textColor: Colors.black,backgroundColor: ColorController.backgroundstatustoday,
                       iconbackground: ColorController.occupiedcolor,
                     ),
@@ -127,7 +137,7 @@ class DashboardToday extends StatelessWidget {
                         color: Colors.white,
                       ),
                       title: "Clean",
-                            value: data['clean']['count'],
+                            value: data['clean']?['count'] ?? 0,
                       textColor: Colors.black,backgroundColor: ColorController.backgroundstatustoday,
                       iconbackground: ColorController.clean,
                     ),
@@ -140,7 +150,7 @@ class DashboardToday extends StatelessWidget {
                         color: Colors.white,
                       ),
                       title: "Block",
-                      value: data!['block'] ?? '',
+                      value: data!['block'] ?? 0,
                       textColor: Colors.black,backgroundColor: ColorController.backgroundstatustoday,
                       iconbackground: ColorController.blockColor,
                     ),
@@ -153,9 +163,7 @@ class DashboardToday extends StatelessWidget {
                       ],
                     ),
                   ),
-                );
-        }
-      },
-    );
-  }
+                )
+          );
+      }
 }

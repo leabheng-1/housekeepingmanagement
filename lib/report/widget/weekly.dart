@@ -6,9 +6,9 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
     TextEditingController number_room_select = TextEditingController();
-class dailyReport extends StatefulWidget {
+class weeklyReport extends StatefulWidget {
   @override
-  _dailyReportState createState() => _dailyReportState();
+  _weeklyReportState createState() => _weeklyReportState();
 }
 String start_date = ''; 
 String end_date = '';
@@ -18,17 +18,19 @@ String room_number_filter = 'All';
 Key dropdownKey = UniqueKey();
 List<dynamic> roomData = [];
 List<String> roomNumbers = [];
-class _dailyReportState extends State<dailyReport> {
-  List<dynamic> data = [] , room_number = [];
+class _weeklyReportState extends State<weeklyReport> {
+   Map<String, dynamic> data = {} ; List<dynamic>  room_number = [];
   
   Future<void> fetchData() async {
       
-    final response = await http.get(Uri.parse('http://127.0.0.1:8000/api/report/daily?start_date=$start_date&end_date=$end_date&room_type=$room_type&room_number=$room_number_filter'));
-    Url='http://127.0.0.1:8000/api/report/daily?start_date=$start_date&end_date=$end_date&room_type=$room_type&room_number=$room_number_filter';
+    final response = await http.get(Uri.parse('http://127.0.0.1:8000/api/report/weekly?start_date=$start_date&end_date=$end_date&room_type=$room_type&room_number=$room_number_filter'));
+    Url='http://127.0.0.1:8000/api/report/weekly?start_date=$start_date&end_date=$end_date&room_type=$room_type&room_number=$room_number_filter';
+    print('http://127.0.0.1:8000/api/report/weekly?start_date=$start_date&end_date=$end_date&room_type=$room_type&room_number=$room_number_filter');
     if (response.statusCode == 200) {
+    
       fetchRoomDate('All');
       setState(() {
-        data = json.decode(response.body)['data'];
+        data =  json.decode(response.body)['data'];
       });
     } else {
       throw Exception('Failed to load data');
@@ -80,36 +82,53 @@ void fetchRoomDate(String value) {
   @override
   Widget build(BuildContext context) {
  number_room_select.text = 'All';
-
+ Map<String, dynamic> weeklyData = data;
+    List<DataRow> rows = weeklyData.entries.map((entry) {
+      String day = entry.key;
+      bool isEven = true;
+      int index = weeklyData.keys.toList().indexOf(day);
+      Map<String, dynamic> dayData = entry.value;
+                final backgroundColor = index % 2 == 0
+              ? Colors.grey[200]
+              : Colors.white;
+       isEven = !isEven;        
+      return DataRow(
+        color: MaterialStateProperty.all(backgroundColor),
+        cells: [
+          DataCell(Text(day)),
+          DataCell(Text(dayData["date"])),
+          DataCell(Text(dayData["check_in"].toString())),
+          DataCell(Text(dayData["check_out"].toString())),
+          DataCell(Text(dayData["payment"].toString())),
+          DataCell(Text(dayData["single_room"].toString())),
+          DataCell(Text(dayData["twin_room"].toString())),
+        ],
+      );
+    }).toList();
     return Column(
       children: [
         Expanded(
           flex: 2,
           child: Row(
         children: [
-          DateRangeWidget(
-            controller: TextEditingController(),
-            labelText: '',
-            checkin: TextEditingController(),
-            checkout: TextEditingController(),
-            checkcurrentdate: DateTime.now(),
-            onDateSelectedDate: (selectedDate) {
-              // Handle date selection
+           DatePickerTextField(
+                    checkcurrnetdate: DateTime(2000),
+                      controller: TextEditingController(),
+                      labelText: 'Date',
+                      width: 265,
+                      
+                       onDateSelectedDate: (selectedDate) {
+              // Handle the selected date here
+              print('Selected Date: $selectedDate');
             },
-            onChange: (DateTime checkin, DateTime checkout, int nights) {
-              start_date = DateFormat('yyyy-MM-dd').format(checkin).toString();
-              end_date = DateFormat('yyyy-MM-dd').format(checkout).toString();
-              fetchData();
-            
-            },
-          ),
+                    ),
+         
           SizedBox(
             width:15,
           ),
-          Container(
-  margin: EdgeInsets.only(top: 5.0), // Adjust the margin as needed
+          Container(// Adjust the margin as needed
   child: CustomDropdownButton(
-   
+   labelText: 'Room Type',
     width: 300,
     items: ['All', 'Single Room', 'Twin Room'],
     selectedValue: 'All',
@@ -125,9 +144,9 @@ void fetchRoomDate(String value) {
   ),
 ),
 SizedBox(width: 15,),
-Container( // Adjust the margin as needed
-  margin: EdgeInsets.only(top: 5.0),
+Container( 
   child:CustomDropdownButton(
+    labelText: 'Room Number',
      key: dropdownKey,
   width: 150,
   items: roomNumbers, // Provide a default value 'All' if roomNumbers is null or empty
@@ -162,39 +181,20 @@ Container( // Adjust the margin as needed
   child: Container(
     width: double.infinity,
     child: SingleChildScrollView(
-      scrollDirection: Axis.vertical,
+        scrollDirection: Axis.vertical,
       child: DataTable(
-        columns: <DataColumn>[
-          DataColumn(label: Text('Guest ID')),
-          DataColumn(label: Text('Room Type')),
-          DataColumn(label: Text('Room Number')),
-          DataColumn(label: Text('Guest Name')),
+        columns: [
+          DataColumn(label: Text('Day')),
+          DataColumn(label: Text('Date')),
           DataColumn(label: Text('Check In')),
           DataColumn(label: Text('Check Out')),
-          DataColumn(label: Text('Balance')),
+          DataColumn(label: Text('Payment')),
+          DataColumn(label: Text('Single Room')),
+          DataColumn(label: Text('Twin Room')),
         ],
-        rows: data.asMap().entries.map((entry) {
-          final index = entry.key;
-          final item = entry.value;
-          final backgroundColor = index % 2 == 0
-              ? Colors.grey[200]
-              : Colors.white;
-
-          return DataRow(
-            color: MaterialStateProperty.all(backgroundColor),
-            cells: <DataCell>[
-              DataCell(Text(item['guest_id'].toString())),
-              DataCell(Text(item['room_type'])),
-              DataCell(Text(item['room_number'])),
-              DataCell(Text(item['name'])),
-              DataCell(Text(item['checkin_date'])),
-              DataCell(Text(item['checkout_date'])),
-              DataCell(Text(item['balance']?.toString() ?? '')),
-            ],
-          );
-        }).toList(),
+        rows: rows,
       ),
-    ),
+    )
   ),
 )
 

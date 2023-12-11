@@ -64,9 +64,13 @@ bool loading = false;
                                   ? const Center(
                                       child: CircularProgressIndicator(),
                                     )
-                                  : Expanded(
-      child: DataTable(
-        columnSpacing: 15.0,
+                              : Container(
+  height: 500,
+  child: SingleChildScrollView(
+    scrollDirection: Axis.vertical,
+      child: 
+      DataTable(
+        columnSpacing: 95,
         columns: [
           DataColumn(
             label: Row(
@@ -213,6 +217,8 @@ bool loading = false;
           );
         }).toList(),
       ),
-    );
+  )
+                                  );
+                                  
   }
 }

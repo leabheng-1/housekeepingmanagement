@@ -248,16 +248,24 @@ class selectCountry_dropdown_layout extends State<selectCountry_dropdown> {
           padding: EdgeInsets.only(left: 10),
           child: SizedBox(height: 10),
         ),
-        Text(
-          widget.labelText!,
-          style: const TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-          ),
+        RichText(
+  text: TextSpan(
+    children: [
+      TextSpan(
+        text:   widget.labelText!,
+        style: const TextStyle(
+          color: Colors.black,
+          fontWeight: FontWeight.bold,
         ),
+      ),
+      
+    ],
+  ),
+),
+SizedBox(height: 5,),
         Container(
           height: 40,
-          width: 250,
+          width: 260,
           margin: const EdgeInsets.only(top: 0),
           decoration: BoxDecoration(
             color: Colors.white,

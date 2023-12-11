@@ -34,36 +34,43 @@ class _CheckBoxCustomRoomRateState extends State<CheckBoxCustomRoomRate> {
       children: [
         Row(
           children: [
-            CustomTextField(
-              width: 255,
-              controller: widget.roomRateController,
-              labelText: 'Room Rate',
-              isCurrency: true,
-              enabled: _isChecked,
-              onChanged: (text) {
-                // Invoke the callback function when text changes
-                widget.onTextChanged?.call(text);
+            Row(
+  children: [
+    Stack(
+      children: [
+        CustomTextField(
+          width: 200,
+          controller: widget.roomRateController,
+          labelText: 'Room Rate',
+          isCurrency: true,
+          enabled: _isChecked,
+          onChanged: (text) {
+            // Invoke the callback function when text changes
+            widget.onTextChanged?.call(text);
+          },
+        ),
+        Positioned(
+          right: 5,
+          top: 15,
+          child: Container(
+            margin: EdgeInsets.only(top: 16.0),
+            padding: EdgeInsets.only(left: 10),
+            child: Checkbox(
+              value: _isChecked,
+              onChanged: (value) {
+                widget.onChanged?.call(value);
+                setState(() {
+                  _isChecked = value ?? false;
+                });
               },
             ),
-            Positioned(
-              right: 20,
-              top: 50,
-              child: 
-              Container(
-  margin: EdgeInsets.only(top: 16.0), // Adjust the value as needed
-  padding: EdgeInsets.only(left:10 ),
-  child: Checkbox(
-    value: _isChecked,
-    onChanged: (value) {
-      widget.onChanged?.call(value);
-      setState(() {
-        _isChecked = value ?? false;
-      });
-    },
-  ),
-),
+          ),
+        ),
+      ],
+    ),
+  ],
+)
 
-            ),
           ],
         ),
       ],

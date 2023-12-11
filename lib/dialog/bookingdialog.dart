@@ -1,3 +1,8 @@
+import 'dart:async';
+import 'dart:convert';
+import 'package:get/get.dart';
+import 'package:housekeepingmanagement/widget/sub_button/sub_button_frontdesk.dart';
+import 'package:intl/intl.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/state_manager.dart';
@@ -83,7 +88,6 @@ class RefreshableDialogState extends State<RefreshableDialog> {
       // Update your dialog content or data here
     });
   }
-
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -140,7 +144,9 @@ TextEditingController totalPaymentController = TextEditingController();
 TextEditingController totalChargeController = TextEditingController();
 TextEditingController totalBalanceController = TextEditingController();
 TextEditingController roomIdController= TextEditingController();
+TextEditingController paymentTypeController= TextEditingController();
 TextEditingController getroomrateController= TextEditingController();
+
 // Check if the values are not null before assigning them to the controllers
 
 
@@ -148,8 +154,7 @@ TextEditingController getroomrateController= TextEditingController();
 String? minSelectDate;
 String? selectCountry ;
   BookingDialog(this.context ,this.reloadDataCallback);
-   void showCreateBookingDialog(Map<String, dynamic> booking) {
-   
+   void showCreateBookingDialog(Map<String, dynamic> booking,DateTime formattedDate) { 
     int? bookingId = booking['booking_id'] as int?;
 int? id = booking['id'] as int?;
 int? guestId = booking['guest_id'] as int?;
@@ -193,11 +198,11 @@ String? cardId = booking['card_id'] as String?;
 String? otherInformation = booking['other_information'] as String?;
 int? isDelete = booking['is_delete'] as int?;
 String? housekeepingStatus = booking['housekeeping_status'] as String?;
-
+String newformattedDate = DateFormat('yyyy-MM-dd').format(formattedDate);
 String? date = booking['date'] as String?;
  bookingIdController.text = bookingId?.toString() ?? '';
-  checkInController.text = checkinDate ?? DateTime.now().toString();
-  DateTime tomorrow = DateTime.now().add(Duration(days: 1));
+  checkInController.text = checkinDate ?? newformattedDate;
+  DateTime tomorrow = formattedDate.add(Duration(days: 1));
     checkOutController.text = checkoutDate ?? tomorrow.toString();
 DateTime checkInDate = DateTime.parse(checkInController.text);
 DateTime checkOutDate = DateTime.parse(checkOutController.text);
@@ -207,7 +212,7 @@ nightController.text = differenceInDays.toString() ?? '1';
 roomTypeController.text =  roomType ?? 'No set';
 BookingAirMethodController.text =  airMethod ?? 'No set';
 roomNumberController.text = roomNumber ?? '';
-roomRateController.text =  roomRate ?? '\$10';
+roomRateController.text =  roomRate ?? '\$0';
 String dpRoomRate  = roomRate ?? '\$0' ;
 extraChargeController.text = extraCharge ?? '\$0';
 totalPaymentController.text = payment?.toString() ?? '\$0';
@@ -216,20 +221,27 @@ double roomRateCal = double.parse(roomRateController.text.replaceAll('\$', ''));
 double result = nightCal * roomRateCal;
 
 totalChargeController.text = charges?.toString() ?? '\$' +  result.toString();
-totalBalanceController.text = balance ??  '\$0';
+totalBalanceController.text = balance ?? dpRoomRate + '\$';
 
 guestNameController.text = name ?? '';
 genderController.text = gender ?? 'No set';
 dobController.text = dob ?? '';
 countryController.text = country ?? '';
-adultController.text = adults?.toString() ?? '';
+adultController.text = adults?.toString() ?? '1';
 childController.text = child?.toString() ?? '';
 phoneController.text = phoneNumber ?? '';
 cardIdController.text = cardId ?? '';
 emailController.text = email ?? '';
 guestNoteController.text = note ?? '';
 bookingNoteController.text = note ?? '';
-
+paymentTypeController.text = booking['payment_type'] ?? '';
+final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+String? validateName(String? value) {
+  if (value == null || value.isEmpty) {
+    print('object');
+  }
+  return null; // Return null if validation passes
+}
  bool isInputRoomRate = true;
   bool isChecked = false;
      double totalCharge = double.parse(totalChargeController.text.replaceAll('\$', '')) ?? 0;
@@ -257,7 +269,11 @@ bookingNoteController.text = note ?? '';
         
         title: TitleBar(title: 'Create Booking'),
         
-        content:   Container(
+        content: 
+        Form(
+    key: _formKey,
+    child:
+          Container(
   margin: EdgeInsets.only(top: 20),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -270,10 +286,13 @@ bookingNoteController.text = note ?? '';
            
                     CustomTextField(
                       controller: guestNameController,
+                                          validator: validateName,
                       labelText: 'Guest Name',
+                      showAsterisk: true,
                       width: 265,
                       
-                    ), SizedBox(width: 20), CustomDropdownButton(
+                    ), SizedBox(width: 15), 
+                    CustomDropdownButton(
                       labelText: 'Gender',
             width: 265,
             items: ['No set', 'Male', 'Female'],
@@ -292,7 +311,7 @@ bookingNoteController.text = note ?? '';
                     DatePickerTextField(
                     checkcurrnetdate: DateTime(2000),
                       controller: dobController,
-                      labelText: 'DOB',
+                      labelText: 'Date of Birth',
                       width: 265,
                       
                        onDateSelectedDate: (selectedDate) {
@@ -300,9 +319,9 @@ bookingNoteController.text = note ?? '';
               print('Selected Date: $selectedDate');
             },
                     ),
-                      SizedBox(width: 20), 
+                      SizedBox(width: 15), 
                    selectCountry_dropdown(
-          width: 270,
+          width: 280,
           labelText: 'Country',
             selectedValue:countryController.text ,
             hintText: 'Room Status',
@@ -319,11 +338,12 @@ bookingNoteController.text = note ?? '';
         
                     CustomTextField(
                       controller: adultController,
+                      showAsterisk: true,
                       labelText: 'Adult',
                       width: 265,
                       isNumeric:true, 
                     ),
-                      SizedBox(width: 20), 
+                      SizedBox(width: 15), 
                     CustomTextField(
                       controller: childController,
                       labelText: 'Child',
@@ -336,10 +356,12 @@ bookingNoteController.text = note ?? '';
                     CustomTextField(
                        isNumeric:true,
                       controller: phoneController,
+                                          validator: validateName,
+                                          showAsterisk:true,
                       labelText: 'Phone Number',
                       width: 265,
                     ),
-                      SizedBox(width: 20),
+                      SizedBox(width: 15),
                         CustomTextField(
                       controller: cardIdController,
                       labelText: 'Card ID',
@@ -364,23 +386,30 @@ bookingNoteController.text = note ?? '';
                       controller: emailController,
                       labelText: 'Email',
                       width: 550,
-                    )]),  SizedBox(width: 20), 
+                    )]),  
+                     Row(
+      children: [ 
                     CustomTextField(
                       controller: guestNoteController,
                       labelText: 'Guest Noted',
                       height:200,
                       width:550,
                     ),
-                  ]
+                 
+      ]
+                     ),
+                     SizedBox(height: 20),]
                   ,() {
                
             }
+            
                 ),
+                
               ),
-              SizedBox(width: 20), // Add spacing between columns
+              SizedBox(width: 15), // Add spacing between columns
               Expanded(
                 child: buildLabelAndContent('Booking Information',[
-                      SizedBox(width: 20), 
+                      SizedBox(width: 15), 
                  DateRangePickerWidget(
               labelText: 'Check-Out Date',
               checkin:checkInController,
@@ -404,15 +433,18 @@ CheckSelectRoomRate(
   roomTypeController: roomTypeController,
   roomNumberController: roomNumberController,
   roomIdController: roomIdController,
-  getroomrateController:getroomrateController,
-  onTextChanged:(value){
-    
-    isChecked=true;
-                //  roomRateController.text = getroomrateController.text;
-          },
+  getroomrateController:roomRateController,
+  onTextChanged: (value) {
+  isChecked = true;
+  Timer(Duration(milliseconds: 500), () {
+    updateFields(nightCal);
+  });
+},
+
   
   ),
-          SizedBox(width: 20), 
+
+          SizedBox(width: 15), 
           CustomDropdownButton(
             width: 150,
             labelText: 'Air Method',
@@ -423,11 +455,6 @@ CheckSelectRoomRate(
                 BookingAirMethodController.text = value!;
             },
           )
-//                   CustomTextField(
-//   width: 110,
-//   controller: roomNumberController,
-//   labelText: 'Room Number',
-// )
       ]),
        Row(
       children: [ 
@@ -437,7 +464,6 @@ CheckSelectRoomRate(
           onChanged: (newValue) {
          
             isChecked = newValue ?? false;
-            print(newValue);
             if(newValue == true){
               
             }else{
@@ -449,11 +475,21 @@ CheckSelectRoomRate(
           onTextChanged:(value){
                  updateFields(nightCal);
           }
-        )
-                    
-                    ,SizedBox(width: 20),
+        ) ,SizedBox(width: 15),
+           CustomDropdownButton(
+                      labelText: 'Type',
+            width: 155,
+            items: ['Cash', 'Bank'],
+            selectedValue:paymentTypeController.text ,
+            hintText: 'Payment ',
+            onChanged: (value) {
+                paymentTypeController.text = value!;
+                print(paymentTypeController.text);
+
+            },
+          ),SizedBox(width: 15),
                     CustomTextField(
-                      width: 230,
+                      width: 155,
                       isCurrency: true,
                       controller: extraChargeController,
                       labelText: 'Extra Charge',
@@ -472,14 +508,14 @@ CheckSelectRoomRate(
                       onChanged:(value){
                  updateFields(nightCal);
           },
-                    ),SizedBox(width: 20),
+                    ),SizedBox(width: 15),
                     CustomTextField(
                       width: 510/3,
                         isCurrency: true,
                         enabled: false,
                       controller: totalChargeController,
                       labelText: 'Total Charge',
-                    ),SizedBox(width: 20),
+                    ),SizedBox(width: 15),
                     CustomTextField(
                       width: 510/3,
                       enabled: false,
@@ -496,8 +532,11 @@ CheckSelectRoomRate(
                       height:200,
                       width:550,
                     ),
+                  
         ],
-      )
+        
+      ),
+        SizedBox(height:20,)
                   ],() {
               // This is the action that will be executed when the button is pressed
               print('Button Pressed!');
@@ -506,6 +545,7 @@ CheckSelectRoomRate(
               ),
             ],
           ),
+        ),
         ),
         actions: [
         Padding(
@@ -521,11 +561,7 @@ children: [
   color: Colors.red,
   label: "Cancel",
   action: () {
-      print(roomRateController.text);
-      print(totalBalanceController.text);
-      print(totalChargeController.text);
-       print(extraChargeController.text);
-           print(roomIdController.text);
+   
        Navigator.of(context).pop();
   },
 ),
@@ -537,6 +573,9 @@ SizedBox(width:20,),
   color: Colors.blue,
   label: "Create",
   action: () {
+      if (_formKey.currentState?.validate() == true) {
+      // The form is valid, you can proceed with the submission
+      // or other actions.
        final guestName = guestNameController.text;
     final gender = genderController.text ;
     final dob = dobController.text;
@@ -588,7 +627,10 @@ SizedBox(width:20,),
   totalBalance.replaceAll('\$', ''),
   checkIn,   // Use checkIn directly
   roomType,
-  roomIdController.text ); },
+  roomIdController.text,
+  paymentTypeController.text
+   ); }
+  }
 )
 ]
           )
@@ -624,37 +666,43 @@ Future<void> submitUpdatedData(
     String checkin_date,
     String roomType,
         String room_id,
+        String paymentType,
     ) async {
   final String baseUrl1 = 'http://localhost:8000/api/booking/insert';
-   final url = Uri.parse('$baseUrl1?room_id=$room_id&booking_note=$bookingNote&booking_air_method=$bookingAirMethod&room_rate=$roomRate&booking_status=booking&name=$name&gender=$gender&dob=$dob&country=$country&adult=$adult&child=$child&phone_number=$phone_number&address=$address&cardId=$cardId&email=$email&checkout_date=$checkout_date&room_type=$room_type&roomNumber=$roomNumber&extra_charge=$extraCharge&payment=$totalPayment&charges=$totalCharge&balance=$totalBalance&checkin_date=$checkin_date&arrival_date=$checkin_date&departure_date=$checkout_date&payment_status=$paymentStatus');
+   final url = Uri.parse('$baseUrl1?room_id=$room_id&payment_type=$paymentType&booking_note=$bookingNote&booking_air_method=$bookingAirMethod&room_rate=$roomRate&booking_status=booking&name=$name&gender=$gender&dob=$dob&country=$country&adult=$adult&child=$child&phone_number=$phone_number&address=$address&cardId=$cardId&email=$email&checkout_date=$checkout_date&room_type=$room_type&roomNumber=$roomNumber&extra_charge=$extraCharge&payment=$totalPayment&charges=$totalCharge&balance=$totalBalance&checkin_date=$checkin_date&arrival_date=$checkin_date&departure_date=$checkout_date&payment_status=$paymentStatus');
+   print('$baseUrl1?room_id=$room_id&payment_type=$paymentType&booking_note=$bookingNote&booking_air_method=$bookingAirMethod&room_rate=$roomRate&booking_status=booking&name=$name&gender=$gender&dob=$dob&country=$country&adult=$adult&child=$child&phone_number=$phone_number&address=$address&cardId=$cardId&email=$email&checkout_date=$checkout_date&room_type=$room_type&roomNumber=$roomNumber&extra_charge=$extraCharge&payment=$totalPayment&charges=$totalCharge&balance=$totalBalance&checkin_date=$checkin_date&arrival_date=$checkin_date&departure_date=$checkout_date&payment_status=$paymentStatus');
     final response = await http.post(url);
     if (response.statusCode == 200) {
-         
+     
     
       print(totalCharge);
+        Map<String, dynamic> data = jsonDecode(response.body); 
+        print(data);
       AwesomeDialog(
          width: 500,  
         context: context,
         dialogType: DialogType.success,
-        title: 'Booking Failed',
-        desc: response.toString(),
+        title: 'Booking Success',
+        desc: data['message'],
         btnOkOnPress: () {
+          
           Navigator.of(context).pop();
        reloadDataCallback();
+         
         },
         
       ).show();
       print('Booking created successfully.');
      
     } else {
-      print('Response body: ${response.body}');
+      Map<String, dynamic> data = jsonDecode(response.body); 
         // ignore: use_build_context_synchronously
         AwesomeDialog(
         width: 500,  
         context: context,
         dialogType: DialogType.error,
-        title: 'Booking successfully',
-        desc: response.toString(),
+        title: 'Booking False',
+        desc: data['data'],
         btnOkOnPress: () {
 
         },
@@ -701,7 +749,7 @@ Boxdetail(
   title: "Guest ID",
   value: booking['guest_id'].toString(),
 ),      
-SizedBox(width: 20),
+SizedBox(width: 15),
 Boxdetail(
   title: "Guest Name",
   value:  booking['name'] ?? '',
@@ -715,7 +763,7 @@ Boxdetail(
   title: "Gender",
   value: booking['gender'] ?? '',
 ),      
-SizedBox(width: 20),
+SizedBox(width: 15),
 Boxdetail(
   title: "Date Of Birth",
   value:  booking['dob'] ?? '' ,
@@ -728,7 +776,7 @@ Boxdetail(
   title: "Adults",
   value: booking['adults'].toString() ,
 ),      
-SizedBox(width: 20),
+SizedBox(width: 15),
 Boxdetail(
   title: "Child",
   value:  booking['child'].toString() ,
@@ -741,7 +789,7 @@ Boxdetail(
   title: "Country",
   value: booking['country'] ?? '',
 ),      
-SizedBox(width: 20),
+SizedBox(width: 15),
 Boxdetail(
   title: "Address",
   value:  booking['address'] ?? '' ,
@@ -754,7 +802,7 @@ Boxdetail(
   title: "Phone Number",
   value: booking['phone_number'].toString() ?? '',
 ),      
-SizedBox(width: 20),
+SizedBox(width: 15),
 Boxdetail(
   title: "Email",
   value:  booking['email'] ?? '' ,
@@ -784,7 +832,7 @@ Row(
                                                             booking);
             },isBtn:true),
       ),
-      SizedBox(width: 20),
+      SizedBox(width: 15),
       Expanded(
       flex: 6,
       child: 
@@ -803,12 +851,12 @@ Boxdetail(
   title: "Check In",
   value: booking['checkin_date'] ?? '',
 ),
-SizedBox(width: 20),
+SizedBox(width: 15),
       Boxdetail(
   title: "Check Out",
   value:  booking['checkout_date'] ?? '' ,
 ), 
-SizedBox(width: 20),  Boxdetail(
+SizedBox(width: 15),  Boxdetail(
   title: "Night",
   value:  numberOfNights.toString() ?? '' ,
 ),
@@ -820,7 +868,7 @@ Boxdetail(
   title: "Room Tpye",
   value: booking['roomtype'].toString() ?? '' ,
 ),      
-SizedBox(width: 20),
+SizedBox(width: 15),
 Boxdetail(
   title: "Room Number",
   value:  booking['room_number'].toString() ?? '' ,
@@ -833,7 +881,7 @@ Boxdetail(
   title: "Room Rate",
   value: '\$' + ( booking['booking_room_rate' ].toString()  ?? booking['room_rate'].toString()),
 ),      
-SizedBox(width: 20),
+SizedBox(width: 15),
 Boxdetail(
   title: "Extra Charge",
   value: '\$' + booking['extra_charge'].toString() ?? '' ,
@@ -845,13 +893,18 @@ Boxdetail(
 Boxdetail(
   title: "Payment",
   value: '\$' + booking['payment'].toString() ?? '',
+),
+SizedBox(width: 15),
+Boxdetail(
+  title: "Payment Type",
+  value: booking['payment_type'].toString() ?? '',
 ),      
-SizedBox(width: 20),
+SizedBox(width: 15),
 Boxdetail(
   title: "Total charges",
   value: '\$' +  booking['charges'].toString() ?? '' ,
 ),
-SizedBox(width: 20),
+SizedBox(width: 15),
 Boxdetail(
   title: "Total Balance",
   value: '\$' +  booking['balance'].toString() ?? '' ,
@@ -904,6 +957,7 @@ Row(
     label: "Check In",
     action: () {
       
+
       onCheck(context, booking['booking_id'],'checkin',reloadDataCallback);
       
 

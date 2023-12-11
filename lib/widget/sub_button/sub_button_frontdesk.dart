@@ -5,7 +5,7 @@ import 'package:housekeepingmanagement/system_widget/system_icon.dart';
 import 'package:housekeepingmanagement/widget/sub_button/sub_button_frontdesd_widget.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
+import 'package:skeletonizer/skeletonizer.dart';
 class SubButtonFrontdesk extends StatefulWidget {
   const SubButtonFrontdesk({super.key});
 
@@ -46,11 +46,9 @@ class _SubButtonFrontdeskState extends State<SubButtonFrontdesk> {
     final data = apiResponse != null ? apiResponse!['data'] : null;
 
     return Column(children: [
-      isLoading
-          ? const Center(
-              child: CircularProgressIndicator(), 
-            )
-          : Column(
+       Skeletonizer(
+        enabled: isLoading,
+        child: Column(
               children: [
                 Row(
                   children: [
@@ -60,8 +58,8 @@ class _SubButtonFrontdeskState extends State<SubButtonFrontdesk> {
                         color: Colors.white,
                      
                       ),
-                      title: "Check In",
-                      value: data?['checkin_count'],
+                      title: "Check-In",
+                      value: data?['checkin_count'] ?? 0,
                       backgroundColor: ColorController.checkInColor,
                        action: () {
                       
@@ -82,7 +80,7 @@ class _SubButtonFrontdeskState extends State<SubButtonFrontdesk> {
                         color: Colors.white,
                       ),
                       title: "Arrival",
-                      value: data?['count_arrival'] ?? '',
+                      value: data?['count_arrival'] ?? 0,
                       backgroundColor: ColorController.arrivalsColor,
                         action: () {
                       
@@ -107,7 +105,7 @@ class _SubButtonFrontdeskState extends State<SubButtonFrontdesk> {
                         color: Colors.white,
                       ),
                       title: "Check-Out",
-                      value: data?['checkout_count'] ?? '',
+                      value: data?['checkout_count'] ?? 0,
                       backgroundColor: ColorController.checkOutColor,
                       action:() {
                          statusDialog(
@@ -126,7 +124,7 @@ class _SubButtonFrontdeskState extends State<SubButtonFrontdesk> {
                         color: Colors.white,
                       ),
                       title: "Departure",
-                      value: data?['count_departure'] ?? '',
+                      value: data?['count_departure'] ?? 0,
                       backgroundColor: ColorController.departuresColor,
                          action: () {
                       
@@ -151,7 +149,7 @@ class _SubButtonFrontdeskState extends State<SubButtonFrontdesk> {
                         color: Colors.white,
                       ),
                       title: "Available",
-                      value: data?['available_rooms'] ?? '',
+                      value: data?['available_rooms'] ?? 0,
                       backgroundColor: ColorController.availableColor,
                       action: () {
                       
@@ -172,8 +170,8 @@ class _SubButtonFrontdeskState extends State<SubButtonFrontdesk> {
                         iconController.inHouseIcon,
                         color: Colors.white,
                       ),
-                      title: "Inhouse",
-                      value: data?['inHouse'] ?? '',
+                      title: "In-House",
+                      value: data?['inHouse'] ?? 0,
                       backgroundColor: ColorController.inhouse,
                         action: () {
                       
@@ -194,6 +192,6 @@ class _SubButtonFrontdeskState extends State<SubButtonFrontdesk> {
                 // Other rows and widgets...
               ],
             )
-    ]);
+    )]);
   }
 }

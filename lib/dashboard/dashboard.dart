@@ -5,6 +5,7 @@ import 'package:housekeepingmanagement/data_list/data_check_out_list.dart';
 import 'package:housekeepingmanagement/widget/current_date.dart';
 import 'package:housekeepingmanagement/widget/dashboard_today.dart';
 import 'package:housekeepingmanagement/widget/guest_chart.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class Dashboard extends StatefulWidget {
   const Dashboard({Key? key}) : super(key: key);
@@ -168,21 +169,22 @@ Expanded(
                       future: listviewClicked
                           ? fetchCheckInData()
                           : fetchCheckOutData(),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const Center(
-                              child: CircularProgressIndicator());
-                        } else if (snapshot.hasError) {
+                      builder: (context, snapshot) {if (snapshot.hasError) {
                           return Center(
                               child: Text('Error: ${snapshot.error}'));
                         } else {
-                          return AnimatedSwitcher(
+                          return 
+                           Skeletonizer(
+        enabled: snapshot.connectionState ==
+                            ConnectionState.waiting,
+        child:
+                           AnimatedSwitcher(
                             duration: const Duration(milliseconds: 300),
                             child: listviewClicked
                                 ? const DataCheckInList()
                                 : const DataCheckOutList(),
-                          );
+                          )
+                           );
                         }
                       },
                     ),

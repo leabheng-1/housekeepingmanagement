@@ -18,7 +18,9 @@ class CustomTextField extends StatelessWidget {
   final bool isCurrency;
   final bool enabled;
   final bool isNote;
-  final ValueChanged<String>? onChanged; // New callback for text changes
+  final ValueChanged<String>? onChanged;
+  final String? Function(String?)? validator; 
+  final bool  showAsterisk;// Validation function
 
   CustomTextField({
     Key? key,
@@ -35,25 +37,47 @@ class CustomTextField extends StatelessWidget {
     this.isCurrency = false,
     this.enabled = true,
     this.isNote = false,
-    this.onChanged, // Pass the callback function
+    this.onChanged,
+    this.showAsterisk = false,
+    this.validator, // Pass the validation function
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return 
+    
+    Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Padding(
           padding: EdgeInsets.only(left: 10),
           child: SizedBox(height: 2),
         ),
-        Text(
-          labelText,
+        SizedBox(height: 5,),
+       RichText(
+  text: TextSpan(
+    children: [
+      TextSpan(
+        text: labelText,
+        style: const TextStyle(
+          color: Colors.black,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      if (showAsterisk)  // Replace 'showAsterisk' with your actual condition
+        TextSpan(
+          text: ' *',
           style: const TextStyle(
-            color: Colors.black,
+            color: Colors.red,
+            fontSize: 15,
             fontWeight: FontWeight.bold,
           ),
         ),
+    ],
+  ),
+),
+SizedBox(height: 5,),
+        
         if (isNote && noteText != null)
           Text(
             noteText!,
@@ -87,9 +111,9 @@ class CustomTextField extends StatelessWidget {
                     : null),
             controller: controller,
             onChanged: (text) {
-              // Invoke the callback function when text changes
               onChanged?.call(text);
             },
+         // Set the validation function
             decoration: const InputDecoration(
               border: InputBorder.none,
               contentPadding: EdgeInsets.symmetric(vertical: 13),
@@ -132,6 +156,7 @@ class DatePickerTextField extends StatefulWidget {
     this.enddate = '2500-1-1',
     required this.checkcurrnetdate,
     required this.onDateSelectedDate,
+
   });
 
   @override
@@ -192,13 +217,20 @@ class _DatePickerTextFieldState extends State<DatePickerTextField> {
           padding: EdgeInsets.only(left: 10),
           child: SizedBox(height: 10),
         ),
-        Text(
-          widget.labelText,
-          style: const TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-          ),
+             RichText(
+  text: TextSpan(
+    children: [
+      TextSpan(
+        text: widget.labelText,
+        style: const TextStyle(
+          color: Colors.black,
+          fontWeight: FontWeight.bold,
         ),
+      ),
+       ],
+  ),
+),
+SizedBox(height: 5,),
         Container(
           width: widget.width,
           height: widget.height,
@@ -307,14 +339,23 @@ class _CustomDropdownButtonState extends State<CustomDropdownButton> {
         ),
         Visibility(
           visible: widget.labelText != null && widget.labelText!.isNotEmpty,
-          child: Text(
-            widget.labelText!,
-            style: const TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          child:
+           RichText(
+  text: TextSpan(
+    children: [
+      TextSpan(
+        text:   widget.labelText!,
+        style: const TextStyle(
+          color: Colors.black,
+          fontWeight: FontWeight.bold,
         ),
+      ),
+      
+    ],
+  ),
+),
+        ),
+        SizedBox(height: 5,),
         Container(
           height: 40,
           width: widget.width,
@@ -602,13 +643,15 @@ class _DateRangeWidgetState extends State<DateRangeWidget> {
       ),
     ),
     
-    
+    SizedBox(
+      width: 15,
+    ),
     Center(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: EdgeInsets.only(left: 10),
+            padding: EdgeInsets.only(left: 15),
             child: SizedBox(height: 10),
           ),
           Container(

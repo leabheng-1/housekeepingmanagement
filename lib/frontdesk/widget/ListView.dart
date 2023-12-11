@@ -17,8 +17,7 @@ class ListViewbooking extends StatelessWidget {
                                                           const EdgeInsets.all(
                                                               16.0),
                                                       decoration: BoxDecoration(
-                                                        color: ColorController
-                                                            .boxBooingColor,
+                                                        color: booking['booking_id'] != null ? Color.fromARGB(255, 193, 255, 194) : ColorController.boxBooingColor,
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(20.0),
@@ -61,10 +60,10 @@ class ListViewbooking extends StatelessWidget {
                                                               const SizedBox(
                                                                   height: 2),
                                  Container(
-  width: 100, // Set the desired width
+  width: 130, // Set the desired width
   child: Text(
     booking['booking_id'] == null
-        ? 'Variable'
+        ? 'Room Available'
         : '${booking['name']}',
     style: const TextStyle(
       height: 1,
@@ -169,7 +168,7 @@ class ListViewbooking extends StatelessWidget {
                                                                   if (booking['booking_id'] !=null)
                                                                     Tooltip(
                                                                       message:
-                                                                          '${booking['payment_status']}',
+                                                                          '${booking['payment_type']}',
                                                                       child:
                                                                           Container(
                                                                         width:

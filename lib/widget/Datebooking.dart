@@ -129,13 +129,28 @@ _updateValues();        }
             padding: EdgeInsets.only(left: 10),
             child: SizedBox(height: 10),
           ),
-          const Text(
-            'Check-In',
-            style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-            ),
+           
+                RichText(
+  text: TextSpan(
+    children: [
+      TextSpan(
+        text: 'Check In',
+        style: const TextStyle(
+          color: Colors.black,
+          fontWeight: FontWeight.bold,
+        ),
+      ),  // Replace 'showAsterisk' with your actual condition
+        TextSpan(
+          text: ' *',
+          style: const TextStyle(
+            color: Colors.red,
+            fontWeight: FontWeight.bold,
           ),
+        ),
+    ],
+  ),
+),
+SizedBox(height: 5,),
           Container(
             width: 200,
             height: widget.height,
@@ -175,13 +190,27 @@ _updateValues();        }
               padding: EdgeInsets.only(left: 10),
               child: SizedBox(height: 10),
             ),
-            const Text(
-              'Check-Out',
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+                            RichText(
+  text: TextSpan(
+    children: [
+      TextSpan(
+        text: 'Check Out',
+        style: const TextStyle(
+          color: Colors.black,
+          fontWeight: FontWeight.bold,
+        ),
+      ),  // Replace 'showAsterisk' with your actual condition
+        TextSpan(
+          text: ' *',
+          style: const TextStyle(
+            color: Colors.red,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+    ],
+  ),
+),
+SizedBox(height: 5,),
             Container(
               width: 200,
               height: widget.height,
@@ -222,13 +251,27 @@ _updateValues();        }
               padding: EdgeInsets.only(left: 10),
               child: SizedBox(height: 10),
             ),
-            const Text(
-              'Nights',
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+                            RichText(
+  text: TextSpan(
+    children: [
+      TextSpan(
+        text: 'Nights',
+        style: const TextStyle(
+          color: Colors.black,
+          fontWeight: FontWeight.bold,
+        ),
+      ),  // Replace 'showAsterisk' with your actual condition
+        TextSpan(
+          text: ' *',
+          style: const TextStyle(
+            color: Colors.red,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+    ],
+  ),
+),
+SizedBox(height: 5,),
             Container(
               width: 120,
               height: widget.height,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:housekeepingmanagement/report/widget/PieChartReport.dart';
+import 'package:housekeepingmanagement/report/widget/actionBtnReport.dart';
 import 'package:housekeepingmanagement/report/widget/chart.dart';
 import 'package:housekeepingmanagement/report/widget/table.dart';
 
@@ -57,7 +58,7 @@ class Report extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Small Title",
+              "Monthly Revenue",
               style: TextStyle(fontSize: 14),
             ),
             Text(
@@ -105,11 +106,11 @@ Expanded(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Small Title",
+              "Total",
               style: TextStyle(fontSize: 14),
             ),
             Text(
-              "Big Title",
+              "Guest",
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
           ],
@@ -124,18 +125,10 @@ Expanded(
         ),
         
         // Row 2 with flex 6
+        
         Expanded(
           flex: 6,
-          child: Container(
-            margin: EdgeInsets.all(10.0),
-            padding: EdgeInsets.all(10),
-            decoration: BoxDecoration(
-    color: const Color.fromARGB(255, 255, 255, 255),
-    borderRadius: BorderRadius.circular(15.0), // Adjust the border radius as needed
-    
-  ),
-            child: dailyReport()
-          ),
+          child: ActionBtnReport() 
         ),
       ],
     )

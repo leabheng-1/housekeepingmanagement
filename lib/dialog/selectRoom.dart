@@ -64,6 +64,7 @@ widget.getroomrateController.text =  roomData
           .map((room) => room["room_rate"].toString() )
           .toString().replaceAll('(', '\$').replaceAll(')', '');
           print(widget.roomIdController.text);
+          print(widget.getroomrateController.text );
 }
 
 

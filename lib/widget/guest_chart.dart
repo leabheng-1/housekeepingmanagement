@@ -78,10 +78,14 @@ class GuestChartState extends State<GuestChart> {
   @override
   Widget build(BuildContext context) {
     return loading
-          ? Align(
+          ? SizedBox(
+      width: 350,
+      height: 270,
+      child: Align(
   alignment: Alignment.center,
   child: CircularProgressIndicator(),
 )
+          )
 : SizedBox(
       width: 350,
       height: 270,

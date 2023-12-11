@@ -142,6 +142,7 @@ TextEditingController totalChargeController = TextEditingController();
 TextEditingController totalBalanceController = TextEditingController();
 TextEditingController roomIdController= TextEditingController();
 TextEditingController getroomrateController= TextEditingController();
+
 // Check if the values are not null before assigning them to the controllers
 
 
@@ -409,7 +410,7 @@ SizedBox(width:20,),
   icon: iconController.saveIcon,
   textColor: Colors.white,
   color: Colors.blue,
-  label: "Create",
+  label: "Update",
   action: () {
        final guestName = guestNameController.text;
     final gender = genderController.text ;
@@ -464,7 +465,9 @@ SizedBox(width:20,),
   totalBalance.replaceAll('\$', ''),
   checkIn,   // Use checkIn directly
   roomType,
-  roomIdController.text ); },
+  roomIdController.text,
+  booking['payment_type']
+   ); },
 )
 ]
           )
@@ -502,10 +505,11 @@ Future<void> submitUpdatedData(
     String checkin_date,
     String roomType,
         String room_id,
+        String paymentType
     ) async {
 
   final String baseUrl1 = 'http://localhost:8000/api/booking/update/$booking_id';
-   final url = Uri.parse('$baseUrl1?booking_note=$bookingNote&booking_air_method=$bookingAirMethod&room_rate=$roomRate&booking_status=booking&name=$name&gender=$gender&dob=$dob&country=$country&adult=$adult&child=$child&phone_number=$phone_number&address=$address&cardId=$cardId&email=$email&checkout_date=$checkout_date&room_type=$room_type&roomNumber=$roomNumber&extra_charge=$extraCharge&payment=$totalPayment&charges=$totalCharge&balance=$totalBalance&checkin_date=$checkin_date&arrival_date=$checkin_date&departure_date=$checkout_date&payment_status=$paymentStatus');
+   final url = Uri.parse('$baseUrl1?booking_note=$bookingNote&payment_type=$paymentType&booking_air_method=$bookingAirMethod&room_rate=$roomRate&booking_status=booking&name=$name&gender=$gender&dob=$dob&country=$country&adult=$adult&child=$child&phone_number=$phone_number&address=$address&cardId=$cardId&email=$email&checkout_date=$checkout_date&room_type=$room_type&roomNumber=$roomNumber&extra_charge=$extraCharge&payment=$totalPayment&charges=$totalCharge&balance=$totalBalance&checkin_date=$checkin_date&arrival_date=$checkin_date&departure_date=$checkout_date&payment_status=$paymentStatus');
     final response = await http.put(url);      
     List<dynamic> bookingData = await ApiFunctionsBookingbyid.fetchBookingData(booking['booking_id']);
     if (response.statusCode == 200) {

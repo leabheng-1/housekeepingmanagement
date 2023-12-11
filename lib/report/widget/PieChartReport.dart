@@ -94,8 +94,8 @@ class PieChart2State extends State{
                 const SizedBox(
             height: 100,
           ),
-          Expanded(child:
-          const Center(
+          const Expanded(child:
+          Center(
           
   child: Row(
     mainAxisAlignment: MainAxisAlignment.center,
@@ -154,7 +154,7 @@ class PieChart2State extends State{
         case 0:
           return PieChartSectionData(
           
-            color: Color.fromARGB(255, 28, 148, 228),
+            color: AppColors.contentColorBlue,
             value: ((singleRoom / total) * 100).toDouble(),
             title: ((singleRoom / total) * 100).toStringAsFixed(2) +'%',
             radius: radius,
@@ -167,7 +167,7 @@ class PieChart2State extends State{
           );
         case 1:
           return PieChartSectionData(
-            color: AppColors.contentColorYellow,
+            color: Colors.yellow,
             value: ((twinRoom / total) * 100).toDouble(),
             title: ((twinRoom / total) * 100).toStringAsFixed(2) +'%',
             radius: radius,
@@ -180,7 +180,7 @@ class PieChart2State extends State{
           );
         case 2:
           return PieChartSectionData(
-            color: AppColors.contentColorPurple,
+            color: ColorController.noshow,
             value: ((noShow / total) * 100).toDouble(),
             title: ((noShow / total) * 100).toStringAsFixed(2) +'%',
             radius: radius,
@@ -193,7 +193,7 @@ class PieChart2State extends State{
           );
         case 3:
           return PieChartSectionData(
-            color: AppColors.contentColorGreen,
+            color: ColorController.cancel,
             value: ((cancel / total) * 100).toDouble(),
             title: ((cancel / total) * 100).toStringAsFixed(2) +'%',
             radius: radius,

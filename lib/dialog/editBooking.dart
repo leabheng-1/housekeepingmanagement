@@ -132,6 +132,7 @@ TextEditingController totalChargeController = TextEditingController();
 TextEditingController totalBalanceController = TextEditingController();
 TextEditingController roomIdController= TextEditingController();
 TextEditingController getroomrateController= TextEditingController();
+TextEditingController paymentTypeController= TextEditingController();
 // Check if the values are not null before assigning them to the controllers
 
 
@@ -184,7 +185,7 @@ String? cardId = booking['card_id'] as String?;
 String? otherInformation = booking['other_information'] as String?;
 int? isDelete = booking['is_delete'] as int?;
 String? housekeepingStatus = booking['housekeeping_status'] as String?;
-
+paymentTypeController.text = booking['payment_type'] ?? '';
 String? date = booking['date'] as String?;
  bookingIdController.text = bookingId?.toString() ?? '';
   checkInController.text = checkinDate ?? DateTime.now().toString();
@@ -252,10 +253,10 @@ bookingNoteController.text = note ?? '';
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(width: 20), // Add spacing between columns
+              SizedBox(width: 15), // Add spacing between columns
               Expanded(
                 child: buildLabelAndContent('Update Booking',[
-                      SizedBox(width: 20), 
+                      SizedBox(width: 15), 
                  DateRangePickerWidget(
               labelText: 'Check-Out Date',
               checkin:checkInController,
@@ -287,7 +288,7 @@ CheckSelectRoomRate(
           },
   
   ),
-          SizedBox(width: 20), 
+          SizedBox(width: 15), 
           CustomDropdownButton(
             width: 150,
             labelText: 'Air Method',
@@ -325,10 +326,23 @@ CheckSelectRoomRate(
                  updateFields(nightCal);
           }
         )
+          ,SizedBox(width: 15)
+        ,  CustomDropdownButton(
+                      labelText: 'Type',
+            width: 155,
+            items: ['Cash', 'Bank'],
+            selectedValue:paymentTypeController.text ,
+            hintText: 'Payment ',
+            onChanged: (value) {
+                paymentTypeController.text = value!;
+                print(paymentTypeController.text);
+
+            },
+          )
                     
-                    ,SizedBox(width: 20),
+                    ,SizedBox(width: 15),
                     CustomTextField(
-                      width: 230,
+                      width: 155,
                       isCurrency: true,
                       controller: extraChargeController,
                       labelText: 'Extra Charge',
@@ -347,14 +361,14 @@ CheckSelectRoomRate(
                       onChanged:(value){
                  updateFields(nightCal);
           },
-                    ),SizedBox(width: 20),
+                    ),SizedBox(width: 15),
                     CustomTextField(
                       width: 510/3,
                         isCurrency: true,
                         enabled: false,
                       controller: totalChargeController,
                       labelText: 'Total Charge',
-                    ),SizedBox(width: 20),
+                    ),SizedBox(width: 15),
                     CustomTextField(
                       width: 510/3,
                       enabled: false,
@@ -465,7 +479,9 @@ SizedBox(width:20,),
   totalBalance.replaceAll('\$', ''),
   checkIn,   // Use checkIn directly
   roomType,
-  roomIdController.text ); },
+  roomIdController.text,
+  paymentTypeController.text
+   ); },
 )
 ]
           )
@@ -503,10 +519,12 @@ Future<void> submitUpdatedData(
     String checkin_date,
     String roomType,
         String room_id,
+        String paymentType
+
     ) async {
 
   final String baseUrl1 = 'http://localhost:8000/api/booking/update/$booking_id';
-   final url = Uri.parse('$baseUrl1?booking_note=$bookingNote&booking_air_method=$bookingAirMethod&room_rate=$roomRate&booking_status=booking&name=$name&gender=$gender&dob=$dob&country=$country&adult=$adult&child=$child&phone_number=$phone_number&address=$address&cardId=$cardId&email=$email&checkout_date=$checkout_date&room_type=$room_type&roomNumber=$roomNumber&extra_charge=$extraCharge&payment=$totalPayment&charges=$totalCharge&balance=$totalBalance&checkin_date=$checkin_date&arrival_date=$checkin_date&departure_date=$checkout_date&payment_status=$paymentStatus');
+   final url = Uri.parse('$baseUrl1?booking_note=$bookingNote&payment_type=$paymentType&booking_air_method=$bookingAirMethod&room_rate=$roomRate&booking_status=booking&name=$name&gender=$gender&dob=$dob&country=$country&adult=$adult&child=$child&phone_number=$phone_number&address=$address&cardId=$cardId&email=$email&checkout_date=$checkout_date&room_type=$room_type&roomNumber=$roomNumber&extra_charge=$extraCharge&payment=$totalPayment&charges=$totalCharge&balance=$totalBalance&checkin_date=$checkin_date&arrival_date=$checkin_date&departure_date=$checkout_date&payment_status=$paymentStatus');
     final response = await http.put(url);      
     List<dynamic> bookingData = await ApiFunctionsBookingbyid.fetchBookingData(booking['booking_id']);
     if (response.statusCode == 200) {
@@ -517,7 +535,7 @@ Future<void> submitUpdatedData(
          width: 500,  
         context: context,
         dialogType: DialogType.success,
-        title: 'Booking Failed',
+        title: 'Update Booking Success',
         desc: response.toString(),
         btnOkOnPress: () {  
           reloadDataCallback();

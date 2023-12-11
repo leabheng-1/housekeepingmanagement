@@ -1,6 +1,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:housekeepingmanagement/data_list/textbutton_list.dart';
+import 'package:housekeepingmanagement/frontdesk/widget/Empty.dart';
 import 'package:housekeepingmanagement/widget/checkinandcheckout.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -85,7 +86,9 @@ class _DataCheckOutListState extends State<DataCheckOutList> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return 
+    bookingsData.length <= 0 ? EmptyStateWidget() : 
+     Padding(
       padding: const EdgeInsets.only(top: 10),
       child: Row(
         children: [

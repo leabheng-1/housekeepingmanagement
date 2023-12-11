@@ -17,8 +17,8 @@ class gridViewbooking extends StatelessWidget {
                                                           const EdgeInsets.all(
                                                               16.0),
                                                       decoration: BoxDecoration(
-                                                        color: ColorController
-                                                            .boxBooingColor,
+                                                    color: booking['booking_id'] != null ? Color.fromARGB(255, 193, 255, 194) : ColorController.boxBooingColor,
+
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(20.0),
@@ -126,7 +126,7 @@ class gridViewbooking extends StatelessWidget {
                                                                   height: 2),
                                                               Text(
                                                                   booking['booking_id'] == null
-      ? 'Variable'
+      ? 'Room Available'
                                                                 :'${booking['name']}',
                                                                 style:
                                                                     const TextStyle(
@@ -221,7 +221,7 @@ class gridViewbooking extends StatelessWidget {
                                                                   if (booking['booking_id'] !=null)
                                                                     Tooltip(
                                                                       message:
-                                                                          '${booking['payment_status']}',
+                                                                          '${booking['payment_type']}',
                                                                       child:
                                                                           Container(
                                                                         width:

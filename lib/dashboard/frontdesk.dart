@@ -15,6 +15,7 @@ import 'package:housekeepingmanagement/widget/sub_button/sub_button_frontdesk.da
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 DateTime dateurl = DateTime.now();
@@ -31,18 +32,20 @@ class FrontDesk extends StatefulWidget {
 
 class _FrontDeskState extends State<FrontDesk> {
   List<dynamic> bookings = [];
-
+Key dropdownKey = UniqueKey();
   bool isLoading = true;
   String message = '';
 
   void reloadData() {
     setState(() {
       fetchBookingData();
+      dropdownKey = UniqueKey();
     });
   }
 
   @override
   void initState() {
+       isLoading = true;
     super.initState();
     _selectedDay = _focusedDay;
     _selectedEvents =
@@ -54,13 +57,12 @@ class _FrontDeskState extends State<FrontDesk> {
   bool isIcon2Active = false;
   Future<void> fetchBookingData() async {
     isLoading = true;
+  
     String formattedDate = DateFormat('yyyy-MM-dd').format(dateurl);
     final response = await http.get(Uri.parse(
         'http://localhost:8000/api/booking/all?date=${formattedDate}&booking_status=${roomStatusfilter}&housekeeping_status=${housekeepingStatusfilter}&guest_name=${guestStatusfilter}'));
-    print(
-        'http://localhost:8000/api/booking/all?date=${formattedDate}&booking_status=${roomStatusfilter}&housekeeping_status=${housekeepingStatusfilter}&guest_name=${guestStatusfilter}');
-
     if (response.statusCode == 200) {
+      
       isLoading = false;
       final Map<String, dynamic> responseData = json.decode(response.body);
       setState(() {
@@ -139,6 +141,7 @@ class _FrontDeskState extends State<FrontDesk> {
 
   @override
   Widget build(BuildContext context) {
+    String formattedDate = DateFormat('yyyy-MM-dd').format(dateurl);
     Map<String, dynamic> newbooking = {};
      newbooking = {
       "booking_id": null,
@@ -185,6 +188,7 @@ class _FrontDeskState extends State<FrontDesk> {
       "date": null
     };
     return SingleChildScrollView(
+      
       child: Container(
         padding: const EdgeInsets.all(10),
         height: 880,
@@ -200,7 +204,7 @@ class _FrontDeskState extends State<FrontDesk> {
                     action: () {
                       
                       BookingDialog(context, reloadData)
-                          .showCreateBookingDialog(newbooking);
+                          .showCreateBookingDialog(newbooking,dateurl);
                     },
                     key: UniqueKey(),
                   )
@@ -300,7 +304,10 @@ class _FrontDeskState extends State<FrontDesk> {
                           ),
                           Expanded(
                             flex: 3,
+                           
                             child: Container(
+                                key:UniqueKey(),
+                             
                               padding: const EdgeInsets.all(10),
                               child: const Center(
                                 child: SubButtonFrontdesk(),
@@ -373,11 +380,9 @@ is_list_view = 1;
                           Expanded(
                             child: Scaffold(
                               backgroundColor: Colors.transparent,
-                              body: isLoading
-                                  ? const Center(
-                                      child: CircularProgressIndicator(),
-                                    )
-                                  : ListView.builder(
+                              body:   Skeletonizer(
+        enabled: isLoading,
+        child: ListView.builder(
                                       itemCount: (bookings.length / is_list_view).ceil(),
                                       itemBuilder:
                                           (BuildContext context, int rowIndex) {
@@ -426,7 +431,7 @@ is_list_view = 1;
                                                     BookingDialog(
                                                             context, reloadData)
                                                         .showCreateBookingDialog(
-                                                            booking);
+                                                            booking,dateurl);
                                                     ;
                                                   } else {
                                                     BookingDialog(
@@ -451,9 +456,11 @@ is_list_view = 1;
                                         );
                                       },
                                     ),
+                              )
                             ),
                           )
                         ],
+                      
                       ),
                     ),
                   ),

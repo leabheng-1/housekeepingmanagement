@@ -1,9 +1,12 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:housekeepingmanagement/frontdesk/widget/Empty.dart';
 import 'package:housekeepingmanagement/system_widget/box_detail.dart';
 import 'package:housekeepingmanagement/system_widget/btn.dart';
-import 'package:housekeepingmanagement/system_widget/custom_text_field.dart';
+import 'package:housekeepingmanagement/widget/country.dart';
+import 'package:housekeepingmanagement/widget/inputbox.dart';
 import 'package:housekeepingmanagement/system_widget/system_color.dart';
+import 'package:housekeepingmanagement/system_widget/system_icon.dart';
 import 'package:http/http.dart' as http;
 // ignore: depend_on_referenced_packages
 import 'package:intl/intl.dart';
@@ -68,9 +71,9 @@ class _HkDataTableState extends State<HkDataTable> {
   late List<Hk> hks;
   int currentPage = 1;
   int perPage = 10;
-  String? roomStatusFilter;
-  String? hkStatusFilter;
-  String? guestNameFilter;
+  String? roomStatusFilter = 'All';
+  String? hkStatusFilter = 'All';
+  String? guestNameFilter = 'All';
   int totalPages = 1;
 
   @override
@@ -81,9 +84,12 @@ class _HkDataTableState extends State<HkDataTable> {
 
   Future<void> fetchData() async {
     loading = true;
+    if (guestNameFilter!.isEmpty) {
+      guestNameFilter = 'All';
+    }
     final response = await http.get(
-        Uri.parse('http://localhost:8000/api/booking/all?page=$currentPage'));
-
+        Uri.parse('http://localhost:8000/api/booking/all?page=$currentPage&room_status=$roomStatusFilter&housekeeping_status=$hkStatusFilter&guest_name=$guestNameFilter'));
+print('http://localhost:8000/api/booking/all?page=$currentPage&room_status=$roomStatusFilter&housekeeping_status=$hkStatusFilter&guest_name=$guestNameFilter');
     if (response.statusCode == 200) {
       loading = false;
       final jsonData = json.decode(response.body);
@@ -99,28 +105,28 @@ class _HkDataTableState extends State<HkDataTable> {
   }
 
   // Filter hk data based on room status, hk status, and guest name
-  List<Hk> getFilteredHks() {
-    List<Hk> filteredHks = [...hks];
+  // List<Hk> getFilteredHks() {
+  //   List<Hk> filteredHks = [...hks];
 
-    if (roomStatusFilter != null && roomStatusFilter!.isNotEmpty) {
-      filteredHks =
-          filteredHks.where((hk) => hk.roomStatus == roomStatusFilter).toList();
-    }
+  //   if (roomStatusFilter != null && roomStatusFilter!.isNotEmpty) {
+  //     filteredHks =
+  //         filteredHks.where((hk) => hk.roomStatus == roomStatusFilter).toList();
+  //   }
 
-    if (hkStatusFilter != null && hkStatusFilter!.isNotEmpty) {
-      filteredHks =
-          filteredHks.where((hk) => hk.hkStatus == hkStatusFilter).toList();
-    }
+  //   if (hkStatusFilter != null && hkStatusFilter!.isNotEmpty) {
+  //     filteredHks =
+  //         filteredHks.where((hk) => hk.hkStatus == hkStatusFilter).toList();
+  //   }
 
-    if (guestNameFilter != null && guestNameFilter!.isNotEmpty) {
-      filteredHks = filteredHks
-          .where((hk) =>
-              hk.name.toLowerCase().contains(guestNameFilter!.toLowerCase()))
-          .toList();
-    }
+  //   if (guestNameFilter != null && guestNameFilter!.isNotEmpty) {
+  //     filteredHks = filteredHks
+  //         .where((hk) =>
+  //             hk.name.toLowerCase().contains(guestNameFilter!.toLowerCase()))
+  //         .toList();
+  //   }
 
-    return filteredHks;
-  }
+  //   return filteredHks;
+  // }
 
   Future<void> showViewDialog(Hk hk) async {
     Color roomStatusColor;
@@ -216,6 +222,7 @@ class _HkDataTableState extends State<HkDataTable> {
                   const SizedBox(width: 20),
                   Boxdetail(
                       title: "Housekeeping Status",
+                      textColor: Colors.white,
                       value: hk.housekeepingStatus,
                       backgroundColor: roomStatusColor,
                       width: 450),
@@ -228,55 +235,23 @@ class _HkDataTableState extends State<HkDataTable> {
                 ],
               ),
               Expanded(
-                child: Boxdetail(
+                child: Boxdetail( 
                     title: "Note", value: hk.note, height: 200, width: 920),
               ),
             ],
           ),
           actions: [
-            SizedBox(
-              width: 150,
-              child: TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all(Colors.blue.withOpacity(0.4)),
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                  ),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(top: 5, bottom: 5),
-                      width: 40.0,
-                      height: 40.0,
-                      decoration: BoxDecoration(
-                        color: Colors.blue.withOpacity(0.4),
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      child: const Icon(
-                        Icons.edit,
-                        color: Colors.white,
-                        size: 24,
-                      ),
-                    ),
-                    const SizedBox(width: 10.0),
-                    const Text(
-                      "Edit",
-                      style: TextStyle(
-                        color: Colors.blue,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            )
+           BtnAction(
+    background: Color.fromARGB(52, 0, 0, 0),
+    icon: iconController.closeIcon,
+    textColor: Colors.white,
+    color: ColorController.CloseColor,
+    label: "Cancel",
+    action: () {
+      Navigator.of(context).pop();
+      // onCheck(context, widget.booking['booking_id'],'checkin',widget.onRefresh);
+    },
+  ),
           ],
         );
       },
@@ -363,9 +338,14 @@ class _HkDataTableState extends State<HkDataTable> {
             children: [
               Row(children: [
                 DatePickerTextField(
+                  checkcurrnetdate: DateTime(2000),
                   labelText: 'Select a Date',
                   controller:
-                      selectedDate, // You can provide a controller if needed
+                      selectedDate, 
+                       onDateSelectedDate: (selectedDate) {
+              // Handle the selected date here
+              print('Selected Date: $selectedDate');
+            },// You can provide a controller if needed
                 ),
               ]),
               Row(children: [
@@ -386,10 +366,11 @@ class _HkDataTableState extends State<HkDataTable> {
                 ),
                 const SizedBox(width: 30),
                 CustomDropdownButton(
+                  labelText: 'Housekeeping Status',
                   bg: const Color.fromRGBO(255, 255, 255, 1),
                   width: 450,
                   items: const ['Clean', 'Cleaning', 'Dirty'],
-                  selectedValue: hkStatusController.text,
+                  selectedValue: hkStatusController.text ?? '',
                   hintText: 'Housekeeping Status',
                   onChanged: (value) {
                     setState(() {
@@ -417,15 +398,25 @@ class _HkDataTableState extends State<HkDataTable> {
             ],
           ),
           actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the edit dialog
-              },
-              child: const Text("Cancel"),
-            ),
-            TextButton(
-              onPressed: () {
-                submitUpdatedData(
+              BtnAction(
+    background: Color.fromARGB(52, 0, 0, 0),
+    icon: iconController.closeIcon,
+    textColor: Colors.white,
+    color: ColorController.CloseColor,
+    label: "Cancel",
+    action: () {
+      Navigator.of(context).pop();
+      // onCheck(context, widget.booking['booking_id'],'checkin',widget.onRefresh);
+    },
+  ),
+            BtnAction(
+    background: Color.fromARGB(52, 0, 0, 0),
+    icon: iconController.closeIcon,
+    textColor: Colors.white,
+    color: ColorController.primaryColor,
+    label: "Update ",
+    action: () {
+     submitUpdatedData(
                     roomTypeController.text,
                     housekeeperController.text,
                     hk.roomId,
@@ -434,9 +425,10 @@ class _HkDataTableState extends State<HkDataTable> {
                     noteController.text,
                     RoomStatusController.text,
                     hk.date);
-              },
-              child: const Text("Save Changes"),
-            ),
+          
+    },
+  ),
+          
           ],
         );
       },
@@ -477,11 +469,7 @@ class _HkDataTableState extends State<HkDataTable> {
   @override
   Widget build(BuildContext context) {
     String formattedDate = DateFormat('dd-MM-yyyy').format(currentDate);
-    return  loading
-                                  ? const Center(
-                                      child: CircularProgressIndicator(),
-                                    )
-                                  : Container(
+    return   Container(
       decoration: BoxDecoration(
         color: const Color.fromARGB(
             255, 255, 255, 255), // Set your desired background color
@@ -498,70 +486,72 @@ class _HkDataTableState extends State<HkDataTable> {
                     margin: EdgeInsets.only(top: 5),
                     padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
                     child: Row(
+                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         CustomDropdownButton(
                           bg: Color.fromRGBO(235, 235, 235, 1.0),
                           width: 300,
+                           labelText: 'Room Status',
                           items: ['All', 'Available', 'Occupied'],
-                          selectedValue: roomStatusFilter,
+                          selectedValue: roomStatusFilter ?? 'All',
                           hintText: 'Room Status',
                           onChanged: (value) {
                             setState(() {
                               roomStatusFilter = value;
+                              currentPage = 1;
+                              fetchData();
                             });
                           },
                         ),
                         const SizedBox(width: 10),
                         CustomDropdownButton(
+                          labelText: 'Housekeeping Status',
                           bg: const Color.fromRGBO(235, 235, 235, 1.0),
                           width: 300,
-                          items: const ['', 'Clean', 'Cleaning', 'Dirty'],
-                          selectedValue: hkStatusFilter,
+                          items: const ['All', 'Clean', 'Cleaning', 'Dirty'],
+                          selectedValue: hkStatusFilter ?? 'All',
                           hintText: 'Housekeeping Status',
                           onChanged: (value) {
                             setState(() {
                               hkStatusFilter = value;
+                              currentPage = 1;
+                              fetchData();
                             });
                           },
                         ),
-                        const SizedBox(width: 10),
-                        SizedBox(
-                          height: 40,
-                          width: MediaQuery.of(context).size.width * 0.2,
-                          child: Expanded(
-                            flex: 1,
-                            child: TextFormField(
-                              decoration: InputDecoration(
-                                contentPadding: const EdgeInsets.all(16),
-                                hintText: 'Guest Name',
-                                hintStyle: const TextStyle(fontSize: 14),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                              ),
-                              onChanged: (value) {
-                                setState(() {
-                                  guestNameFilter = value;
-                                });
-                              },
-                            ),
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.centerRight,
+                          const SizedBox(width: 10),
+                         CustomTextField(
+                      controller: textEditingController,
+                      labelText: 'Guest Name',
+                      width: 265,
+                           onChanged:(value){
+                guestNameFilter = value;
+                                  currentPage = 1;
+                                   fetchData();
+          },
+                    ),
+                        
+                    Align(
+                          alignment: Alignment.center,
                           child: Text(
                             formattedDate,
                             style: const TextStyle(fontSize: 16),
                           ),
-                        ),
+                        ),    
                       ],
+                      
                     ),
+                    
                   ),
                 ],
               )
             ],
           ),
-          SingleChildScrollView(
+          loading
+                                  ? const Center(
+                                      child: CircularProgressIndicator(),
+                                    )
+                                  :  hks.isEmpty ? EmptyStateWidget() : SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: DataTable(
               columnSpacing: MediaQuery.of(context).size.width * 0.06,
@@ -599,7 +589,7 @@ class _HkDataTableState extends State<HkDataTable> {
                   numeric: false,
                 ),
               ],
-              rows: getFilteredHks().asMap().entries.map((entry) {
+              rows: hks.asMap().entries.map((entry) {
                 int index = entry.key + 1;
                 Hk hk = entry.value;
 
@@ -643,7 +633,7 @@ class _HkDataTableState extends State<HkDataTable> {
                     DataCell(
                       Center(
                         child: Container(
-                          width: 120,
+                          width: 100,
                           height: 30,
                           padding: const EdgeInsets.symmetric(
                               horizontal: 10, vertical: 5),
@@ -677,7 +667,7 @@ class _HkDataTableState extends State<HkDataTable> {
                               style: ButtonStyle(
                                 backgroundColor: MaterialStateProperty.all<
                                         Color>(
-                                    const Color.fromRGBO(49, 145, 196, 1.0)),
+                                    Color.fromARGB(255, 138, 214, 255)),
                                 shape: MaterialStateProperty.all<
                                     RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
@@ -701,7 +691,7 @@ class _HkDataTableState extends State<HkDataTable> {
                               style: ButtonStyle(
                                 backgroundColor: MaterialStateProperty.all<
                                         Color>(
-                                    const Color.fromRGBO(49, 145, 196, 1.0)),
+                                    Color.fromARGB(255, 41, 55, 255)),
                                 shape: MaterialStateProperty.all<
                                     RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
@@ -729,7 +719,11 @@ class _HkDataTableState extends State<HkDataTable> {
           const SizedBox(
             height: 20,
           ),
-          Row(
+           loading
+                                  ? const Center(
+                                      child: null,
+                                    )
+                                  :  hks.isEmpty ? EmptyStateWidget() :Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               IconButton(

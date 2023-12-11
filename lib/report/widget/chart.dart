@@ -33,7 +33,6 @@ Future<void> fetchMonthlyChargeData() async {
           value: dataList[i]['total_charge'].toString(),
           
         ));
-         print(dataList[i]['total_charge'].toString());
       }
 
       setState(() {}); // Update the UI with the fetched data

@@ -2,11 +2,14 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:housekeepingmanagement/data_list/textbutton_list.dart';
 import 'package:housekeepingmanagement/dialog/bookingdialog.dart';
+import 'package:housekeepingmanagement/frontdesk/widget/Empty.dart';
 import 'package:housekeepingmanagement/system_widget/guest_inhouse_widget.dart';
 import 'package:housekeepingmanagement/system_widget/system_color.dart';
 import 'package:housekeepingmanagement/widget/checkinandcheckout.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+import 'package:skeletonizer/skeletonizer.dart';
 
 class DataCheckInList extends StatefulWidget {
   const DataCheckInList({
@@ -21,7 +24,7 @@ class DataCheckInList extends StatefulWidget {
 class _DataCheckInListState extends State<DataCheckInList> {
   List<dynamic> bookingsData = [];
   Set<int> selectedRows = <int>{};
-
+ bool isLoading = false;
   @override
   void initState() {
     super.initState();
@@ -29,13 +32,16 @@ class _DataCheckInListState extends State<DataCheckInList> {
   }
 
   Future<void> fetchData() async {
+    isLoading = true;
     final response = await http
         .get(Uri.parse('http://localhost:8000/api/dashboard/today_booking'));
 
     if (response.statusCode == 200) {
       Map<String, dynamic> data = json.decode(response.body);
+       isLoading = false;
       setState(() {
         bookingsData = data['data']['check_in_bookings'];
+        print(bookingsData.length);
       });
     } else {
       throw Exception('Failed to load data');
@@ -88,7 +94,11 @@ class _DataCheckInListState extends State<DataCheckInList> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return  Skeletonizer(
+        enabled: isLoading,
+        child:
+    bookingsData.length <= 0 ? EmptyStateWidget() : 
+    Padding(
       padding: const EdgeInsets.only(top: 10),
       child: Column(
         children: [
@@ -362,6 +372,7 @@ class _DataCheckInListState extends State<DataCheckInList> {
           ),
         ],
       ),
+    )
     );
   }
 

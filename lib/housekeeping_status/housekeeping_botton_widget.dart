@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:housekeepingmanagement/housekeeping_status/housekeeping_widget_color.dart';
+import 'package:housekeepingmanagement/system_widget/guest_inhouse_widget.dart';
 import 'package:housekeepingmanagement/system_widget/system_color.dart';
 import 'package:housekeepingmanagement/system_widget/system_icon.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
+import 'package:skeletonizer/skeletonizer.dart';
+bool loading = true;
 class HouseKeepingBottonWidget extends StatefulWidget {
   const HouseKeepingBottonWidget({super.key});
 
@@ -14,20 +16,26 @@ class HouseKeepingBottonWidget extends StatefulWidget {
 
 class _SubButtonFrontdeskState extends State<HouseKeepingBottonWidget> {
   Map<String, dynamic>? apiResponse;
-
+ Map<String, dynamic> data = {};
   @override
   void initState() {
+    loading = true;
     super.initState();
     fetchData();
   }
 
   Future<void> fetchData() async {
+    loading = true;
     final response = await http
         .get(Uri.parse('http://localhost:8000/api/dashboard/todayStatus'));
 
     if (response.statusCode == 200) {
+      loading = false; 
+      apiResponse = json.decode(response.body);
       setState(() {
-        apiResponse = json.decode(response.body);
+        loading = false;
+       data = apiResponse?['data'];
+    
       });
     } else {
       throw Exception('Failed to load data from the API');
@@ -36,14 +44,11 @@ class _SubButtonFrontdeskState extends State<HouseKeepingBottonWidget> {
 
   @override
   Widget build(BuildContext context) {
-    if (apiResponse == null) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
-    }
-
-    final data = apiResponse!['data'];
-    return Row(
+  
+    
+    return Skeletonizer(
+        enabled: loading,
+        child: Row(
       children: [
         Expanded(
           child: HouseKeepingColorWidget(
@@ -52,7 +57,7 @@ class _SubButtonFrontdeskState extends State<HouseKeepingBottonWidget> {
               color: Colors.white,
             ),
             title: "Check-In",
-            value: data['checkin_count'],
+            value: data['checkin_count'] ?? 0,
             backgroundColor: ColorController.checkInColor,
             iconbackground: Color(0x66000000),
           ),
@@ -67,7 +72,7 @@ class _SubButtonFrontdeskState extends State<HouseKeepingBottonWidget> {
               color: Colors.white,
             ),
             title: "Arrival",
-            value: data['count_arrival'],
+            value: data['count_arrival'] ?? 0,
             backgroundColor: ColorController.arrivalsColor,
             iconbackground: Color(0x66000000),
           ),
@@ -82,7 +87,7 @@ class _SubButtonFrontdeskState extends State<HouseKeepingBottonWidget> {
               color: Colors.white,
             ),
             title: "Check-Out",
-            value: data['checkout_count'],
+            value: data['checkout_count'] ?? 0,
             backgroundColor: ColorController.checkOutColor,
             iconbackground: Color(0x66000000),
           ),
@@ -97,7 +102,7 @@ class _SubButtonFrontdeskState extends State<HouseKeepingBottonWidget> {
               color: Colors.white,
             ),
             title: "Departure",
-            value: data['count_departure'],
+            value: data['count_departure'] ?? 0,
             backgroundColor: ColorController.departuresColor,
             iconbackground: Color(0x66000000),
           ),
@@ -112,7 +117,7 @@ class _SubButtonFrontdeskState extends State<HouseKeepingBottonWidget> {
               color: Colors.white,
             ),
             title: "Available",
-            value: data['available_rooms'],
+            value: data['available_rooms'] ?? 0,
             backgroundColor: ColorController.availableColor,
             iconbackground: Color(0x66000000),
           ),
@@ -127,12 +132,12 @@ class _SubButtonFrontdeskState extends State<HouseKeepingBottonWidget> {
               color: Colors.white,
             ),
             title: "Inhouse",
-            value: data['inHouse'],
+            value: data['inHouse'] ?? 0,
             backgroundColor: ColorController.inhouse,
             iconbackground: Color(0x66000000),
           ),
         ),
       ],
-    );
+        )    );
   }
 }

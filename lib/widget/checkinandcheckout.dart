@@ -25,11 +25,12 @@ Future<void> onCheck(BuildContext context, int bookingid, String check, VoidCall
         dialogType: DialogType.success,
         title: '$check Successfully',
         desc: errorMessage,
-        btnOkOnPress: () {
-          print(bookingData);
-          //  Navigator.of(context).pop();
-          // BookingDialog(context, action!).showBookingDetailsDialog(bookingData[0]);
+        btnOkOnPress: () { 
           action?.call();
+          print(bookingData);
+           Navigator.of(context).pop();
+          BookingDialog(context, action!).showBookingDetailsDialog(bookingData[0]);
+         
         },
       ).show();
       print('Booking created successfully.');
@@ -38,7 +39,7 @@ Future<void> onCheck(BuildContext context, int bookingid, String check, VoidCall
         width: 500,
         context: context,
         dialogType: DialogType.error,
-        title: 'Booking Failed',
+        title: '$check Failed',
         desc: errorMessage,
         btnOkOnPress: () {},
       ).show();
