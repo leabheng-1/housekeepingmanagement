@@ -70,24 +70,8 @@ bool loading = false;
     scrollDirection: Axis.vertical,
       child: 
       DataTable(
-        columnSpacing: 95,
+        columnSpacing: 110,
         columns: [
-          DataColumn(
-            label: Row(
-              children: [
-                Checkbox(
-                  value: selectAll,
-                  onChanged: (value) {
-                    setState(() {
-                      selectAll = value!;
-                      selectedCheckboxes =
-                          List.filled(selectedCheckboxes.length, value);
-                    });
-                  },
-                ),
-              ],
-            ),
-          ),
           const DataColumn(label: Text('Guest ID')),
           const DataColumn(label: Text('Guest Name')),
           const DataColumn(label: Text('Check-In')),
@@ -114,16 +98,6 @@ bool loading = false;
                                     )
                                   : DataRow(
             cells: [
-              DataCell(
-                Checkbox(
-                  value: selectedCheckboxes[index],
-                  onChanged: (bool? value) {
-                    setState(() {
-                      selectedCheckboxes[index] = value!;
-                    });
-                  },
-                ),
-              ),
               DataCell(
                 Text(booking['guest_id']?.toString() ?? 'N/A'),
               ),
@@ -154,33 +128,6 @@ bool loading = false;
               DataCell(
                 Row(
                   children: [
-//                     SizedBox(
-//                       width: 70.0,
-//                       child: TextButton(
-//                         onPressed: () {
-// print(booking);
-//                           viewGuestDetail(
-//                                                             context, fetchData)
-//                                                         .showBookingDetailsDialog(
-//                                                             booking);
-//                         },
-//                         style: ButtonStyle(
-//                           shape:
-//                               MaterialStateProperty.all<RoundedRectangleBorder>(
-//                             RoundedRectangleBorder(
-//                               borderRadius: BorderRadius.circular(20),
-//                             ),
-//                           ),
-//                           backgroundColor: MaterialStateProperty.all<Color>(
-//                             const Color(0xFF419674),
-//                           ),
-//                         ),
-//                         child: const Text(
-//                           'View',
-//                           style: TextStyle(color: Colors.white),
-//                         ),
-//                       ),
-//                     ),
                     const SizedBox(
                       width: 10,
                     ),

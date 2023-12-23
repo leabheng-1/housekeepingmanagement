@@ -62,7 +62,7 @@ class _CustomDropdownFilterState extends State<CustomDropdownFilter> {
   child: TextFormField(
     decoration: InputDecoration(
       contentPadding: const EdgeInsets.all(16),
-      hintText: 'Guest Name',
+      hintText: 'Search',
       hintStyle: const TextStyle(fontSize: 14),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(10),

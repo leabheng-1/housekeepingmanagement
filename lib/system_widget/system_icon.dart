@@ -6,7 +6,7 @@ class iconController {
   static const IconData checkOutIcon = Icons.logout_sharp;
   static const IconData arrivalsIcon = Icons.flight_land;
   static const IconData departuresIcon = Icons.airplay_rounded;
-  static const IconData availableIcon = Icons.room_service;
+  static const IconData availableIcon = Icons.check_circle_outline;
   static const IconData inHouseIcon = Icons.camera_outdoor;
   static const IconData allRoomsIcon = Icons.bed_sharp;
   static const IconData khIcon = Icons.cleaning_services;

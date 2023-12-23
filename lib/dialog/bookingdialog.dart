@@ -409,6 +409,7 @@ String? validateName(String? value) {
               SizedBox(width: 15), // Add spacing between columns
               Expanded(
                 child: buildLabelAndContent('Booking Information',[
+                  
                       SizedBox(width: 15), 
                  DateRangePickerWidget(
               labelText: 'Check-Out Date',
@@ -694,7 +695,17 @@ Future<void> submitUpdatedData(
       ).show();
       print('Booking created successfully.');
      
-    } else {
+    } else if (response.statusCode == 400) {
+      AwesomeDialog(
+        width: 500,
+        context: context,
+        dialogType: DialogType.error,
+        title: ' Failed',
+        desc: '',
+        btnOkOnPress: () {},
+      ).show();
+      print('Booking failed: ');
+    }  else {
       Map<String, dynamic> data = jsonDecode(response.body); 
         // ignore: use_build_context_synchronously
         AwesomeDialog(
@@ -742,7 +753,8 @@ print('Number of nights: $numberOfNights');
       child:  
       
       buildLabelAndContent('Guest Information', [
-       
+    
+
         Row(
         children: [           
 Boxdetail(
@@ -842,7 +854,24 @@ Row(
 Boxdetail(
   title: "Booking ID",
   value: booking['booking_id'].toString(),
-),      
+),     
+ Row(
+  children: [
+    if (booking['booking_status'] == 'No Show')
+      ...?[
+        BtnAction(
+          background: Color.fromARGB(52, 0, 0, 0),
+          icon: iconController.checkOutIcon,
+          textColor: Colors.white,
+          color: ColorController.checkOutColor,
+          label: "Add New Booking",
+          action: () {
+            
+          },
+        ),
+      ],
+  ],
+), 
  ]
         ),
         Row(

@@ -17,86 +17,6 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: MyHomePage(),
-    );
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  final GlobalKey<RefreshableDialogState> dialogKey = GlobalKey();
-
-  void _showDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return RefreshableDialog(
-          key: dialogKey,
-        );
-      },
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Dialog Refresh Example"),
-      ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            _showDialog(context);
-          },
-          child: Text("Show Dialog"),
-        ),
-      ),
-    );
-  }
-}
-
-class RefreshableDialog extends StatefulWidget {
-  RefreshableDialog({Key? key}) : super(key: key);
-
-  @override
-  RefreshableDialogState createState() => RefreshableDialogState();
-}
-
-class RefreshableDialogState extends State<RefreshableDialog> {
-  // You can add data or state that you want to refresh in the dialog here
-
-  void refreshDialog() {
-    // Call this method to refresh the dialog content
-    setState(() {
-      // Update your dialog content or data here
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text("Refreshable Dialog"),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          // Your dialog content goes here
-          // You can display dynamic data or widgets that need to be refreshed
-        ],
-      ),
-      actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: Text("Close"),
-        ),
-      ],
-    );
-  }
-}
 
 
 
@@ -247,7 +167,7 @@ bookingNoteController.text = note ?? '';
     builder: (BuildContext context) {
       return AlertDialog(
         
-        title: TitleBar(title: 'Guest'),
+        title: TitleBar(title: 'Update Booking'),
         content:   Container(
   margin: EdgeInsets.only(top: 20),
           child: Row(
@@ -255,7 +175,7 @@ bookingNoteController.text = note ?? '';
             children: [
               SizedBox(width: 15), // Add spacing between columns
               Expanded(
-                child: buildLabelAndContent('Update Booking',[
+                child: buildLabelAndContent('Booking Information',[
                       SizedBox(width: 15), 
                  DateRangePickerWidget(
               labelText: 'Check-Out Date',

@@ -3,12 +3,30 @@ import 'package:housekeepingmanagement/housekeeping_status/housekeeping_botton_w
 import 'package:housekeepingmanagement/housekeeping_status/housekeeping_data_guest.dart';
 import 'package:housekeepingmanagement/system_widget/guest_inhouse_widget.dart';
 
-class Housekeeping extends StatelessWidget {
-  const Housekeeping({super.key});
+class Housekeeping extends StatefulWidget {
+  const Housekeeping({Key? key}) : super(key: key);
+
+  @override
+  _HousekeepingState createState() => _HousekeepingState();
+}
+
+class _HousekeepingState extends State<Housekeeping> {
+  late HouseKeepingDataGuest houseKeepingDataGuest;
+Key dropdownKey = UniqueKey();
+  @override
+  void initState() {
+    super.initState();
+    houseKeepingDataGuest = HouseKeepingDataGuest();
+  }
+
+  void reloadData() {
+    setState(() {
+      dropdownKey = UniqueKey();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    false;
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
@@ -32,9 +50,10 @@ class Housekeeping extends StatelessWidget {
                 height: 140.0,
                 child: Expanded(
                   child: Container(
+                     key:UniqueKey(),
                     padding: const EdgeInsets.symmetric(
                         vertical: 10, horizontal: 20),
-                    child: const HouseKeepingDataGuest(),
+                    child: HouseKeepingDataGuest(),
                   ),
                 ),
               ),
@@ -44,7 +63,7 @@ class Housekeeping extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.symmetric(
                         vertical: 10, horizontal: 20),
-                    child: const HkDataTable(),
+                    child: HkDataTable(reloadData:reloadData),
                   ),
                 ),
               ),

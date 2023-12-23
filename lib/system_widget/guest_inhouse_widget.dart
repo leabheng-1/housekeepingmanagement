@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:housekeepingmanagement/frontdesk/widget/Empty.dart';
 import 'package:housekeepingmanagement/system_widget/box_detail.dart';
@@ -60,12 +61,14 @@ class Hk {
 }
 
 class HkDataTable extends StatefulWidget {
-  const HkDataTable({super.key});
+  final VoidCallback reloadData;
+
+  const HkDataTable({Key? key, required this.reloadData}) : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
   _HkDataTableState createState() => _HkDataTableState();
 }
+
 
 class _HkDataTableState extends State<HkDataTable> {
   late List<Hk> hks;
@@ -103,30 +106,6 @@ print('http://localhost:8000/api/booking/all?page=$currentPage&room_status=$room
       throw Exception('Failed to load data');
     }
   }
-
-  // Filter hk data based on room status, hk status, and guest name
-  // List<Hk> getFilteredHks() {
-  //   List<Hk> filteredHks = [...hks];
-
-  //   if (roomStatusFilter != null && roomStatusFilter!.isNotEmpty) {
-  //     filteredHks =
-  //         filteredHks.where((hk) => hk.roomStatus == roomStatusFilter).toList();
-  //   }
-
-  //   if (hkStatusFilter != null && hkStatusFilter!.isNotEmpty) {
-  //     filteredHks =
-  //         filteredHks.where((hk) => hk.hkStatus == hkStatusFilter).toList();
-  //   }
-
-  //   if (guestNameFilter != null && guestNameFilter!.isNotEmpty) {
-  //     filteredHks = filteredHks
-  //         .where((hk) =>
-  //             hk.name.toLowerCase().contains(guestNameFilter!.toLowerCase()))
-  //         .toList();
-  //   }
-
-  //   return filteredHks;
-  // }
 
   Future<void> showViewDialog(Hk hk) async {
     Color roomStatusColor;
@@ -411,7 +390,7 @@ print('http://localhost:8000/api/booking/all?page=$currentPage&room_status=$room
   ),
             BtnAction(
     background: Color.fromARGB(52, 0, 0, 0),
-    icon: iconController.closeIcon,
+    icon: iconController.saveIcon,
     textColor: Colors.white,
     color: ColorController.primaryColor,
     label: "Update ",
@@ -453,11 +432,38 @@ print('http://localhost:8000/api/booking/all?page=$currentPage&room_status=$room
     final url = Uri.parse(
         '$baseUrl1?room_status=$RoomStatus&note=$noteController&housekeeper=$housekeeper&housekeeping_status=$hkStatus&date=$dateController');
     final response = await http.put(url);
-    if (response.statusCode == 200) {
-      // ignore: use_build_context_synchronously
-      Navigator.of(context).pop();
-      fetchData();
-    } else {}
+       if (response.statusCode == 200) {
+        Map<String, dynamic> data = jsonDecode(response.body); 
+        print(data);
+      AwesomeDialog(
+         width: 500,  
+        context: context,
+        dialogType: DialogType.success,
+        title: 'Update Success',
+        desc: data['message'],
+        btnOkOnPress: () {
+          fetchData();
+         widget.reloadData(); 
+          Navigator.of(context).pop();
+         
+        },
+        
+      ).show();
+     
+    } else {
+      Map<String, dynamic> data = jsonDecode(response.body); 
+        // ignore: use_build_context_synchronously
+        AwesomeDialog(
+        width: 500,  
+        context: context,
+        dialogType: DialogType.error,
+        title: 'Update False',
+        desc: data['data'],
+        btnOkOnPress: () {
+
+        },
+      ).show();
+    }
   }
 
   DateTime currentDate = DateTime.now();
@@ -530,14 +536,19 @@ print('http://localhost:8000/api/booking/all?page=$currentPage&room_status=$room
                                    fetchData();
           },
                     ),
+                    SizedBox(width:350,),
                         
-                    Align(
-                          alignment: Alignment.center,
-                          child: Text(
-                            formattedDate,
-                            style: const TextStyle(fontSize: 16),
-                          ),
-                        ),    
+                   Align(
+  alignment: Alignment.center,
+  child: Container(
+    margin: EdgeInsets.only(top: 20.0), // Adjust the top margin as needed
+    child: Text(
+      formattedDate,
+      style: const TextStyle(fontSize: 16),
+    ),
+  ),
+),
+  
                       ],
                       
                     ),
@@ -548,13 +559,17 @@ print('http://localhost:8000/api/booking/all?page=$currentPage&room_status=$room
             ],
           ),
           loading
-                                  ? const Center(
-                                      child: CircularProgressIndicator(),
-                                    )
+                                  ? Center(
+  child: Container(
+    margin: EdgeInsets.only(top: 100.0), // Adjust the top margin as needed
+    child: CircularProgressIndicator(),
+  ),
+)
+
                                   :  hks.isEmpty ? EmptyStateWidget() : SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: DataTable(
-              columnSpacing: MediaQuery.of(context).size.width * 0.06,
+              columnSpacing: MediaQuery.of(context).size.width * 0.05,
               columns: const [
                 DataColumn(
                   label: Center(child: Text('No')),
@@ -599,16 +614,6 @@ print('http://localhost:8000/api/booking/all?page=$currentPage&room_status=$room
                 bool isSelected = selectedRows.contains(index + 1);
 
                 return DataRow(
-                  selected: isSelected,
-                  onSelectChanged: (isSelected) {
-                    setState(() {
-                      if (isSelected!) {
-                        selectedRows.add(index);
-                      } else {
-                        selectedRows.remove(index);
-                      }
-                    });
-                  },
                   cells: [
                     DataCell(
                       Center(child: Text(index.toString())),
@@ -627,7 +632,9 @@ print('http://localhost:8000/api/booking/all?page=$currentPage&room_status=$room
                       showEditIcon: false,
                     ),
                     DataCell(
-                      Center(child: Text(hk.name)),
+                      Center( child: Text(
+    hk.name.isEmpty ? 'N/A' : hk.name,
+  ),),
                       showEditIcon: false,
                     ),
                     DataCell(

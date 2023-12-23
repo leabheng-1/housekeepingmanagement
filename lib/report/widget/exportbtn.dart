@@ -2,6 +2,7 @@
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:housekeepingmanagement/system_widget/btn.dart';
+import 'package:housekeepingmanagement/system_widget/system_color.dart';
 import 'package:housekeepingmanagement/system_widget/system_icon.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
@@ -37,13 +38,49 @@ Future<void> submitRequest() async  {
   Widget build(BuildContext context) {
     return  DropdownButtonHideUnderline(
           child: DropdownButton2(
-            customButton: BtnAction(
-    icon: Icons.print,
-    textColor: Colors.white,
-    color: Color.fromARGB(255, 0, 0, 0),
-    label: "Export",
-    background: Colors.red,
+            customButton:
+      GestureDetector(
+ 
+  child: Container(
+    decoration: BoxDecoration(
+      color: ColorController.moreOptionColor,
+      borderRadius: BorderRadius.circular(8.0),
+    ),
+    padding: const EdgeInsets.only(left: 5, top: 5, bottom: 5, right: 10),
+    child: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Container(
+          padding: const EdgeInsets.all(8.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8.0),
+            color: ColorController.bgIconColorop,
+          ),
+          child: Icon(
+            iconController.settiongIcon,
+            size: 16,
+            color: Colors.white, // Icon color
+          ),
+        ),
+        const SizedBox(width: 8.0),
+        Text(
+          "Export",
+          style: TextStyle(
+            fontSize: 16.0,
+            color: Colors.white,
+          ),
+        ),
+      ],
+    ),
   ),
+),      
+  //            BtnAction(
+  //   icon: Icons.print,
+  //   textColor: Colors.white,
+  //   color: Color.fromARGB(255, 0, 0, 0),
+  //   label: "Export",
+  //   background: Colors.red,
+  // ),
             items: [
               ...MenuItems.firstItems.map(
                 (item) => DropdownMenuItem<MenuItem>(

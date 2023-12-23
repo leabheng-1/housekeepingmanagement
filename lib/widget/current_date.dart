@@ -36,22 +36,41 @@ class CurrentDate extends StatelessWidget {
             ),
             child: Center(
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    DateFormat('E').format(now),
-                    style: const TextStyle(color: Colors.white, fontSize: 30),
-                  ),
-                  const SizedBox(width: 80),
-                  Text(
-                    " ${now.year}",
-                    style: const TextStyle(
-                      fontSize: 30,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
-              ),
+  mainAxisAlignment: MainAxisAlignment.center,
+  children: [
+    // First Column
+    Expanded(
+      flex: 1,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            DateFormat('E').format(now),
+            style: const TextStyle(color: Colors.white, fontSize: 30),
+          ),
+        ],
+      ),
+    ),
+    // Second Column
+    SizedBox(width: 16), // Adjust the width as needed for the space
+    Expanded(
+      flex: 1,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            "${now.year}",
+            style: const TextStyle(
+              fontSize: 30,
+              color: Colors.white,
+            ),
+          ),
+        ],
+      ),
+    ),
+  ],
+),
+
             ),
           ),
           Container(

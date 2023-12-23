@@ -1,6 +1,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:housekeepingmanagement/system_widget/btn.dart';
 import 'package:housekeepingmanagement/system_widget/system_color.dart';
 import 'package:housekeepingmanagement/system_widget/system_icon.dart';
@@ -21,13 +22,51 @@ class _moreoptionbtnactionState extends State<moreoptionbtnaction> {
   Widget build(BuildContext context) {
     return DropdownButtonHideUnderline(
       child: DropdownButton2(
-        customButton: const BtnAction(
-          icon: iconController.settiongIcon,
-          textColor: Colors.white,
-          color: ColorController.moreOptionColor,
-          label: "More Option",
-          background: ColorController.bgIconColorop,
+     
+        customButton: 
+GestureDetector(
+ 
+  child: Container(
+    decoration: BoxDecoration(
+      color: ColorController.moreOptionColor,
+      borderRadius: BorderRadius.circular(8.0),
+    ),
+    padding: const EdgeInsets.only(left: 5, top: 5, bottom: 5, right: 10),
+    child: Row(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Container(
+          padding: const EdgeInsets.all(8.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8.0),
+            color: ColorController.bgIconColorop,
+          ),
+          child: Icon(
+            iconController.settiongIcon,
+            size: 16,
+            color: Colors.white, // Icon color
+          ),
         ),
+        const SizedBox(width: 8.0),
+        Text(
+          "More Option",
+          style: TextStyle(
+            fontSize: 16.0,
+            color: Colors.white,
+          ),
+        ),
+      ],
+    ),
+  ),
+),
+        
+        //  const BtnAction(
+        //   icon: iconController.settiongIcon,
+        //   textColor: Colors.white,
+        //   color: ColorController.moreOptionColor,
+        //   label: "More Option",
+        //   background: ColorController.bgIconColorop,
+        // ),
         items: [
           ...MenuItems.firstItems.map(
             (item) => DropdownMenuItem<MenuItem>(
@@ -40,11 +79,11 @@ class _moreoptionbtnactionState extends State<moreoptionbtnaction> {
   MenuItems.onChanged(context, value! as MenuItem, widget.bookingId);
 },
         dropdownStyleData: DropdownStyleData(
-          width: 160,
+          width: 200,
           padding: const EdgeInsets.symmetric(vertical: 6),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(4),
-            color: Color.fromARGB(255, 110, 110, 110),
+            color: ColorController.moreOptionColor,
           ),
           offset: const Offset(0, 8),
         ),
