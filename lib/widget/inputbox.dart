@@ -303,7 +303,7 @@ class CustomDropdownButton extends StatefulWidget {
   final double fontSize;
   final Color bg;
   final double marginTop;
-  
+  final bool showAsterisk;
   const CustomDropdownButton({
     super.key,
     required this.width,
@@ -316,6 +316,7 @@ class CustomDropdownButton extends StatefulWidget {
     this.marginTop = 0,
     required this.hintText,
     this.fontSize = 14.0,
+    this.showAsterisk = false
   });
 
   @override
@@ -344,13 +345,21 @@ class _CustomDropdownButtonState extends State<CustomDropdownButton> {
   text: TextSpan(
     children: [
       TextSpan(
-        text:   widget.labelText!,
+        text: widget.labelText,
         style: const TextStyle(
           color: Colors.black,
           fontWeight: FontWeight.bold,
         ),
       ),
-      
+      if (widget.showAsterisk)  // Replace 'showAsterisk' with your actual condition
+        TextSpan(
+          text: ' *',
+          style: const TextStyle(
+            color: Colors.red,
+            fontSize: 15,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
     ],
   ),
 ),

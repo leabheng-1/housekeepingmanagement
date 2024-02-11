@@ -3,25 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:housekeepingmanagement/dialog/barDialog.dart';
 import 'package:housekeepingmanagement/dialog/bookingdetail.dart';
 import 'package:housekeepingmanagement/dialog/bookingdialog.dart';
-import 'package:housekeepingmanagement/dialog/editBooking.dart';
-import 'package:housekeepingmanagement/dialog/editGuest.dart';
-import 'package:housekeepingmanagement/dialog/selectRoom.dart';
-import 'package:housekeepingmanagement/frontdesk/widget/Morebtnaction.dart';
-import 'package:housekeepingmanagement/system_widget/box_detail.dart';
 import 'package:housekeepingmanagement/system_widget/btn.dart';
-import 'package:housekeepingmanagement/system_widget/CheckBoxCustomRoomRate.dart';
-import 'package:housekeepingmanagement/system_widget/system_color.dart';
 import 'package:housekeepingmanagement/system_widget/system_icon.dart';
-import 'package:housekeepingmanagement/widget/Datebooking.dart';
-import 'package:housekeepingmanagement/widget/checkinandcheckout.dart';
 import 'package:housekeepingmanagement/widget/country.dart';
 import 'package:housekeepingmanagement/widget/inputbox.dart';
 import 'package:housekeepingmanagement/widget/legend.dart';
 import 'package:housekeepingmanagement/widget/paymentcheck.dart';
 import 'package:http/http.dart' as http;
-
-
-import 'package:flutter/material.dart';
 
 void main() {
   runApp(MyApp());
@@ -181,7 +169,7 @@ String? housekeeper = booking['housekeeper'] as String?;
 String? airMethod = booking['booking_air_method'] as String?;
 int? payment = booking['payment'] as int?;
 String? extraCharge = booking['extra_charge'].toString();
-int? charges = booking['charges'] as int?;
+double? charges = booking['charges'] as double?;
 String? balance = booking['balance'].toString();
 String? itemExtraCharge = booking['item_extra_charge'] as String?;
 String? name = booking['name'] as String?;
@@ -466,7 +454,8 @@ SizedBox(width:20,),
   checkIn,   // Use checkIn directly
   roomType,
   roomIdController.text,
-  booking['payment_type']
+  booking['payment_type'] ?? 'Not set',
+  booking['booking_status'] ?? 'booking'
    ); },
 )
 ]
@@ -505,13 +494,16 @@ Future<void> submitUpdatedData(
     String checkin_date,
     String roomType,
         String room_id,
-        String paymentType
+        String paymentType,
+        String bookingStatus
     ) async {
 
   final String baseUrl1 = 'http://localhost:8000/api/booking/update/$booking_id';
-   final url = Uri.parse('$baseUrl1?booking_note=$bookingNote&payment_type=$paymentType&booking_air_method=$bookingAirMethod&room_rate=$roomRate&booking_status=booking&name=$name&gender=$gender&dob=$dob&country=$country&adult=$adult&child=$child&phone_number=$phone_number&address=$address&cardId=$cardId&email=$email&checkout_date=$checkout_date&room_type=$room_type&roomNumber=$roomNumber&extra_charge=$extraCharge&payment=$totalPayment&charges=$totalCharge&balance=$totalBalance&checkin_date=$checkin_date&arrival_date=$checkin_date&departure_date=$checkout_date&payment_status=$paymentStatus');
+   final url = Uri.parse('$baseUrl1?booking_note=$bookingNote&payment_type=$paymentType&booking_air_method=$bookingAirMethod&room_rate=$roomRate&booking_status=$bookingStatus&name=$name&gender=$gender&dob=$dob&country=$country&adult=$adult&child=$child&phone_number=$phone_number&address=$address&cardId=$cardId&email=$email&checkout_date=$checkout_date&room_type=$room_type&roomNumber=$roomNumber&extra_charge=$extraCharge&payment=$totalPayment&charges=$totalCharge&balance=$totalBalance&checkin_date=$checkin_date&arrival_date=$checkin_date&departure_date=$checkout_date&payment_status=$paymentStatus');
     final response = await http.put(url);      
+    print(url);
     List<dynamic> bookingData = await ApiFunctionsBookingbyid.fetchBookingData(booking['booking_id']);
+    
     if (response.statusCode == 200) {
          
     
@@ -521,7 +513,6 @@ Future<void> submitUpdatedData(
         context: context,
         dialogType: DialogType.success,
         title: 'Update Guest Success',
-        desc: response.toString(),
         btnOkOnPress: () {  
           reloadDataCallback();
           Navigator.of(context).pop();

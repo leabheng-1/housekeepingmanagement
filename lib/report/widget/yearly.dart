@@ -4,6 +4,8 @@ import 'package:housekeepingmanagement/report/widget/exportbtn.dart';
 import 'package:housekeepingmanagement/widget/inputbox.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+import 'package:housekeepingmanagement/frontdesk/widget/formatSystem.dart';
 import 'package:intl/intl.dart';
     TextEditingController number_room_select = TextEditingController();
 class yearlyReport extends StatefulWidget {
@@ -20,15 +22,17 @@ List<dynamic> roomData = [];
 List<String> roomNumbers = [];
 class _yearlyReportState extends State<yearlyReport> {
   List<dynamic> data = [] , room_number = [];
-  
+  double total = 0;
   Future<void> fetchData() async {
       
     final response = await http.get(Uri.parse('http://127.0.0.1:8000/api/report/yearly?room_type=$room_type&room_number=$room_number_filter'));
-    Url='http://127.0.0.1:8000/api/report/daily?start_date=$start_date&end_date=$end_date&room_type=$room_type&room_number=$room_number_filter';
+    Url='http://127.0.0.1:8000/api/report/yearly?start_date=$start_date&end_date=$end_date&room_type=$room_type&room_number=$room_number_filter';
     if (response.statusCode == 200) {
       fetchRoomDate('All');
       setState(() {
         data = json.decode(response.body)['data'];
+ 
+total = data.fold(0, (previousValue, element) => previousValue + (element['summary_sum_payment'] ?? 0));
         print(data);
       });
     } else {
@@ -165,19 +169,47 @@ Container( // Adjust the margin as needed
           return DataRow(
             color: MaterialStateProperty.all(backgroundColor),
             cells: <DataCell>[
-                 DataCell(Text(item["check_in"].toString() ?? '')),
+                 DataCell(Text(item["month"].toString() ?? '')),
           DataCell(Text(item["check_in"].toString()?? '')),
           DataCell(Text(item["check_out"].toString()?? '')),
          
           DataCell(Text(item["single_room"].toString()?? '')),
           DataCell(Text(item["twin_room"].toString()?? '')), 
-          DataCell(Text( item["summary_sum_payment"].toString()?? '')),
+          DataCell(Text( formatCurrency(item["summary_sum_payment"].toString()) ?? '')),
             ],
           );
         }).toList(),
       ),
     ),
   ),
+),
+Row(
+  children: <Widget>[
+    // Other cells...
+    Spacer(), // This will push the "Total" cell to the end
+  Padding(
+  padding: EdgeInsets.only(top: 30.0,right: 20), // Adjust the top margin as needed
+  child: SizedBox(
+    width: 240.0,
+    height: 42.0,
+    child: Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(24.0),
+      ),
+      child: Text(
+        'Total ${ formatCurrency( total.toStringAsFixed(2))} ',
+        style: TextStyle(
+          fontSize: 18,
+          color: const Color.fromARGB(255, 0, 0, 0),
+          height: 1,
+        ),
+        textAlign: TextAlign.end,
+      ),
+    ),
+  ),
+)
+
+  ],
 )
 
       ],

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:housekeepingmanagement/frontdesk/widget/formatSystem.dart';
 import 'package:housekeepingmanagement/get_api/get_room.dart';
 import 'package:housekeepingmanagement/report/widget/exportbtn.dart';
 import 'package:housekeepingmanagement/widget/inputbox.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:intl/intl.dart';
     TextEditingController number_room_select = TextEditingController();
 class weeklyReport extends StatefulWidget {
   @override
@@ -20,17 +20,21 @@ List<dynamic> roomData = [];
 List<String> roomNumbers = [];
 class _weeklyReportState extends State<weeklyReport> {
    Map<String, dynamic> data = {} ; List<dynamic>  room_number = [];
-  
+  double total = 0;
+  List<dynamic> data_fold = [] ;
   Future<void> fetchData() async {
       
     final response = await http.get(Uri.parse('http://127.0.0.1:8000/api/report/weekly?start_date=$start_date&end_date=$end_date&room_type=$room_type&room_number=$room_number_filter'));
     Url='http://127.0.0.1:8000/api/report/weekly?start_date=$start_date&end_date=$end_date&room_type=$room_type&room_number=$room_number_filter';
-    print('http://127.0.0.1:8000/api/report/weekly?start_date=$start_date&end_date=$end_date&room_type=$room_type&room_number=$room_number_filter');
-    if (response.statusCode == 200) {
+ if (response.statusCode == 200) {
     
       fetchRoomDate('All');
       setState(() {
         data =  json.decode(response.body)['data'];
+  data.forEach((day, details) {
+    total += details['payment'];
+  });
+
       });
     } else {
       throw Exception('Failed to load data');
@@ -99,9 +103,9 @@ void fetchRoomDate(String value) {
           DataCell(Text(dayData["date"])),
           DataCell(Text(dayData["check_in"].toString())),
           DataCell(Text(dayData["check_out"].toString())),
-          DataCell(Text(dayData["payment"].toString())),
           DataCell(Text(dayData["single_room"].toString())),
           DataCell(Text(dayData["twin_room"].toString())),
+          DataCell(Text( formatCurrency( dayData["payment"].toString()))),
         ],
       );
     }).toList();
@@ -188,14 +192,45 @@ Container(
           DataColumn(label: Text('Date')),
           DataColumn(label: Text('Check In')),
           DataColumn(label: Text('Check Out')),
-          DataColumn(label: Text('Payment')),
+         
           DataColumn(label: Text('Single Room')),
           DataColumn(label: Text('Twin Room')),
+           DataColumn(label: Text('Payment')),
         ],
         rows: rows,
       ),
-    )
+      
+    ),
+    
   ),
+),
+Row(
+  children: <Widget>[
+    // Other cells...
+    Spacer(), // This will push the "Total" cell to the end
+  Padding(
+  padding: EdgeInsets.only(top: 30.0,right: 20), // Adjust the top margin as needed
+  child: SizedBox(
+    width: 240.0,
+    height: 42.0,
+    child: Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(24.0),
+      ),
+      child: Text(
+        'Total ${total.toStringAsFixed(2)} \$ ',
+        style: TextStyle(
+          fontSize: 18,
+          color: const Color.fromARGB(255, 0, 0, 0),
+          height: 1,
+        ),
+        textAlign: TextAlign.end,
+      ),
+    ),
+  ),
+)
+
+  ],
 )
 
       ],

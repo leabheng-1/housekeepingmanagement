@@ -52,7 +52,7 @@ class CurrentDate extends StatelessWidget {
       ),
     ),
     // Second Column
-    SizedBox(width: 16), // Adjust the width as needed for the space
+    SizedBox(width: 30), // Adjust the width as needed for the space
     Expanded(
       flex: 1,
       child: Column(
@@ -82,11 +82,12 @@ class CurrentDate extends StatelessWidget {
                 bottomRight: Radius.circular(10),
               ),
             ),
-            child: Row(
+            child:
+             Center(
+                child:
+             Row(
               children: [
-                const SizedBox(
-                  width: 40,
-                ),
+                SizedBox(width: 55,),
                 SizedBox(
                   child: Text(
                     "${now.day}",
@@ -107,6 +108,7 @@ class CurrentDate extends StatelessWidget {
               ],
             ),
           ),
+          )
         ],
       ),
     );

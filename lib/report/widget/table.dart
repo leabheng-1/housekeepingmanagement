@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:housekeepingmanagement/frontdesk/widget/formatSystem.dart';
 import 'package:housekeepingmanagement/get_api/get_room.dart';
 import 'package:housekeepingmanagement/report/widget/exportbtn.dart';
 import 'package:housekeepingmanagement/widget/inputbox.dart';
@@ -20,7 +21,7 @@ List<dynamic> roomData = [];
 List<String> roomNumbers = [];
 class _dailyReportState extends State<dailyReport> {
   List<dynamic> data = [] , room_number = [];
-  
+  double total = 0;
   Future<void> fetchData() async {
       
     final response = await http.get(Uri.parse('http://127.0.0.1:8000/api/report/daily?start_date=$start_date&end_date=$end_date&room_type=$room_type&room_number=$room_number_filter'));
@@ -28,7 +29,14 @@ class _dailyReportState extends State<dailyReport> {
     if (response.statusCode == 200) {
       fetchRoomDate('All');
       setState(() {
-        data = json.decode(response.body)['data'];
+        // Assuming you have the JSON data stored in a variable called 'response'
+data = json.decode(response.body)['data'];
+total = data.fold(0, (previousValue, element) => previousValue + (element['charges'] ?? 0));
+
+// Extract the 'Balance' values from the data
+
+
+
       });
     } else {
       throw Exception('Failed to load data');
@@ -36,6 +44,7 @@ class _dailyReportState extends State<dailyReport> {
   }
  List<dynamic> roomData = [];
   List<String> roomNumbers = [];
+  
 String RoomID = '';
 Future<void> RoomDateType() async { 
   roomData = await ApiFunctionsroom.fetchroomData('All');
@@ -80,7 +89,9 @@ void fetchRoomDate(String value) {
   @override
   Widget build(BuildContext context) {
  number_room_select.text = 'All';
+// var balanceValues = data.map<double>((entry) => entry['charges'] as double);
 
+// double totalbalance = balanceValues.reduce((value, element) => value + element) as double ;
     return Column(
       children: [
         Expanded(
@@ -156,13 +167,36 @@ Container( // Adjust the margin as needed
                
             
           ),
-           
-  Expanded(
-  flex: 8,
+// Container(
+//   child:
+//    Row(
+//         children: [ 
+//   Boxdetail(
+//     width: 200,
+//   title: "Adults",
+//   value: totalbalance.toString() ,
+// ),
+//  Boxdetail(
+//   width: 200,
+//   title: "Adults",
+//   value: totalbalance.toString() ,
+// ),
+//  Boxdetail(
+//   width: 200,
+//   title: "Adults",
+//   value: totalbalance.toString() ,
+// )
+//         ]
+//    )
+// ),
+ Expanded(
+  flex: 5,
   child: Container(
+    
     width: double.infinity,
     child: SingleChildScrollView(
       scrollDirection: Axis.vertical,
+      
       child: DataTable(
         columns: <DataColumn>[
           DataColumn(label: Text('Guest ID')),
@@ -173,13 +207,14 @@ Container( // Adjust the margin as needed
           DataColumn(label: Text('Check Out')),
           DataColumn(label: Text('Balance')),
         ],
+        
         rows: data.asMap().entries.map((entry) {
+         
           final index = entry.key;
           final item = entry.value;
           final backgroundColor = index % 2 == 0
               ? Colors.grey[200]
               : Colors.white;
-
           return DataRow(
             color: MaterialStateProperty.all(backgroundColor),
             cells: <DataCell>[
@@ -189,14 +224,68 @@ Container( // Adjust the margin as needed
               DataCell(Text(item['name'])),
               DataCell(Text(item['checkin_date'])),
               DataCell(Text(item['checkout_date'])),
-              DataCell(Text(item['balance']?.toString() ?? '')),
+              DataCell(Text(( formatCurrency(item['charges']?.toString())))),
             ],
+            
+            
           );
-        }).toList(),
+        }).toList()
+        
+        ,
+      ),
+   
+    ),
+  ),
+),
+// Row(
+// children: [
+//   DataTable(
+//       columns: [
+//         DataColumn(label: Text('')), // Empty header
+//         DataColumn(label: Text('')), // Empty header
+//       ],
+//       rows: [
+//         DataRow(
+//           cells: [
+//             DataCell(Text('Row 1, Column 1')),
+//             DataCell(Text('Row 1, Column 2')),
+//           ],
+//         ),
+       
+//       ]
+//   )
+// ]
+// ),
+Row(
+  children: <Widget>[
+    // Other cells...
+    Spacer(), // This will push the "Total" cell to the end
+  Padding(
+  padding: EdgeInsets.only(top: 30.0,right: 20), // Adjust the top margin as needed
+  child: SizedBox(
+    width: 240.0,
+    height: 42.0,
+    child: Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(24.0),
+      ),
+      child: Text(
+        'Total ${ formatCurrency( total.toStringAsFixed(2))} ',
+        style: TextStyle(
+          fontSize: 18,
+          color: const Color.fromARGB(255, 0, 0, 0),
+          height: 1,
+        ),
+        textAlign: TextAlign.end,
       ),
     ),
   ),
 )
+
+  ],
+)
+
+
 
       ],
     ) ;

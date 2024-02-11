@@ -42,8 +42,9 @@ class Report extends StatelessWidget {
   ),
   child: Center(
     child: Padding(
-      padding: EdgeInsets.all(30), // Adjust the padding as needed
-      child: chart_bar_report(),
+      padding: EdgeInsets.all(10), // Adjust the padding as needed
+      child:  
+       chart_bar_report(),
     ),
   ),
 ),

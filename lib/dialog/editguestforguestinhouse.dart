@@ -3,25 +3,114 @@ import 'package:flutter/material.dart';
 import 'package:housekeepingmanagement/dialog/barDialog.dart';
 import 'package:housekeepingmanagement/dialog/bookingdetail.dart';
 import 'package:housekeepingmanagement/dialog/bookingdialog.dart';
-import 'package:housekeepingmanagement/dialog/payment.dart';
+import 'package:housekeepingmanagement/dialog/editBooking.dart';
+import 'package:housekeepingmanagement/dialog/editGuest.dart';
 import 'package:housekeepingmanagement/dialog/selectRoom.dart';
+import 'package:housekeepingmanagement/frontdesk/widget/Morebtnaction.dart';
+import 'package:housekeepingmanagement/system_widget/box_detail.dart';
 import 'package:housekeepingmanagement/system_widget/btn.dart';
 import 'package:housekeepingmanagement/system_widget/CheckBoxCustomRoomRate.dart';
+import 'package:housekeepingmanagement/system_widget/system_color.dart';
 import 'package:housekeepingmanagement/system_widget/system_icon.dart';
 import 'package:housekeepingmanagement/widget/Datebooking.dart';
+import 'package:housekeepingmanagement/widget/checkinandcheckout.dart';
+import 'package:housekeepingmanagement/widget/country.dart';
 import 'package:housekeepingmanagement/widget/inputbox.dart';
 import 'package:housekeepingmanagement/widget/legend.dart';
 import 'package:housekeepingmanagement/widget/paymentcheck.dart';
 import 'package:http/http.dart' as http;
 
+
+import 'package:flutter/material.dart';
+
 void main() {
   runApp(MyApp());
 }
 
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: MyHomePage(),
+    );
+  }
+}
+
+class MyHomePage extends StatelessWidget {
+  final GlobalKey<RefreshableDialogState> dialogKey = GlobalKey();
+
+  void _showDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return RefreshableDialog(
+          key: dialogKey,
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Dialog Refresh Example"),
+      ),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () {
+            _showDialog(context);
+          },
+          child: Text("Show Dialog"),
+        ),
+      ),
+    );
+  }
+}
+
+class RefreshableDialog extends StatefulWidget {
+  RefreshableDialog({Key? key}) : super(key: key);
+
+  @override
+  RefreshableDialogState createState() => RefreshableDialogState();
+}
+
+class RefreshableDialogState extends State<RefreshableDialog> {
+  // You can add data or state that you want to refresh in the dialog here
+
+  void refreshDialog() {
+    // Call this method to refresh the dialog content
+    setState(() {
+      // Update your dialog content or data here
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text("Refreshable Dialog"),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Your dialog content goes here
+          // You can display dynamic data or widgets that need to be refreshed
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: Text("Close"),
+        ),
+      ],
+    );
+  }
+}
 
 
 
-class editBookingDialog {
+class editGuestDialog_guest_inhouse {
   // final VoidCallback reloadDataCallback;
   final BuildContext context;
     final VoidCallback reloadDataCallback;
@@ -53,15 +142,15 @@ TextEditingController totalChargeController = TextEditingController();
 TextEditingController totalBalanceController = TextEditingController();
 TextEditingController roomIdController= TextEditingController();
 TextEditingController getroomrateController= TextEditingController();
-TextEditingController paymentTypeController= TextEditingController();
+
 // Check if the values are not null before assigning them to the controllers
 
 
 
 String? minSelectDate;
 String? selectCountry ;
-  editBookingDialog(this.context ,this.reloadDataCallback);
-   void showCreateeditBookingDialog(Map<String, dynamic> booking) {
+  editGuestDialog_guest_inhouse(this.context ,this.reloadDataCallback);
+   void showCreateeditGuestDialog_guest_inhouse(Map<String, dynamic> booking) {
    
     int? bookingId = booking['booking_id'] as int?;
 int? id = booking['id'] as int?;
@@ -69,13 +158,13 @@ int? guestId = booking['guest_id'] as int?;
 String? roomType = booking['roomtype'] as String?;
 roomIdController.text = booking['room_id'].toString();
 int? paymentId = booking['payment_id'] as int?;
-String? bookingStatus = booking['booking_status'] ?? 'Booking';
+String? bookingStatus = booking['booking_status'] as String?;
 String? paymentStatus = booking['payment_status'] as String?;
 String? cancelDate = booking['cancel_date'] as String?;
 String? arrivalDate = booking['arrival_date'] as String?;
 String? departureDate = booking['departure_date'] as String?;
-String? checkinDate = booking['arrival_date'] as String?;
-String? checkoutDate = booking['departure_date'] as String?;
+String? checkinDate = booking['checkin_date'] as String?;
+String? checkoutDate = booking['checkout_date'] as String?;
 int? adults = booking['adults'] as int?;
 int? child = booking['child'] as int?;
 String? createdBy = booking['created_by'] as String?;
@@ -94,8 +183,7 @@ double? payment = booking['payment'] as double?;
 String? extraCharge = booking['extra_charge'].toString();
 double? charges = booking['charges'] as double?;
 String? balance = booking['balance'].toString();
-TextEditingController itemExtraCharge =  TextEditingController()  ;
-itemExtraCharge.text = booking['item_extra_charge'] ?? '' ;
+String? itemExtraCharge = booking['item_extra_charge'] as String?;
 String? name = booking['name'] as String?;
 String? gender = booking['gender'] as String?;
 String? phoneNumber = booking['phone_number'].toString();
@@ -107,7 +195,7 @@ String? cardId = booking['card_id'] as String?;
 String? otherInformation = booking['other_information'] as String?;
 int? isDelete = booking['is_delete'] as int?;
 String? housekeepingStatus = booking['housekeeping_status'] as String?;
-paymentTypeController.text = booking['payment_type'] ?? '';
+
 String? date = booking['date'] as String?;
  bookingIdController.text = bookingId?.toString() ?? '';
   checkInController.text = checkinDate ?? DateTime.now().toString();
@@ -169,198 +257,129 @@ bookingNoteController.text = note ?? '';
     builder: (BuildContext context) {
       return AlertDialog(
         
-        title: TitleBar(title: 'Update Booking'),
+        title: TitleBar(title: 'Update Guest'),
         content:   Container(
   margin: EdgeInsets.only(top: 20),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(width: 15), // Add spacing between columns
-              Expanded(
-                child: buildLabelAndContent('Booking Information',[
-                      SizedBox(width: 15), 
-                 DateRangePickerWidget(
-              labelText: 'Check-Out Date',
-              checkin:checkInController,
-              checkout:checkOutController,
-              night:nightController,
-              checkcurrentdate: checkOutDate,
-              onDateSelectedDate: (selectedDate) {
-            
-              }
-              , onChange: (DateTime checkin, DateTime checkout, int nights) {
-                checkInController.text = checkin.toString();
-                checkOutController.text = checkout.toString();
-updateFields(nights);
-nightCal = nights;
-                },
-            ),
+              SizedBox(width: 20), // Add spacing between columns
+             Expanded(
+                child:buildLabelAndContent('Guest Information', 
+                   [
+                    Row(
+      children: [
+           
+                    CustomTextField(
+                      controller: guestNameController,
+                      labelText: 'Guest Name',
+                      width: 265,
+                      
+                    ), SizedBox(width: 20), CustomDropdownButton(
+                      labelText: 'Gender',
+            width: 265,
+            items: ['No set', 'Male', 'Female'],
+            selectedValue:genderController.text ,
+            hintText: 'Room Status',
+            onChanged: (value) {
+                genderController.text = value!;
+
+            },
+          )
+          
+      ]),
+          Row(
+      children: [
         
-           Row(
-      children: [ 
-CheckSelectRoomRate(
-  check_in: checkInController,
-  check_out: checkOutController,
-  roomTypeController: roomTypeController,
-  roomNumberController: roomNumberController,
-  roomIdController: roomIdController,
-  getroomrateController:getroomrateController,
-  onTextChanged:(value){
-    
-    isChecked=true;
-                //  roomRateController.text = getroomrateController.text;
-          },
-  
-  ),
-          SizedBox(width: 15), 
-          CustomDropdownButton(
-            width: 150,
-            labelText: 'Air Method',
-            items: ['No set', 'Fan', 'Conditioner','All'],
-            selectedValue:BookingAirMethodController.text ,
-            hintText: 'Booking Air Method',
-            onChanged: (value) {
-                BookingAirMethodController.text = value!;
+                    DatePickerTextField(
+                    checkcurrnetdate: DateTime(2000),
+                      controller: dobController,
+                      labelText: 'DOB',
+                      width: 265,
+                      
+                       onDateSelectedDate: (selectedDate) {
+              // Handle the selected date here
+              print('Selected Date: $selectedDate');
             },
-          )
-//                   CustomTextField(
-//   width: 110,
-//   controller: roomNumberController,
-//   labelText: 'Room Number',
-// )
-      ]),
-       Row(
-      children: [ 
-                   CheckBoxCustomRoomRate(
-          isChecked: isChecked,
-          roomRateController:roomRateController,
-          onChanged: (newValue) {
-         
-            isChecked = newValue ?? false;
-            print(newValue);
-            if(newValue == true){
-              
-            }else{
-              roomRateController.text =  ( booking['room_rate'] ?? '\$0');
-            }
-            
-   updateFields(nightCal);
-          },
-          onTextChanged:(value){
-                 updateFields(nightCal);
-          }
-        )
-          ,SizedBox(width: 15)
-        ,  CustomDropdownButton(
-                      labelText: 'Type',
-            width: 155,
-            items: ['Cash', 'Bank'],
-            selectedValue:paymentTypeController.text ,
-            hintText: 'Payment ',
+                    ),
+                      SizedBox(width: 20), 
+                   selectCountry_dropdown(
+          width: 270,
+          labelText: 'Country',
+            selectedValue:countryController.text ,
+            hintText: 'Room Status',
             onChanged: (value) {
-                paymentTypeController.text = value!;
-                print(paymentTypeController.text);
+                countryController.text = value!;
+                print(countryController.text);
 
             },
-          )
-                    
-                    ,SizedBox(width: 15),
-                      MouseRegion(
-  cursor: SystemMouseCursors.click,
-  child:   
-Stack(
-  children: [
-    CustomTextField(
-      width: 155,
-      isCurrency: true,
-      controller: extraChargeController,
-      enabled: false,
-      labelText: 'Extra Charge',
-      onChanged: (value) {
-        updateFields(nightCal);
-      },
-    ),
-    Positioned(
-      top: 33,
-      right: 5,
-      child: GestureDetector(
-        onTap: () {
-          showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return paymentdialogpage(
-                  onDialogClosed: (result, isChecked, price) {
-                    itemExtraCharge.text = price;
-                    extraChargeController.text = result ;
-                    updateFields(nightCal);
-                  },
-                  payment_id: booking['payment_id'].toString(),
-                );
-              },
-            );
-        },
-        child: Container(
-              decoration: BoxDecoration(
-                color: Color.fromARGB(255, 0, 140, 255), // Set your desired background color here
-                 borderRadius: BorderRadius.circular(10.0),
-              ),
-              padding: EdgeInsets.all(8), // Adjust the padding as needed
-              child: Icon(
-                Icons.account_balance_wallet,
-                size: 15, // Adjust the size of the icon as needed
-                color: Colors.white, // Set the icon color if needed
-              ),
-            ),
-            )// Replace 'your_icon' with the desired icon
       ),
-  ],
-),
-        )
-
       ]),
-        Row(
+
+         Row(
       children: [ 
+        
                     CustomTextField(
-                      width: 510/3,
-                      isCurrency: true,
-                      controller: totalPaymentController,
-                      labelText: 'Total Payment',
-                      onChanged:(value){
-                 updateFields(nightCal);
-          },
-                    ),SizedBox(width: 15),
+                      controller: adultController,
+                      labelText: 'Adult',
+                      width: 265,
+                      isNumeric:true, 
+                    ),
+                      SizedBox(width: 20), 
                     CustomTextField(
-                      width: 510/3,
-                        isCurrency: true,
-                        enabled: false,
-                      controller: totalChargeController,
-                      labelText: 'Total Charge',
-                    ),SizedBox(width: 15),
-                    CustomTextField(
-                      width: 510/3,
-                      enabled: false,
-                        isCurrency: true,
-                      controller: totalBalanceController,
-                      labelText: 'Total Balance',
+                      controller: childController,
+                      labelText: 'Child',
+                      width: 265,
+                       isNumeric:true,
                     )
-      ]),Row(
+      ]),
+          Row(
+      children: [
+                    CustomTextField(
+                       isNumeric:true,
+                      controller: phoneController,
+                      labelText: 'Phone Number',
+                      width: 265,
+                    ),
+                      SizedBox(width: 20),
+                        CustomTextField(
+                      controller: cardIdController,
+                      labelText: 'Card ID',
+                      width: 265,
+                    ) 
+                    
+      ]),
+      Row(
         children: [
-           CustomTextField(
-                      controller: bookingNoteController,
-                      labelText: 'Booking Note',
-                      isNote: true,
+          CustomTextField(
+                      controller: addressController,
+                      labelText: 'Address',
+                      width: 550,
+                    )
+        ],
+      ),
+          Row(
+      children: [
+                   
+                    CustomTextField(
+                      
+                      controller: emailController,
+                      labelText: 'Email',
+                      width: 550,
+                    )]),  SizedBox(width: 20), 
+                    CustomTextField(
+                      controller: guestNoteController,
+                      labelText: 'Guest Noted',
                       height:200,
                       width:550,
                     ),
-        ],
-      )
-                  ],() {
-              // This is the action that will be executed when the button is pressed
-              print('Button Pressed!');
+                  ]
+                  ,() {
+               
             }
                 ),
               ),
-            ],
+                ],
           ),
         ),
         actions: [
@@ -443,13 +462,12 @@ SizedBox(width:20,),
   extraCharge.replaceAll('\$', ''),
   totalPayment.replaceAll('\$', ''),
   totalCharge.replaceAll('\$', ''),
-    itemExtraCharge.text,
   totalBalance.replaceAll('\$', ''),
   checkIn,   // Use checkIn directly
   roomType,
   roomIdController.text,
-  paymentTypeController.text,
-   booking['booking_status'] ?? 'Booking'
+  booking['payment_type'] ?? 'Not set',
+  booking['booking_status'] ?? 'booking'
    ); },
 )
 ]
@@ -484,34 +502,26 @@ Future<void> submitUpdatedData(
     String extraCharge,
     String totalPayment,
     String totalCharge,
-    String item_extra_charge,
     String totalBalance,
     String checkin_date,
     String roomType,
         String room_id,
         String paymentType,
         String bookingStatus
-
     ) async {
-  
+
   final String baseUrl1 = 'http://localhost:8000/api/booking/update/$booking_id';
-  print('$baseUrl1?item_extra_charge=$item_extra_charge&booking_note=$bookingNote&payment_type=$paymentType&booking_air_method=$bookingAirMethod&room_rate=$roomRate&booking_status=$bookingStatus&name=$name&gender=$gender&dob=$dob&country=$country&adult=$adult&child=$child&phone_number=$phone_number&address=$address&cardId=$cardId&email=$email&checkout_date=$checkout_date&room_type=$room_type&roomNumber=$roomNumber&extra_charge=$extraCharge&payment=$totalPayment&charges=$totalCharge&balance=$totalBalance&checkin_date=$checkin_date&arrival_date=$checkin_date&departure_date=$checkout_date&payment_status=$paymentStatus');   
-   
-   final url = Uri.parse('$baseUrl1?item_extra_charge=$item_extra_charge&booking_note=$bookingNote&payment_type=$paymentType&booking_air_method=$bookingAirMethod&room_rate=$roomRate&booking_status=$bookingStatus&name=$name&gender=$gender&dob=$dob&country=$country&adult=$adult&child=$child&phone_number=$phone_number&address=$address&cardId=$cardId&email=$email&checkout_date=$checkout_date&room_type=$room_type&roomNumber=$roomNumber&extra_charge=$extraCharge&payment=$totalPayment&charges=$totalCharge&balance=$totalBalance&checkin_date=$checkin_date&arrival_date=$checkin_date&departure_date=$checkout_date&payment_status=$paymentStatus');
-    final response = await http.put(url);   
-   List<dynamic> bookingData = await ApiFunctionsBookingbyid.fetchBookingData(booking['booking_id']);
-    if (response.statusCode == 200) {
-         
-    
-      print(bookingData[0]);
-      AwesomeDialog(
+   final url = Uri.parse('$baseUrl1?booking_note=$bookingNote&payment_type=$paymentType&booking_air_method=$bookingAirMethod&room_rate=$roomRate&booking_status=$bookingStatus&name=$name&gender=$gender&dob=$dob&country=$country&adult=$adult&child=$child&phone_number=$phone_number&address=$address&cardId=$cardId&email=$email&checkout_date=$checkout_date&room_type=$room_type&roomNumber=$roomNumber&extra_charge=$extraCharge&payment=$totalPayment&charges=$totalCharge&balance=$totalBalance&checkin_date=$checkin_date&arrival_date=$checkin_date&departure_date=$checkout_date&payment_status=$paymentStatus');
+    final response = await http.put(url);      
+    print(url);
+    List<dynamic> bookingData = await ApiFunctionsBookingbyid.fetchBookingData(booking['booking_id']);
+     AwesomeDialog(
          width: 500,  
         context: context,
         dialogType: DialogType.success,
-        title: 'Update Booking Success',
+        title: 'Update Guest Success',
         btnOkOnPress: () {  
           reloadDataCallback();
-          Navigator.of(context).pop();
            Navigator.of(context).pop();
      
         BookingDialog(context, reloadDataCallback!).showBookingDetailsDialog(bookingData[0]);
@@ -519,6 +529,11 @@ Future<void> submitUpdatedData(
         },
         
       ).show();
+    if (response.statusCode == 200) {
+         
+    
+      print(bookingData[0]);
+     
       print('Booking created successfully.');
      
     } else {
@@ -528,7 +543,7 @@ Future<void> submitUpdatedData(
          width: 500,  
         context: context,
         dialogType: DialogType.error,
-        title: 'Update Booking successfully',
+        title: 'Update Guest Failed',
         desc: response.toString(),
         btnOkOnPress: () {
 

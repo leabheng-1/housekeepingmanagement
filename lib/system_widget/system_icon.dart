@@ -5,7 +5,7 @@ class iconController {
   static const IconData checkInIcon = Icons.login_sharp;
   static const IconData checkOutIcon = Icons.logout_sharp;
   static const IconData arrivalsIcon = Icons.flight_land;
-  static const IconData departuresIcon = Icons.airplay_rounded;
+  static const IconData departuresIcon = Icons.flight_takeoff;
   static const IconData availableIcon = Icons.check_circle_outline;
   static const IconData inHouseIcon = Icons.camera_outdoor;
   static const IconData allRoomsIcon = Icons.bed_sharp;
@@ -24,6 +24,7 @@ class iconController {
   static IconData saveIcon = Icons.save;
   static IconData closeIcon = Icons.close;
   static IconData editIcon = Icons.edit;
+    static IconData addIcon = Icons.add;
   static const IconData settiongIcon = Icons.settings;
 
   static airMethod(String? airMethod) {

@@ -1,27 +1,38 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:housekeepingmanagement/data_list/textbutton_list.dart';
+import 'package:housekeepingmanagement/dialog/AwesomeDialogCs.dart';
 import 'package:housekeepingmanagement/dialog/bookingdialog.dart';
+import 'package:housekeepingmanagement/dialog/checkBtn.dart';
 import 'package:housekeepingmanagement/frontdesk/widget/Empty.dart';
+import 'package:housekeepingmanagement/frontdesk/widget/formatSystem.dart';
 import 'package:housekeepingmanagement/system_widget/guest_inhouse_widget.dart';
 import 'package:housekeepingmanagement/system_widget/system_color.dart';
 import 'package:housekeepingmanagement/widget/checkinandcheckout.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class DataCheckInList extends StatefulWidget {
-  const DataCheckInList({
-    super.key,
-  });
-
+class mutibookingdialog extends StatefulWidget {
+   final String group_id;
+   final void Function(String booking_id ) onChange;
+   const mutibookingdialog({
+      required this.group_id, 
+      required this.onChange
+   });
+  void reloadData() {
+    _mutibookingdialogState? state = _key.currentState;
+    state?.reloadData();
+  }
   @override
   // ignore: library_private_types_in_public_api
-  _DataCheckInListState createState() => _DataCheckInListState();
+  _mutibookingdialogState createState() => _mutibookingdialogState();
 }
-
-class _DataCheckInListState extends State<DataCheckInList> {
+final GlobalKey<_mutibookingdialogState> _key = GlobalKey<_mutibookingdialogState>();
+class _mutibookingdialogState extends State<mutibookingdialog> {
+  
   List<dynamic> bookingsData = [];
   Set<int> selectedRows = <int>{};
+String selectedRowsString = '';
  bool isLoading = false;
   @override
   void initState() {
@@ -31,14 +42,14 @@ class _DataCheckInListState extends State<DataCheckInList> {
 
   Future<void> fetchData() async {
     isLoading = true;
-    final response = await http
-        .get(Uri.parse('http://localhost:8000/api/dashboard/today_booking'));
+    final response = await http.get(Uri.parse('http://localhost:8000/api/booking/BookingDailog?group_id=${widget.group_id}'));
+
 
     if (response.statusCode == 200) {
       Map<String, dynamic> data = json.decode(response.body);
        isLoading = false;
       setState(() {
-        bookingsData = data['data']['check_in_bookings'];
+        bookingsData = data['data'];
         print(bookingsData.length);
       });
     } else {
@@ -89,7 +100,9 @@ class _DataCheckInListState extends State<DataCheckInList> {
 
     return months[month];
   }
-
+ Future<void> reloadData() async {
+    await fetchData();
+  }
   @override
   Widget build(BuildContext context) {
     return  
@@ -102,6 +115,9 @@ class _DataCheckInListState extends State<DataCheckInList> {
      )
                               :
     bookingsData.length <= 0 ? EmptyStateWidget() : 
+    Container(
+      height: 400,
+      child: 
     Padding(
       padding: const EdgeInsets.only(top: 10),
       child: Column(
@@ -123,14 +139,14 @@ class _DataCheckInListState extends State<DataCheckInList> {
                     DataColumn(
                       label: SizedBox(
                         width: 100,
-                        child: Text('Guest Name',
+                        child: Text('Booking ID',
                             style: TextStyle(fontWeight: FontWeight.bold)),
                       ),
                     ),
                     DataColumn(
                       label: SizedBox(
                         width: 100,
-                        child: Text('Phone Number',
+                        child: Text('Room Type',
                             style: TextStyle(fontWeight: FontWeight.bold)),
                       ),
                     ),
@@ -143,8 +159,22 @@ class _DataCheckInListState extends State<DataCheckInList> {
                     ),
                     DataColumn(
                       label: SizedBox(
-                        width: 120,
-                        child: Text('Stay Date',
+                        width: 100,
+                        child: Text('Payment',
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                      ),
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        width: 100,
+                        child: Text('Charge',
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                      ),
+                    ),
+                    DataColumn(
+                      label: SizedBox(
+                        width: 100,
+                        child: Text('Balance',
                             style: TextStyle(fontWeight: FontWeight.bold)),
                       ),
                     ),
@@ -155,10 +185,10 @@ class _DataCheckInListState extends State<DataCheckInList> {
                             style: TextStyle(fontWeight: FontWeight.bold)),
                       ),
                     ),
-                    DataColumn(
+                      DataColumn(
                       label: SizedBox(
-                        width: 100,
-                        child: Text('Night',
+                        width: 130,
+                        child: Text('Booking Status',
                             style: TextStyle(fontWeight: FontWeight.bold)),
                       ),
                     ),
@@ -179,19 +209,26 @@ class _DataCheckInListState extends State<DataCheckInList> {
                   rows: bookingsData.asMap().entries.map<DataRow>((entry) {
                     int index = entry.key;
                     Map<String, dynamic> booking = entry.value;
-                    bool isSelected = selectedRows.contains(index);
+                    bool isSelected = selectedRows.contains(booking['booking_id']);
 
                     return DataRow(
-                      // selected: isSelected,
-                      // onSelectChanged: (isSelected) {
-                      //   setState(() {
-                      //     if (isSelected != null && isSelected) {
-                      //       selectedRows.add(index);
-                      //     } else {
-                      //       selectedRows.remove(index);
-                      //     }
-                      //   });
-                      // },
+                      selected: isSelected,
+                      onSelectChanged: (isSelected) {
+                          
+                        setState(() {
+                          if (isSelected != null && isSelected) {
+                            selectedRows.add(booking['booking_id']);
+                          } else {
+                            selectedRows.remove(booking['booking_id']);
+                          }
+                        });
+                        Future.delayed(const Duration(milliseconds: 100), () {
+                         selectedRowsString = selectedRows.toList().join(', ');
+widget.onChange(selectedRowsString); 
+                          print(selectedRowsString);
+                          }
+                          );
+                      },
                       cells: [
                         DataCell(
                           SizedBox(
@@ -201,17 +238,20 @@ class _DataCheckInListState extends State<DataCheckInList> {
                             ),
                           ),
                         ),
-                        DataCell(
+                         DataCell(
                           SizedBox(
-                            width: 180,
+                             
                             child: Text(
-                              booking['name'] ?? 'N/A',
+                              booking['booking_id'].toString() ?? 'N/A',
                             ),
                           ),
                         ),
                         DataCell(
-                          Text(
-                            booking['phone_number'] ?? 'N/A',
+                          SizedBox(
+                             
+                            child: Text(
+                              booking['room_type'] ?? 'N/A',
+                            ),
                           ),
                         ),
                         DataCell(
@@ -219,14 +259,34 @@ class _DataCheckInListState extends State<DataCheckInList> {
                             width: 50,
                             child: Center(
                               child: Text(
-                                booking['room_id']?.toString() ?? 'N/A',
+                                booking['room_number']?.toString() ?? 'N/A',
                               ),
                             ),
                           ),
                         ),
-                        DataCell(
-                          Text(
-                            '${formatDate(booking['checkin_date'])} - ${formatDate(booking['checkout_date'])}',
+                         DataCell(
+                          SizedBox(
+                             
+                            child: Text(
+                              formatCurrency(booking['payment']).toString() ?? 'N/A',
+                            ),
+                          ),
+                        ),
+                         DataCell(
+                          SizedBox(
+                             
+                            child: Text(
+                              formatCurrency(booking['charges']).toString() ?? 'N/A',
+                            ),
+                          ),
+                        ),
+                         DataCell(
+                          SizedBox(
+                             
+                            child: Text(
+                              formatCurrency(booking['balance']).toString()
+                               ?? 'N/A',
+                            ),
                           ),
                         ),
                         DataCell(
@@ -239,11 +299,26 @@ class _DataCheckInListState extends State<DataCheckInList> {
                             ),
                           ),
                         ),
-                        DataCell(
-                          Text(
-                            calculateDateDifference(booking['checkin_date'],
-                                booking['checkout_date']),
-                          ),
+                           DataCell(
+                          Center(
+                                  child: Container(
+                                    width: 140,
+                                    height: 30,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 5),
+                                    decoration: BoxDecoration(
+                                      color: ColorController.bookingStatus(booking['booking_status'])
+                             ,
+                                      borderRadius: BorderRadius.circular(50.0),
+                                    ),
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      booking['booking_status'],
+                                      style:
+                                          const TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                ),
                         ),
                         DataCell(
                           Row(
@@ -260,32 +335,60 @@ class _DataCheckInListState extends State<DataCheckInList> {
                                                             booking);
   },
                               ),
+                              checkbtncheckin(booking) ? 
                               TextButttonList(
                                 title: 'Check-In',
                                 height: 0.1,
                                 width: 0.06,
-                                backgroundColor: Colors.purple.shade800,
+                                backgroundColor: ColorController.checkInColor,
                                 onPressed: (){
-                                  AwesomeDialog(
-          width: 650,
-                      context: context,
-                      keyboardAware: true,
-                      dismissOnBackKeyPress: false,
-                      dialogType: DialogType.warning,
-                      animType: AnimType.bottomSlide,
-                      btnCancelText: "NO",
-                      btnOkText: "YES",
-                      title: 'Check In',
-                      // padding: const EdgeInsets.all(5.0),
-                      desc:
-                          'Do you want Check this Booking',
-                      btnCancelOnPress: () {},
-                      btnOkOnPress: () {
-                         onCheck(context, booking['booking_id'],'checkin',fetchData,false);
-                      },
-                    ).show();
-                                },
-                              ),
+                                   AwesomeDialog(
+      width: 650,
+      context: context,
+      keyboardAware: true,
+      dismissOnBackKeyPress: false,
+      dialogType: DialogType.warning,
+      animType: AnimType.bottomSlide,
+      btnCancelText: "NO",
+      btnOkText: "YES",
+      title:  'Check In',
+      // padding: const EdgeInsets.all(5.0),
+      desc: 'Do you want to check in this booking ?',
+      btnCancelOnPress: () {},
+      btnOkOnPress: () {
+        print('this it booking ${ booking['booking_id']}');
+        onCheck(context, booking['booking_id'], 'checkin', fetchData, false  );
+      },
+    ).show();
+                                  },
+                              ) : booking['booking_status'] == 'In House' ?
+                               TextButttonList(
+                                title: 'Check-out',
+                                height: 0.1,
+                                width: 0.06,
+                                backgroundColor: ColorController.checkOutColor,
+                                onPressed: (){
+                                    AwesomeDialog(
+      width: 650,
+      context: context,
+      keyboardAware: true,
+      dismissOnBackKeyPress: false,
+      dialogType: DialogType.warning,
+      animType: AnimType.bottomSlide,
+      btnCancelText: "NO",
+      btnOkText: "YES",
+      title: 'Check Out',
+      // padding: const EdgeInsets.all(5.0),
+      desc:  'Do you want to check Out this booking ?',
+      btnCancelOnPress: () {},
+      btnOkOnPress: () {
+        print('this it booking ${ booking['booking_id']}');
+        onCheck(context, booking['booking_id'], 'checkout', fetchData, false  );
+      },
+    ).show(); 
+                            
+                                  },
+                              ) : Row()
                             ],
                           ),
                         ),
@@ -296,9 +399,7 @@ class _DataCheckInListState extends State<DataCheckInList> {
               ),
             ],
           ),
-          const SizedBox(
-            height: 200,
-          ),
+          
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -376,6 +477,7 @@ class _DataCheckInListState extends State<DataCheckInList> {
           ),
         ],
       ),
+    )
     );
   }
 

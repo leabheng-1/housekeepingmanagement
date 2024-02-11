@@ -1,6 +1,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:housekeepingmanagement/data_list/textbutton_list.dart';
+import 'package:housekeepingmanagement/dialog/bookingdialog.dart';
 import 'package:housekeepingmanagement/frontdesk/widget/Empty.dart';
 import 'package:housekeepingmanagement/widget/checkinandcheckout.dart';
 import 'package:http/http.dart' as http;
@@ -19,6 +20,7 @@ class DataCheckOutList extends StatefulWidget {
 class _DataCheckOutListState extends State<DataCheckOutList> {
   List<dynamic> bookingsData = [];
   Set<int> selectedRows = <int>{};
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -27,10 +29,12 @@ class _DataCheckOutListState extends State<DataCheckOutList> {
   }
 
   Future<void> fetchData() async {
+     isLoading = true;
     final response = await http
         .get(Uri.parse('http://localhost:8000/api/dashboard/today_booking'));
 
     if (response.statusCode == 200) {
+       isLoading = false;
       Map<String, dynamic> data = json.decode(response.body);
       setState(() {
         bookingsData = data['data']['check_out_bookings'];
@@ -87,6 +91,14 @@ class _DataCheckOutListState extends State<DataCheckOutList> {
   @override
   Widget build(BuildContext context) {
     return 
+    isLoading ? const 
+     Padding(
+      padding: const EdgeInsets.only(top: 100),
+    child: Center(
+                                      child: CircularProgressIndicator(),
+                                    )
+     )
+                              :
     bookingsData.length <= 0 ? EmptyStateWidget() : 
      Padding(
       padding: const EdgeInsets.only(top: 10),
@@ -166,16 +178,16 @@ class _DataCheckOutListState extends State<DataCheckOutList> {
                 bool isSelected = selectedRows.contains(index);
 
                 return DataRow(
-                  selected: isSelected,
-                  onSelectChanged: (isSelected) {
-                    setState(() {
-                      if (isSelected != null && isSelected) {
-                        selectedRows.add(index);
-                      } else {
-                        selectedRows.remove(index);
-                      }
-                    });
-                  },
+                  // selected: isSelected,
+                  // onSelectChanged: (isSelected) {
+                  //   setState(() {
+                  //     if (isSelected != null && isSelected) {
+                  //       selectedRows.add(index);
+                  //     } else {
+                  //       selectedRows.remove(index);
+                  //     }
+                  //   });
+                  // },
                   cells: [
                     DataCell(
                       SizedBox(
@@ -238,8 +250,10 @@ class _DataCheckOutListState extends State<DataCheckOutList> {
                             width: 0.05,
                             backgroundColor: Colors.green,
                             onPressed: () {
-    // Define the action you want to perform when the button is pressed
-    print("Button pressed!");
+     BookingDialog(
+                                                            context, fetchData)
+                                                        .showBookingDetailsDialog(
+                                                            booking);
   },
                           ),
                           TextButttonList(
@@ -263,7 +277,7 @@ class _DataCheckOutListState extends State<DataCheckOutList> {
                           'Do you want Check Out this Booking',
                       btnCancelOnPress: () {},
                       btnOkOnPress: () {
-                         onCheck(context, booking['booking_id'],'checkout',fetchData);
+                              onCheck(context, booking['booking_id'],'checkout',fetchData,false);
                       },
                     ).show();
                             },

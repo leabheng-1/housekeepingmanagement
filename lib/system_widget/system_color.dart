@@ -71,7 +71,9 @@ class ColorController {
       case "block":
         return blockColor;
       case "booking":
-        return arrivalsColor;       
+        return arrivalsColor; 
+      case "checked out":
+        return checkOutColor;         
       default:
         return allRoomsColor;
     }

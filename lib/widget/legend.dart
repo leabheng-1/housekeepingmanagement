@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:housekeepingmanagement/system_widget/system_color.dart';
 
 Widget buildLabelAndContent(
-    String label, List<Widget> content, VoidCallback action , {bool isBtn = false}) {
+    String label, List<Widget> content, VoidCallback action , {bool isBtn = false ,  double maxWidthtitle = 200.0} ) {
   return Stack(
     clipBehavior: Clip.none,
     children: [
@@ -33,8 +33,8 @@ Widget buildLabelAndContent(
         top: -20,
         left: 20,
         child: ConstrainedBox(
-          constraints: const BoxConstraints(
-            maxWidth: 200,
+          constraints:  BoxConstraints(
+            maxWidth: maxWidthtitle,
           ),
           child: Container(
             decoration: BoxDecoration(

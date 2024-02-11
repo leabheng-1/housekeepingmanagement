@@ -45,10 +45,10 @@ class _GuestInHouseBottonState extends State<GuestInHouseBotton> {
         enabled: isLoading,
         child: Expanded(
       child: Padding(
-        padding: const EdgeInsets.only(left: 30, right: 10, top: 15),
+        padding: const EdgeInsets.only(left: 20, right: 15, top: 15),
         child: Container(
           height: 80,
-          width: 1200,
+          width: 1245,
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(10),
@@ -100,10 +100,10 @@ class _GuestInHouseBottonState extends State<GuestInHouseBotton> {
                 Expanded(
                   child: SubButtonFrontdeskWidget(
                     icon: const Icon(
-                      iconController.departuresIcon,
+                     iconController.departuresIcon,
                       color: Colors.white,
                     ),
-                    title: "Departure",
+                    title: "Departures",
                     value: data['count_departure'] ?? 0 ,
                     backgroundColor: Colors.grey.shade400,
                     iconbackground: Colors.grey.shade700,
@@ -113,7 +113,7 @@ class _GuestInHouseBottonState extends State<GuestInHouseBotton> {
                 Expanded(
                   child: SubButtonFrontdeskWidget(
                     icon: const Icon(
-                      iconController.arrivalsIcon,
+                      iconController.availableIcon,
                       color: Colors.white,
                     ),
                     title: "Available",

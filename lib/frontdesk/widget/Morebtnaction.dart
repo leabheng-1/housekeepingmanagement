@@ -156,7 +156,7 @@ static void noac(){
                           'This Booking Will Remove From Room Table',
                       btnCancelOnPress: () {},
                       btnOkOnPress: () {   
-                             onCheck(context, bookingId,'no_show',noac);
+                             onCheck(context, bookingId,'no_show',noac,true);
                       },
                     ).show();
         break;
@@ -170,16 +170,12 @@ static void noac(){
                       animType: AnimType.bottomSlide,
                       btnCancelText: "NO",
                       btnOkText: "YES",
-                      title: 'DO YOU WANT TO NO SHOW THIS BOOKING',
-                      // padding: const EdgeInsets.all(5.0),
-                      desc:
-                          'This Booking Will Remove From Room Table',
+                      title: 'DO YOU WANT TO Undo Check In THIS BOOKING',
                       btnCancelOnPress: () {},
                       btnOkOnPress: () {   
-                             onCheck(context, bookingId,'no_show',noac);
+                             onCheck(context, bookingId,'undocheckin',noac,true);
                       },
                     ).show();
-      onCheck(context, bookingId,'undocheckin',noac);
         //Do something
         break;
        case MenuItems.UndoCheckOut:
@@ -198,7 +194,7 @@ static void noac(){
                           'This Booking Will BACK IN HOUSE',
                       btnCancelOnPress: () {},
                       btnOkOnPress: () {   
-                           onCheck(context, bookingId,'undocheckout',noac);
+                           onCheck(context, bookingId,'undocheckout',noac,true);
                       },
                     ).show();
        
@@ -220,7 +216,7 @@ static void noac(){
                           'This Booking Will Remove From Room Table',
                       btnCancelOnPress: () {},
                       btnOkOnPress: () {   
-                              onCheck(context, bookingId,'cancel',noac);
+                              onCheck(context, bookingId,'cancel',noac,true);
                       },
                     ).show();
     

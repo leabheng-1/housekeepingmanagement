@@ -302,7 +302,7 @@ Row(
     label: "Check In",
     action: () {
       
-      onCheck(context, booking['booking_id'],'checkin',reloadDataCallback);
+      onCheck(context, booking['booking_id'],'checkin',reloadDataCallback,true);
       
 
       
@@ -318,7 +318,7 @@ Visibility(
     color:ColorController.checkOutColor,
     label: "Check Out",
     action: () {
-      onCheck(context, booking['booking_id'],'checkout',reloadDataCallback);
+      onCheck(context, booking['booking_id'],'checkout',reloadDataCallback,true);
     },
   ),
 )

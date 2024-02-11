@@ -1,3 +1,5 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:housekeepingmanagement/system_widget/system_color.dart';
 
@@ -8,6 +10,7 @@ class IconButtonWithLabel extends StatelessWidget {
   final Color labelColor; // Add a parameter for the label text color
   final Color buttonBackgroundColor; // Add a parameter for the button background color
   final VoidCallback action;
+  
 
   IconButtonWithLabel({
     required this.icon,
@@ -65,7 +68,10 @@ class AddBookingDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconButtonWithLabel(
+    return 
+    Row(
+      children: [
+     IconButtonWithLabel(
       icon: Icons.add_circle,
       label: 'Add Booking',
       iconColor: Colors.white,
@@ -74,7 +80,40 @@ class AddBookingDialog extends StatelessWidget {
       action: () {
         action();
       },
+    )
+      ],
     );
+   
+  }
+}
+
+class AddGroupBookingDialog extends StatelessWidget {
+  final VoidCallback action;
+  final Key? key; // Add a named 'key' parameter
+
+  AddGroupBookingDialog({
+    required this.action,
+    this.key, // Include the 'key' parameter in the constructor
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return 
+    Row(
+      children: [
+        IconButtonWithLabel(
+      icon: Icons.add_circle,
+      label: 'Add Group Booking',
+      iconColor: Colors.white,
+      labelColor: Colors.white,
+      buttonBackgroundColor: const Color.fromARGB(255, 133, 216, 255),
+      action: () {
+        action();
+      },
+    ),
+      ],
+    );
+   
   }
 }
 

@@ -2,11 +2,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:housekeepingmanagement/data_booking/add_booking_dialog.dart';
+import 'package:housekeepingmanagement/dialog/barDialog.dart';
 import 'package:housekeepingmanagement/dialog/bookingdialog.dart';
 import 'package:housekeepingmanagement/frontdesk/widget/ListView.dart';
 import 'package:housekeepingmanagement/frontdesk/widget/gridView.dart';
 import 'package:housekeepingmanagement/housekeeping_status/housekeeping_botton.dart';
+import 'package:housekeepingmanagement/system_widget/btn.dart';
 import 'package:housekeepingmanagement/system_widget/eventcalendar.dart';
+import 'package:housekeepingmanagement/system_widget/system_icon.dart';
 import 'package:housekeepingmanagement/system_widget/system_color.dart';
 import 'package:housekeepingmanagement/widget/bookingfilter.dart';
 import 'package:housekeepingmanagement/widget/inputbox.dart';
@@ -199,6 +202,15 @@ Key dropdownKey = UniqueKey();
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
+  AddGroupBookingDialog(
+                    action: () {
+                      
+                      BookingDialog(context, reloadData)
+                          .showCreateGroupBookingDialog(newbooking,dateurl);
+                    },
+                    key: UniqueKey(),
+                  ),
+                  SizedBox(width: 20,),
                   AddBookingDialog(
                     action: () {
                       
@@ -425,14 +437,57 @@ is_list_view = 1;
                                             Expanded(
                                               child: GestureDetector(
                                                 onTap: () {
-                                                  if (booking['booking_id'] ==
+                                                   if(booking['room_status']=="Block") {
+                                                     showDialog(
+
+    
+    context: context,
+    builder: (BuildContext context) {
+      return 
+  AlertDialog(
+        
+        title: TitleBar(title: 'Room Block'),
+        
+        content:
+        Row(
+          children: [
+            BtnAction(
+   background: Color.fromARGB(52, 0, 0, 0),
+  icon: iconController.closeIcon,
+  textColor: Colors.white,
+  color: const Color.fromARGB(255, 54, 101, 244),
+  label: "UnBlock Room For Booking",
+  action: () {
+       Navigator.of(context).pop();
+       BookingDialog(
+                                                            context, reloadData)
+                                                        .showCreateBookingDialog(
+                                                            booking,dateurl);
+  },
+),
+          ],
+         
+        )
+);
+},
+  );
+ 
+                                                  } else if (booking['booking_id'] ==
                                                       null) {
                                                     BookingDialog(
                                                             context, reloadData)
                                                         .showCreateBookingDialog(
                                                             booking,dateurl);
                                                     ;
-                                                  } else {
+                                                  } 
+                                                  else if (booking['group_id'] != null){
+                                                      BookingDialog(
+                                                            context, reloadData)
+                                                        .showBookingGroupDetailsDialog(
+                                                            booking);
+
+                                                  }
+                                                  else {
                                                     BookingDialog(
                                                             context, reloadData)
                                                         .showBookingDetailsDialog(

@@ -5,6 +5,7 @@ import 'package:housekeepingmanagement/system_widget/btn.dart';
 import 'package:housekeepingmanagement/system_widget/system_color.dart';
 import 'package:housekeepingmanagement/system_widget/system_icon.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:housekeepingmanagement/report/widget/pdfview.dart';
 import 'package:http/http.dart' as http;
 String format = '';
 class exportBtn extends StatefulWidget {
@@ -21,9 +22,8 @@ Future<void> submitRequest() async  {
     WidgetsFlutterBinding.ensureInitialized();
     
      final url = '$url_new&format=$format';
-     
-
-  final response = await http.get(Uri.parse(url));
+     if ( format == 'excel' ) {
+        final response = await http.get(Uri.parse(url));
 
   if (response.statusCode == 200) {
     // Use the url_launcher package to open the URL in a web browser
@@ -32,6 +32,12 @@ Future<void> submitRequest() async  {
     // Handle the error
     print('Failed to download PDF: ${response.statusCode}');
   }
+     }else{
+        showWebViewDialog(context,url); 
+     }
+
+ 
+
   }
   
   @override
@@ -152,18 +158,20 @@ abstract class MenuItems {
       ],
     );
   }
+  
 
   static void onChanged(BuildContext context, MenuItem item) {
     switch (item) {
       case MenuItems.pdf:
-        print('object');
-        format = 'PDF';
+      print(context);
+    format = 'PDF';
                 break;
       case MenuItems.share:
       format = 'excel';
         //Do something
         break;
     }
+    
   }
   
 }

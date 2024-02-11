@@ -265,7 +265,7 @@ class selectCountry_dropdown_layout extends State<selectCountry_dropdown> {
 SizedBox(height: 5,),
         Container(
           height: 40,
-          width: 260,
+          width: widget.width,
           margin: const EdgeInsets.only(top: 0),
           decoration: BoxDecoration(
             color: Colors.white,

@@ -115,15 +115,15 @@ class _LoginButtonState extends State<LoginButton> {
                     SizedBox(
                       height: 40,
                       width: 200,
-                      child: ElevatedButton(
-                        onPressed: () {},
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              const Color.fromARGB(255, 58, 33, 243),
-                          shape: const StadiumBorder(),
-                        ),
-                        child: const Text('Login'),
-                      ),
+                      // child: ElevatedButton(
+                      //   onPressed: () {},
+                      //   style: ElevatedButton.styleFrom(
+                      //     backgroundColor:
+                      //         const Color.fromARGB(255, 58, 33, 243),
+                      //     shape: const StadiumBorder(),
+                      //   ),
+                      //   child: const Text('Login',),
+                      // ),
                     ),
                   ],
                 ),

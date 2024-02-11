@@ -192,6 +192,7 @@ class ListViewbooking extends StatelessWidget {
                                                                    const SizedBox(
                                                                       width:
                                                                           10),
+                                                                if(  booking['booking_air_method'] != null && booking['booking_air_method'] != "No set" )
                                                                 Tooltip(
                                                                   message:
                                                                       '${booking['booking_air_method']} ',

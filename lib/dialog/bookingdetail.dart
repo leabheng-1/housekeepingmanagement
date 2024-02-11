@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ApiFunctionsBooking {
-  static Future<List> fetchBookingData(int bookingsId) async {
+  static Future<List> fetchBookingData(dynamic bookingsId) async {
     final response = await http.get(
         Uri.parse('http://localhost:8000/api/booking/all?booking_id=$bookingsId'));
 

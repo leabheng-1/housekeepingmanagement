@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:housekeepingmanagement/dashboard/report.dart';
+import 'package:housekeepingmanagement/frontdesk/widget/formatSystem.dart';
 import 'package:housekeepingmanagement/report/data/DataModel.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -68,7 +69,7 @@ Future<void> fetchMonthlyChargeData() async {
           Expanded(child: Container(
             color: Colors.white,
             height: 100,
-            width: 200,
+            width: 100,
             child: BarChart(
               BarChartData(
                 backgroundColor: Colors.white,
@@ -81,10 +82,12 @@ Future<void> fetchMonthlyChargeData() async {
                   leftTitles: AxisTitles(
                       sideTitles: SideTitles(
                         showTitles: true,
-                        interval:1000,
+                        interval:100,
+                        reservedSize:50,
                         getTitlesWidget: (value, meta) {
                           return Text(
-                            value.toString(),
+                            formatCurrency(value.toString())
+                            ,
                             style: const TextStyle(fontSize:10),
                           );
                         },

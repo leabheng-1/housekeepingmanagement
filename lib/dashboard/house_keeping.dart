@@ -36,7 +36,7 @@ Key dropdownKey = UniqueKey();
               Container(
                 padding:
                     const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                height: 100.0,
+                height: 120.0,
                 child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

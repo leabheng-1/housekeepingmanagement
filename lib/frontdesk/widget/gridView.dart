@@ -4,10 +4,20 @@ import 'package:housekeepingmanagement/system_widget/system_icon.dart';
 
 class gridViewbooking extends StatelessWidget {
    Map<String, dynamic> booking;
-
+String floor = '';
   gridViewbooking({required this.booking});
   @override
   Widget build(BuildContext context,) {
+    if (booking['floor'] == 1) {
+      floor = 'st';
+    }else if(booking['floor'] == 2){
+      floor = 'nd';
+    }else if(booking['floor'] == 3){
+      floor = 'rd';
+    }else if(booking['floor'] == 4){
+      floor = 'th';
+    }
+     
     return Container(
                                                       height: 140,
                                                       margin:
@@ -23,7 +33,9 @@ class gridViewbooking extends StatelessWidget {
                                                             BorderRadius
                                                                 .circular(20.0),
                                                       ),
-                                                      child: Stack(
+                                                      child:
+                                                      
+                                                       Stack(
                                                         children: [
                                                           Align(
                                                             alignment: Alignment
@@ -35,6 +47,7 @@ class gridViewbooking extends StatelessWidget {
                                                               children:
                                                               
                                                                [
+                                                                if(  booking['booking_air_method'] != null && booking['booking_air_method'] != "No set" )
                                                                 Tooltip(
                                                                   message:
                                                                       '${booking['booking_air_method']} ',
@@ -67,7 +80,8 @@ class gridViewbooking extends StatelessWidget {
                                                                           255),
                                                                     ),
                                                                   ),
-                                                                ),
+                                                                )
+                                                                ,
                                                                 if (booking['booking_air_method'] == 'All')
                                                                 SizedBox(width: 5,),
                                                                  if (booking['booking_air_method'] == 'All')
@@ -122,6 +136,7 @@ class gridViewbooking extends StatelessWidget {
                                                                   height: 1,
                                                                 ),
                                                               ),
+                                                              
                                                               const SizedBox(
                                                                   height: 2),
                                                               Text(
@@ -221,7 +236,7 @@ class gridViewbooking extends StatelessWidget {
                                                                   if (booking['booking_id'] !=null)
                                                                     Tooltip(
                                                                       message:
-                                                                          '${booking['payment_type']}',
+                                                                          '${booking['payment_type'] ?? 'Not set' } ',
                                                                       child:
                                                                           Container(
                                                                         width:
@@ -242,7 +257,32 @@ class gridViewbooking extends StatelessWidget {
                                                                               Colors.white),
                                                                       ),
                                                                     ),
+                                                                    Spacer(),
+                                                                    RichText(
+      text: TextSpan(
+        children: [
+          TextSpan(
+            
+            text:booking['floor'].toString()
+            
+            ),
+          WidgetSpan(
+            child: Transform.translate(
+              offset: const Offset(0, -5), // Adjust the offset as needed
+              child: Text(
+                floor, style: TextStyle(fontSize: 12)),
+            ),
+          ),
+          TextSpan(
+            
+            text:'Floor'
+            
+            ),
+        ],
+      ),
+    )
                                                                 ],
+                                                                
                                                               )
                                                             ],
                                                           ),

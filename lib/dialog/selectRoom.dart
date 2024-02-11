@@ -8,8 +8,10 @@ class CheckSelectRoomRate extends StatefulWidget {
   final TextEditingController roomNumberController;
   final TextEditingController roomIdController;
    final TextEditingController getroomrateController;
+    final TextEditingController check_in;
+   final TextEditingController check_out;
   final ValueChanged<String>? onTextChanged;
-
+  String? roomNumbersselect;
   
 
   CheckSelectRoomRate({
@@ -18,7 +20,10 @@ class CheckSelectRoomRate extends StatefulWidget {
     required this.roomNumberController,
     this.onTextChanged,
     required this.roomIdController,
-    required this.getroomrateController
+    required this.getroomrateController,
+    required this.check_in,
+    required this.check_out,
+    roomNumbersselect
   });
 
   @override
@@ -31,11 +36,16 @@ class _CheckSelectRoomRateState extends State<CheckSelectRoomRate> {
 String RoomID = '';
 Key dropdownKey = UniqueKey();
 Future<void> RoomDateType() async { 
-  roomData = await ApiFunctionsroom.fetchroomData('All');
-            roomNumbers = roomData
-          .where((room) => room["roomtype"] == widget.roomTypeController.text)
-          .map((room) => room["room_number"].toString() )
-          .toList(); 
+  roomData = await getRoomNumberAndRate.fetchroomData(widget.check_in.text,widget.check_out.text, 'All');
+  print('this is ${widget.roomNumbersselect}');
+    print('check in ${widget.check_in.text}');
+        print('check out ${widget.check_out.text}');
+           roomNumbers = roomData
+  .where((room) =>
+      room["roomtype"] == widget.roomTypeController.text &&
+      ![widget.roomNumbersselect].contains(room["room_number"].toString()))
+  .map((room) => room["room_number"].toString())
+  .toList();
         setState(() {  
             fetchRoomDate(widget.roomTypeController.text!);
 });
@@ -84,14 +94,15 @@ widget.getroomrateController.text =  roomData
         Row(
           children: [
             CustomDropdownButton(
-              
               width: 250,
               labelText: 'Room Types',
-              items: ['No set', 'Single Room', 'Twin Room'],
+              items: [ 'Single Room', 'Twin Room'],
               selectedValue: widget.roomTypeController.text,
               hintText: 'Room Type',
+              showAsterisk: true,
               onChanged: (value) async {
                 setState(() {
+                   widget.onTextChanged?.call(value!);
                   widget.roomTypeController.text = value!;
                   fetchRoomDate(value!);
                   dropdownKey = UniqueKey();

@@ -17,40 +17,35 @@ class _GuestInHouseState extends State<GuestInHouse> {
   String? selectedDropdownValue;
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const Row(
+    return
+    Scaffold(
+      body: SingleChildScrollView(
+        child: Container(
+          color: Colors.grey[300],
+          child: Column(
+            children: [
+              Row(
           children: [
             Expanded(
+              
               child: GuestInHouseBotton(),
             ),
           ],
         ),
-        Expanded(
-          child: Padding(
-            padding:
-                const EdgeInsets.only(left: 30, right: 10, top: 10, bottom: 10),
-            child: Container(
-              width: double.infinity,
-              height: 550,
-              decoration: BoxDecoration(
-                color: const Color(0xFFFFFFFF),
-                borderRadius: BorderRadius.circular(10),
+              SizedBox(
+                height: 750.0,
+                child: Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 20),
+                    child: GuestInHouseList(),
+                  ),
+                ),
               ),
-              child: Column(
-                children: [
-                 
-                  const Row(
-                    children: [
-                      GuestInHouseList(),
-                    ],
-                  )
-                ],
-              ),
-            ),
+            ],
           ),
-        )
-      ],
+        ),
+      ),
     );
   }
 }

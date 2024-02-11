@@ -7,30 +7,41 @@ import 'package:housekeepingmanagement/dialog/bookingdialog.dart';
 import 'package:http/http.dart' as http;
 
 
-Future<void> onCheck(BuildContext context, int bookingid, String check, VoidCallback? action) async {
+Future<void> onCheck(BuildContext context, dynamic bookingid, String check, VoidCallback action,bool isdialog,{dynamic groupcheckinid , bool isgourpcheck = false } ) async {
   try {
-    List<dynamic> bookingData = await ApiFunctionsBooking.fetchBookingData(bookingid);
+   
 
     final String baseUrl1 = 'http://localhost:8000/api/booking/updatestatus/$check';
-    final url = Uri.parse('$baseUrl1/$bookingid');
-
+    final url = Uri.parse('$baseUrl1/$bookingid?booking_id=$groupcheckinid');
+print('$baseUrl1/$bookingid?booking_id=$groupcheckinid');
     final response = await http.put(url);
     final jsonResponse = json.decode(response.body);
     final errorMessage = jsonResponse['message'];
 
     if (response.statusCode == 200) {
+    
+              Future.delayed(const Duration(milliseconds: 500), () {
+            action.call();
+              });
+      // ignore: use_build_context_synchronously
       AwesomeDialog(
         width: 500,
         context: context,
         dialogType: DialogType.success,
         title: '$check Successfully',
         desc: errorMessage,
-        btnOkOnPress: () { 
-          action?.call();
-          print(bookingData);
-           Navigator.of(context).pop();
-          BookingDialog(context, action!).showBookingDetailsDialog(bookingData[0]);
+        btnOkOnPress: () async { 
+          List<dynamic> bookingData = await ApiFunctionsBooking.fetchBookingData(bookingid);
          
+          if (isdialog) {
+              Navigator.of(context).pop();
+          }
+         if (isgourpcheck) {
+          BookingDialog(context, action).showBookingGroupDetailsDialog(bookingData[0]); 
+         }else{
+          BookingDialog(context, action).showBookingDetailsDialog(bookingData[0]);
+         }
+          
         },
       ).show();
       print('Booking created successfully.');
@@ -55,6 +66,7 @@ Future<void> onCheck(BuildContext context, int bookingid, String check, VoidCall
       ).show();
     }
   } catch (e) {
+
     print('Error during API call: $e');
   }
 }

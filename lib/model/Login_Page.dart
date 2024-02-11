@@ -73,62 +73,60 @@ class _LoginPageState extends State<LoginPage> {
   child: Align(
     alignment: Alignment.bottomLeft,
     child: Container(
-      child: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/images/backgroundlogin.png'),
-            fit: BoxFit.cover,
-          ),
+      width: double.infinity,
+      height: double.infinity,
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/images/backgroundlogin.png'),
+          fit: BoxFit.cover,
         ),
-        child: Container(
-          margin: EdgeInsets.only(left: 100),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'WELCOME',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 50,
-                  fontWeight: FontWeight.bold,
-                ),
+      ),
+      child: Container(
+        margin: const EdgeInsets.only(left: 100),
+        child: const Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'WELCOME',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 50,
+                fontWeight: FontWeight.bold,
               ),
-              Text(
-                'UNIQUE PALM ANGKOR VILLA',
+            ),
+            Text(
+              'UNIQUE PALM ANGKOR VILLA',
+              style: TextStyle(
+                color: Color.fromARGB(243, 208, 208, 208),
+                fontSize: 30,
+              ),
+            ),
+            Text(
+              'SORPHOUN VILLA THE PASSED',
+              style: TextStyle(
+                color: Color.fromARGB(243, 208, 208, 208),
+                fontSize: 25,
+              ),
+            ),
+            Align(
+              alignment: Alignment.bottomLeft,
+              child: Text(
+                'Copy Right',
                 style: TextStyle(
                   color: Color.fromARGB(243, 208, 208, 208),
-                  fontSize: 30,
+                  fontSize: 16,
                 ),
               ),
-              Text(
-                'SORPHOUN VILLA THE PASSED',
-                style: TextStyle(
-                  color: Color.fromARGB(243, 208, 208, 208),
-                  fontSize: 25,
-                ),
-              ),
-              Align(
-                alignment: Alignment.bottomLeft,
-                child: Text(
-                  'Copy Right',
-                  style: TextStyle(
-                    color: Color.fromARGB(243, 208, 208, 208),
-                    fontSize: 16,
-                  ),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     ),
   ),
 ),
 
-          SizedBox(
+          const SizedBox(
             width: 180,
           ),
           Expanded(
@@ -283,7 +281,7 @@ class _LoginPageState extends State<LoginPage> {
                               const Color.fromARGB(255, 58, 33, 243),
                           shape: const StadiumBorder(),
                         ),
-                        child: const Text('Login'),
+                        child: const Text('Login', style: TextStyle(color: Colors.white, fontSize: 15),),
                       ),
                     ),
                     const SizedBox(height: 16),

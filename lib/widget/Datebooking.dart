@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:housekeepingmanagement/frontdesk/widget/formatSystem.dart';
 
 class DateRangePickerWidget extends StatefulWidget {
   final TextEditingController? controller;
@@ -92,7 +93,7 @@ _updateValues();
       setState(() {
         if (isCheckIn) {
           _checkInDate = picked;
-
+_updateValues();
           if (_checkOutDate!.isBefore(_checkInDate!)) {
 
             _checkOutDate = _checkInDate!.add(

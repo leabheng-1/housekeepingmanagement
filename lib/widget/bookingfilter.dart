@@ -27,7 +27,7 @@ class _CustomDropdownFilterState extends State<CustomDropdownFilter> {
         CustomDropdownButton(
              bg:Color.fromRGBO(255, 255, 255, 1),
             width: 200,
-            items: ['All','In House', 'Varaible', 'Block' , 'No Show' , 'Void' , 'Checked In' , 'Checked Out'],
+            items: ['All','In House', 'Available', 'Block' , 'No Show' , 'Void' , 'Checked In' , 'Checked Out'],
             selectedValue:  'All',
             hintText: 'Housekeeping Status',
             onChanged: (value) {

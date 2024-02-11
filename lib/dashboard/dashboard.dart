@@ -172,17 +172,13 @@ Expanded(
                               child: Text('Error: ${snapshot.error}'));
                         } else {
                           return 
-                           Skeletonizer(
-        enabled: snapshot.connectionState ==
-                            ConnectionState.waiting,
-        child:
                            AnimatedSwitcher(
                             duration: const Duration(milliseconds: 300),
                             child: listviewClicked
                                 ? const DataCheckInList()
                                 : const DataCheckOutList(),
-                          )
-                           );
+                          );
+                          
                         }
                       },
                     ),

@@ -32,19 +32,11 @@ Future<void> getname() async {
 
   if (storedName != null) {
     // Use the storedName
-    print("Stored Name: $storedName");
   } else {
     // Handle the case where the "name" was not found in local storage
-    print("Name not found in local storage");
   }
 }
 
-Future<void> _loadSelectedIndex() async {
-  final prefs = await SharedPreferences.getInstance();
-  setState(() {
-    _selectedIndex = prefs.getInt('selectedIndex') ?? 0;
-  });
-}
   bool showNavigationBar = false;
   late List<Widget> list = [
     Dashboard(),
@@ -54,7 +46,7 @@ Future<void> _loadSelectedIndex() async {
     Report()
   ];
   final List<String> _destinations = [
-    'DashBoard',
+    'Dashboard',
     'Front Desk',
     'Housekeeping',
     'Guest In House',
@@ -76,8 +68,10 @@ final MainController controller = Get.put(MainController());
   ),
   child: NavigationRail(
     backgroundColor: Colors.transparent,
-    minWidth:60,
-  
+    minWidth:70,
+  indicatorShape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(10),
+  ),
     extended: controller.isExpanded.value,
     labelType: NavigationRailLabelType.none,
     selectedIndex: _selectedIndex,
@@ -91,6 +85,7 @@ final MainController controller = Get.put(MainController());
  SizedBox(height: 50,),
     ],),
     onDestinationSelected: (int index) async {
+      
       final prefs = await SharedPreferences.getInstance();
       getname();
       setState(() {
@@ -99,18 +94,22 @@ final MainController controller = Get.put(MainController());
       // Save the selected index to local storage
       prefs.setInt('selectedIndex', _selectedIndex);
     },
-     
+      selectedIconTheme: IconThemeData(
+    color: Color.fromARGB(255, 71, 99, 255),
+  ),
     destinations: const <NavigationRailDestination>[
       NavigationRailDestination(
         icon: Icon(Icons.grid_view),
+        
         selectedIcon: Icon(Icons.grid_view),
         label: Text('Dashboard'),
       ),
       NavigationRailDestination(
-        icon:ImageIcon(AssetImage('assets/images/front-desk.jpg')),
-      
-        selectedIcon: ImageIcon(AssetImage('assets/images/front-desk-active.png')),
+        
+        icon: ImageIcon(AssetImage('assets/images/front-desk.jpg')),
+        selectedIcon: ImageIcon(AssetImage('assets/images/front-desk-active.jpg')),
         label: Text('FrontDesk'),
+         
       ),
       NavigationRailDestination(
         icon:ImageIcon(AssetImage('assets/images/housekeeping.png')),
@@ -180,7 +179,7 @@ final MainController controller = Get.put(MainController());
                                       toggleImageSize();
                                 },
                               ),
-                              SizedBox(
+                              const SizedBox(
 width: 20,
                               ),
                               Text(
@@ -230,10 +229,10 @@ width: 20,
                     child: list[_selectedIndex],
                   ),
                   Container(
-  margin: EdgeInsets.only(left:5,right:5),
+  margin: const EdgeInsets.only(left:5,right:5),
   alignment: Alignment.bottomCenter,
-  padding:EdgeInsets.all(15),
-  decoration: BoxDecoration(
+  padding:const EdgeInsets.all(15),
+  decoration: const BoxDecoration(
     color: Colors.white,
     borderRadius: BorderRadius.only(
       topLeft: Radius.circular(30.0),
@@ -243,7 +242,7 @@ width: 20,
   child:footer()
   
    
-)
+),
 
                 ],
               ),
