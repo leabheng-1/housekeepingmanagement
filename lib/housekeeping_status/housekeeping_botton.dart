@@ -26,11 +26,7 @@ class _HousekeepingButtonState extends State<HousekeepingButton> {
               color: Colors.white,
               borderRadius: BorderRadius.circular(20),
             ),
-            child: Padding(
-              padding: const EdgeInsets.only(
-                right: 10,
-                left: 10,
-              ),
+         
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -53,10 +49,7 @@ class _HousekeepingButtonState extends State<HousekeepingButton> {
               ),
             ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 10, right: 10),
-          child: Expanded(
+           Expanded(
             flex: 4,
             child: Container(
               height: 50,
@@ -94,11 +87,8 @@ class _HousekeepingButtonState extends State<HousekeepingButton> {
               ),
             ),
           ),
-        ),
         Expanded(
           flex: 3,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Container(
               height: 50,
               width: 250,
@@ -128,7 +118,6 @@ class _HousekeepingButtonState extends State<HousekeepingButton> {
               ),
             ),
           ),
-        ),
       ],
     );
   }
