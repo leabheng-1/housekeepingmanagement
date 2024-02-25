@@ -65,6 +65,7 @@ dependencies:
   currency_text_input_formatter: ^2.1.10
   money_input_formatter: ^2.0.0
   skeletonizer: ^0.8.0
+  webview_flutter_platform_interface: ^2.10.0
   webview_flutter: ^4.5.0
 
 dev_dependencies:

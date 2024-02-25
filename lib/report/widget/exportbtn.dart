@@ -22,7 +22,7 @@ Future<void> submitRequest() async  {
     WidgetsFlutterBinding.ensureInitialized();
     
      final url = '$url_new&format=$format';
-     if ( format == 'excel' ) {
+  
         final response = await http.get(Uri.parse(url));
 
   if (response.statusCode == 200) {
@@ -32,9 +32,9 @@ Future<void> submitRequest() async  {
     // Handle the error
     print('Failed to download PDF: ${response.statusCode}');
   }
-     }else{
-        showWebViewDialog(context,url); 
-     }
+    //   if ( format == 'excel' ) {  }else{
+    //     showWebViewDialog(context,url); 
+    //  }
 
  
 

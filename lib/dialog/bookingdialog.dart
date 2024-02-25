@@ -1066,9 +1066,6 @@ CheckSelectRoomRate(
                     itemExtraCharge.text = price;
                     extraChargeController.text = result ;
                     updateFields(nightCal);
-                  print(result);
-                  print(isChecked);
-                   print(price);
                   
                   },
                 );
@@ -1527,7 +1524,7 @@ Stack(
   children: [
 Boxdetail(
   title: "Extra Charge",
-  value: formatCurrency(booking['extra_charge']).toString() ,
+  value: formatCurrency(booking['extra_charge'] ?? 0).toString() ,
 ),
     Positioned(
       top: 33,
@@ -1539,8 +1536,7 @@ Boxdetail(
               builder: (BuildContext context) {
                 return paymentdialogpage(
                   onDialogClosed: (result, isChecked, price) {
-               print(booking['payment_id']);
-                  
+                    print('hii');
                   },
                   payment_id: booking['payment_id'].toString(),
                   is_view: true,
@@ -1563,13 +1559,15 @@ Boxdetail(
             )// Replace 'your_icon' with the desired icon
       ),
  ]
-),]
+),
+]
+    
         ),
  Row(
         children: [           
 Boxdetail(
   title: "Payment",
-  value: formatCurrency(booking['payment']).toString(),
+  value: formatCurrency(booking['payment'] ?? 0).toString(),
 ),
 SizedBox(width: 15),
 Boxdetail(
@@ -1579,12 +1577,12 @@ Boxdetail(
 SizedBox(width: 15),
 Boxdetail(
   title: "Total charges",
-  value: formatCurrency(booking['charges']).toString(),
+  value: formatCurrency(booking['charges'] ?? 0).toString(),
 ),
 SizedBox(width: 15),
 Boxdetail(
   title: "Total Balance",
-  value: formatCurrency(booking['balance']).toString(),
+  value: formatCurrency(booking['balance'] ?? 0).toString(),
 ),
  ]
         ), 

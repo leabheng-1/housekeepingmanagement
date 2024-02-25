@@ -1,4 +1,3 @@
-import 'dart:html';
 
 import 'package:flutter/material.dart';
 import 'package:housekeepingmanagement/frontdesk/widget/Empty.dart';
@@ -9,16 +8,22 @@ import 'package:housekeepingmanagement/widget/legend.dart';
 import 'package:housekeepingmanagement/system_widget/system_icon.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+// ignore: camel_case_types
 class paymentdialogpage extends StatefulWidget {
+  // ignore: non_constant_identifier_names
   final Function(String Items, bool isChecked , String ItemExtra) onDialogClosed;
-  final String payment_id ;
+  // ignore: non_constant_identifier_names
+  final String? payment_id ;
   final bool is_view;
-  paymentdialogpage({required this.onDialogClosed ,  this.payment_id = '' , this.is_view = false  });
+  // ignore: non_constant_identifier_names
+  const paymentdialogpage({super.key,  required this.onDialogClosed ,  this.payment_id , this.is_view = false  });
 
   @override
+  // ignore: library_private_types_in_public_api
   _paymentdialogpageState createState() => _paymentdialogpageState();
 }
 
+// ignore: camel_case_types
 class _paymentdialogpageState extends State<paymentdialogpage> {
   Map<String, dynamic> bookingsData = {};
     List<Map<String, dynamic>> listitem = [];
@@ -47,8 +52,6 @@ class _paymentdialogpageState extends State<paymentdialogpage> {
       listitem.add({"name": name.toString(),"qty" : total ,"price": price   });
     }
   }
-  print(listitem);
-
 
       });
     } else {
@@ -89,16 +92,6 @@ List<Map<String, dynamic>> items = [
  
   }
 
-  void _decrement() {
-    setState(() {
-      if (_value > 1) {
-        _value = _value - 1;
-       
-      }
-      
-    });
-  
-  }
 String concatenateNames(List<Map<String, dynamic>> items) {
   List<String> itemStrings = items.map((item) {
     String name = item["name"].toString();
@@ -144,7 +137,7 @@ TextEditingController totalAllController = TextEditingController(text:(double.pa
                       controller: nameController,
                       labelText: 'Item Extra Charge',
                     ),
-                     SizedBox(width: 15,),
+                     const SizedBox(width: 15,),
                    CustomTextField(
                       width: 510/3,
                       controller: qtyController,
@@ -153,7 +146,7 @@ TextEditingController totalAllController = TextEditingController(text:(double.pa
                       totalAllController.text = (double.parse(value) * double.parse(priceController.text)).toString();
                       },
                     ),
-                    SizedBox(width: 15,),
+                    const SizedBox(width: 15,),
                      CustomTextField(
                       width: 510/3,
                       controller: priceController,
@@ -162,7 +155,7 @@ TextEditingController totalAllController = TextEditingController(text:(double.pa
                             totalAllController.text = (double.parse(value) * double.parse(qtyController.text)).toString();
                       },
                     ),
-                      SizedBox(width: 15,),
+                      const SizedBox(width: 15,),
                      CustomTextField(
                       width: 510/3,
                       enabled: false,
@@ -280,7 +273,7 @@ TextEditingController totalController = TextEditingController();
                   children: [
 
                 
-               widget.is_view ? Row() : Row(
+               widget.is_view ? const Row() : Row(
                 children: [
                   CustomDropdownButton(
                        key: dropdownKey,
@@ -299,7 +292,7 @@ TextEditingController totalController = TextEditingController();
                     newItem = {'name': value, 'price': priceItemController.text.replaceAll('\$', '') , 'qty' :  qtyItemController.text  };
             },
           ),
-          SizedBox(
+          const SizedBox(
             width: 15,
           ),
           CustomTextField(
@@ -311,7 +304,7 @@ TextEditingController totalController = TextEditingController();
              newItem = {'name': valueName, 'price': getPrice(valueName).toString()  , 'qty' : text  };
           },
         ),
-         SizedBox(
+         const SizedBox(
             width: 15,
           ),
           Stack(
@@ -332,8 +325,8 @@ TextEditingController totalController = TextEditingController();
           right: 5,
           top: 15,
           child: Container(
-            margin: EdgeInsets.only(top: 16.0),
-            padding: EdgeInsets.only(left: 10),
+            margin: const EdgeInsets.only(top: 16.0),
+            padding: const EdgeInsets.only(left: 10),
             child: Checkbox(
               value: isChecked,
               onChanged: (value) {
@@ -349,7 +342,7 @@ TextEditingController totalController = TextEditingController();
         
       ],
     ),
-     SizedBox(
+     const SizedBox(
             width: 15,
           ),
      CustomTextField(
@@ -362,14 +355,14 @@ TextEditingController totalController = TextEditingController();
            
           },
         ),
-    SizedBox(width: 15,),
+    const SizedBox(width: 15,),
     Container(
-  margin: EdgeInsets.only(top: 25.0), // Set the top margin
+  margin: const EdgeInsets.only(top: 25.0), // Set the top margin
   child: BtnAction(
-   background: Color.fromARGB(52, 0, 0, 0),
+   background: const Color.fromARGB(52, 0, 0, 0),
   icon: iconController.addIcon,
   textColor: Colors.white,
-  color: Color.fromARGB(255, 54, 130, 244),
+  color: const Color.fromARGB(255, 54, 130, 244),
   label: "Add Item",
   action: () {
       setState(() {
