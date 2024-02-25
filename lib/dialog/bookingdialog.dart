@@ -1520,45 +1520,9 @@ Boxdetail(
   value: formatCurrency(booking['booking_room_rate' ] ??booking['room_rate']).toString(),
 ),      
 SizedBox(width: 15),
-Stack(
-  children: [
 Boxdetail(
   title: "Extra Charge",
   value: formatCurrency(booking['extra_charge'] ?? 0).toString() ,
-),
-    Positioned(
-      top: 33,
-      right: 5,
-      child: GestureDetector(
-        onTap: () {
-          showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return paymentdialogpage(
-                  onDialogClosed: (result, isChecked, price) {
-                    print('hii');
-                  },
-                  payment_id: booking['payment_id'].toString(),
-                  is_view: true,
-                );
-              },
-            );
-        },
-        child: Container(
-              decoration: BoxDecoration(
-                color: Color.fromARGB(255, 0, 140, 255), // Set your desired background color here
-                 borderRadius: BorderRadius.circular(10.0),
-              ),
-              padding: EdgeInsets.all(8), // Adjust the padding as needed
-              child: Icon(
-                Icons.account_balance_wallet,
-                size: 15, // Adjust the size of the icon as needed
-                color: Colors.white, // Set the icon color if needed
-              ),
-            ),
-            )// Replace 'your_icon' with the desired icon
-      ),
- ]
 ),
 ]
     

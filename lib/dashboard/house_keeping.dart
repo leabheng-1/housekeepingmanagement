@@ -46,27 +46,27 @@ Key dropdownKey = UniqueKey();
                   ],
                 ),
               ),
-              SizedBox(
-                height: 140.0,
-                child: Expanded(
-                  child: Container(
-                     key:UniqueKey(),
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 20),
-                    child: HouseKeepingDataGuest(),
-                  ),
+               Container(
+                  key:UniqueKey(),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                height: 120.0,
+                child: const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: HouseKeepingDataGuest(),
+                    ),
+                  ],
                 ),
               ),
-              SizedBox(
-                height: 750.0,
-                child: Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 20),
-                    child: HkDataTable(reloadData:reloadData),
-                  ),
-                ),
-              ),
+              Container(
+  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+  height: 750.0,
+  child: Center(
+    child: HkDataTable(reloadData: reloadData),
+  ),
+),
             ],
           ),
         ),

@@ -7,14 +7,14 @@ import 'dart:convert';
 import 'package:skeletonizer/skeletonizer.dart';
 bool loading = true;
 class HouseKeepingDataGuest extends StatefulWidget {
-  const HouseKeepingDataGuest({super.key});
+    const HouseKeepingDataGuest({Key? key}) : super(key: key);
 
   @override
   State<HouseKeepingDataGuest> createState() => _HouseKeepingDataGuestState();
 }
 
 class _HouseKeepingDataGuestState extends State<HouseKeepingDataGuest> {
-  Map<String, dynamic>? apiResponse;
+  Map<String, dynamic>? apiResponse = {};
 Map<String, dynamic> data = {};
   @override
   void initState() {
@@ -101,7 +101,7 @@ Map<String, dynamic> data = {};
               size: 40,
             ),
             title: "Cleaned",
-            value: data['clean']?['count'] ?? 0 ,
+            value: data['clean']['count'] ?? 0 ,
             backgroundColor: ColorController.bottonbackcolor,
             iconbackground: const Color(0xFFD8F1D8),
           ),

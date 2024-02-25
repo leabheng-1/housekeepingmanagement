@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:housekeepingmanagement/widget/sub_button/sub_button_frontdesd_widget.dart';
 class GuestInHouseBotton extends StatefulWidget {
-  const GuestInHouseBotton({super.key});
+  const GuestInHouseBotton({Key? key}) : super(key: key);
 
   @override
   State<GuestInHouseBotton> createState() => _GuestInHouseBottonState();
@@ -13,7 +13,7 @@ class GuestInHouseBotton extends StatefulWidget {
 
 class _GuestInHouseBottonState extends State<GuestInHouseBotton> {
   Map<String, dynamic>? apiResponse = {};
-  Map<String, dynamic> data = {};
+  Map<String, dynamic>? data = {};
   bool isLoading = true;
   @override
   void initState() {
@@ -30,7 +30,7 @@ class _GuestInHouseBottonState extends State<GuestInHouseBotton> {
        isLoading = false;
   apiResponse = json.decode(response.body);
       setState(() {
-              data = apiResponse!['data'];
+              data = apiResponse?['data'];
       
       });
     } else {
@@ -44,9 +44,7 @@ class _GuestInHouseBottonState extends State<GuestInHouseBotton> {
     return Skeletonizer(
         enabled: isLoading,
         child: Expanded(
-      child: Padding(
-        padding: const EdgeInsets.only(left: 20, right: 15, top: 15),
-        child: Container(
+      child: Container(
           height: 80,
           width: 1245,
           decoration: BoxDecoration(
@@ -65,7 +63,7 @@ class _GuestInHouseBottonState extends State<GuestInHouseBotton> {
                       color: Colors.white,
                     ),
                     title: "Check-In",
-                    value: data['checkin_count'] ?? 0 ,
+                    value: data?['checkin_count'] ?? 0 ,
                     backgroundColor: const Color.fromARGB(255, 100, 138, 204),
                     iconbackground: Colors.blue.shade800,
                   ),
@@ -78,7 +76,7 @@ class _GuestInHouseBottonState extends State<GuestInHouseBotton> {
                       color: Colors.white,
                     ),
                     title: "Arrival",
-                    value: data['count_arrival'] ?? 0 ,
+                    value: data?['count_arrival'] ?? 0 ,
                     backgroundColor: Colors.blue.shade800,
                     iconbackground: Colors.purple.shade900,
                   ),
@@ -91,7 +89,7 @@ class _GuestInHouseBottonState extends State<GuestInHouseBotton> {
                       color: Colors.white,
                     ),
                     title: "Check-Out",
-                    value: data['checkout_count'] ?? 0 ,
+                    value: data?['checkout_count'] ?? 0 ,
                     backgroundColor: Colors.orange.shade500,
                     iconbackground: Colors.orange.shade900,
                   ),
@@ -104,7 +102,7 @@ class _GuestInHouseBottonState extends State<GuestInHouseBotton> {
                       color: Colors.white,
                     ),
                     title: "Departures",
-                    value: data['count_departure'] ?? 0 ,
+                    value: data?['count_departure'] ?? 0 ,
                     backgroundColor: Colors.grey.shade400,
                     iconbackground: Colors.grey.shade700,
                   ),
@@ -117,7 +115,7 @@ class _GuestInHouseBottonState extends State<GuestInHouseBotton> {
                       color: Colors.white,
                     ),
                     title: "Available",
-                    value: data['available_rooms'] ?? 0 ,
+                    value: data?['available_rooms'] ?? 0 ,
                     backgroundColor: Colors.blue.shade500,
                     iconbackground: Colors.blue.shade800,
                   ),
@@ -130,7 +128,7 @@ class _GuestInHouseBottonState extends State<GuestInHouseBotton> {
                       color: Colors.white,
                     ),
                     title: "In House",
-                    value: data['inHouse'] ?? 0 ,
+                    value: data?['inHouse'] ?? 0 ,
                     backgroundColor: Colors.blue.shade300,
                     iconbackground: Colors.blue.shade800,
                   ),
@@ -141,7 +139,7 @@ class _GuestInHouseBottonState extends State<GuestInHouseBotton> {
           ),
         ),
       ),
-        )
+      
     );
   }
 }
